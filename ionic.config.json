@@ -1,0 +1,8 @@
+{
+  "name": "Raqyx",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue",
+  "id": "1b681291"
+}
