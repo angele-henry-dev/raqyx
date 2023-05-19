@@ -33,15 +33,23 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createAnimation, createGesture  } from '@ionic/vue';
 
-const animation = createAnimation();
+const animationPlayer = createAnimation();
 const player = ref<HTMLDivElement | null>(null);
 const container = ref<HTMLDivElement | null>(null);
+const CONTAINER_WIDTH = 315;
+const CONTAINER_HEIGHT = 549;
+const PLAYER_SIZE = 7;
+const duration = 15000; // Durée de l'animation en millisecondes
 
-function launchGesture() {
-  if (container.value) {
+const initialize = () => {
+  if (player.value && container.value) {
+    animationPlayer
+      .addElement(player.value)
+      .duration(duration)
+      .iterations(Infinity);
     const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
@@ -51,7 +59,7 @@ function launchGesture() {
   }
 }
 
-function onMove(detail) {
+const onMove = (detail: GestureDetail) => {
   if (player.value && container.value) {
     const deltaY = detail.deltaY; // Negatif haut - Positif bas
     const deltaX = detail.deltaX; // Negatif gauche - Positif droite
@@ -67,17 +75,9 @@ function onMove(detail) {
   }
 }
 
-function launchPlayer() {
+const launchPlayer = () => {
   if (player.value && container.value) {
-    const CONTAINER_WIDTH = 315;
-    const CONTAINER_HEIGHT = 549;
-    const PLAYER_SIZE = 7;
-    const duration = 15000; // Durée de l'animation en millisecondes
-
-    animation
-      .addElement(player.value)
-      .duration(duration)
-      .iterations(Infinity)
+    animationPlayer
       .keyframes([
         { offset: 0, left: '0px', top: '0px' },
         { offset: 0.25, left: (CONTAINER_WIDTH + PLAYER_SIZE) + 'px', top: '0px' },
@@ -85,15 +85,13 @@ function launchPlayer() {
         { offset: 0.75, left: '0px', top: (CONTAINER_HEIGHT + PLAYER_SIZE) + 'px' },
         { offset: 1, left: '0px', top: '0px' },
       ])
-      .play().then(() => {
-      // Code à exécuter après l'animation
-      });
+      .play();
   }
 }
 
 onMounted(() => {
+  initialize();
   launchPlayer();
-  launchGesture();
 });
 </script>
 
