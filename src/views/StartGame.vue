@@ -34,11 +34,38 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/vue';
-import { createAnimation } from '@ionic/vue';
+import { createAnimation, createGesture  } from '@ionic/vue';
 
 const animation = createAnimation();
 const player = ref<HTMLDivElement | null>(null);
 const container = ref<HTMLDivElement | null>(null);
+
+function launchGesture() {
+  if (container.value) {
+    const gesture = createGesture({
+      el: container.value,
+      gestureName: 'move-player',
+      onMove: (detail) => { onMove(detail); }
+    });
+    gesture.enable();
+  }
+}
+
+function onMove(detail) {
+  if (player.value && container.value) {
+    const deltaY = detail.deltaY; // Negatif haut - Positif bas
+    const deltaX = detail.deltaX; // Negatif gauche - Positif droite
+
+    container.value.innerHTML = `
+      <div>Delta Y: ${deltaY}</div>
+      <div>Delta X: ${deltaX}</div>
+      <div>Player offsetHeight: ${player.value.offsetHeight}</div>
+      <div>Player offsetWidth: ${player.value.offsetWidth}</div>
+      <div>Player offsetTop: ${player.value.offsetTop}</div>
+      <div>Player offsetLeft: ${player.value.offsetLeft}</div>
+    `
+  }
+}
 
 function launchPlayer() {
   if (player.value && container.value) {
@@ -50,9 +77,7 @@ function launchPlayer() {
     animation
       .addElement(player.value)
       .duration(duration)
-      .iterations(Infinity);
-
-    animation
+      .iterations(Infinity)
       .keyframes([
         { offset: 0, left: '0px', top: '0px' },
         { offset: 0.25, left: (CONTAINER_WIDTH + PLAYER_SIZE) + 'px', top: '0px' },
@@ -60,15 +85,15 @@ function launchPlayer() {
         { offset: 0.75, left: '0px', top: (CONTAINER_HEIGHT + PLAYER_SIZE) + 'px' },
         { offset: 1, left: '0px', top: '0px' },
       ])
-
-    animation.play().then(() => {
+      .play().then(() => {
       // Code à exécuter après l'animation
-    });
+      });
   }
 }
 
 onMounted(() => {
   launchPlayer();
+  launchGesture();
 });
 </script>
 
