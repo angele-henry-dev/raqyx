@@ -11,10 +11,12 @@
           </ion-col>
         </ion-row>
         <ion-row id="game-area">
-          <div ref="player" id="player"></div>
-          <div id="container">
-            <div id="ennemies"></div>
-          </div>
+          <ion-col>
+            <div ref="player" id="player"></div>
+            <div ref="container" id="container">
+              <div id="enemies"></div>
+            </div>
+          </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-between">
           <ion-col size="5" class="ion-text-start">
@@ -30,81 +32,74 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
-  import { 
-    IonPage,
-    IonContent,
-    IonGrid,
-    IonRow,
-    IonCol,
-    onIonViewWillEnter,
-    onIonViewDidEnter,
-    onIonViewWillLeave,
-    onIonViewDidLeave,
-    createAnimation,
-  } from '@ionic/vue'
+import { onMounted, ref } from 'vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/vue';
+import { createAnimation } from '@ionic/vue';
 
-  // Variables
-  const animation = createAnimation()
-  const player = ref<HTMLDivElement | null>(null)
+const animation = createAnimation();
+const player = ref<HTMLDivElement | null>(null);
+const container = ref<HTMLDivElement | null>(null);
 
-  // Methods
-  function launch() {
-    //
+function launchPlayer() {
+  if (player.value && container.value) {
+    const CONTAINER_WIDTH = 315;
+    const CONTAINER_HEIGHT = 549;
+    const PLAYER_SIZE = 7;
+    const duration = 15000; // Durée de l'animation en millisecondes
+
+    animation
+      .addElement(player.value)
+      .duration(duration)
+      .iterations(Infinity);
+
+    animation
+      .keyframes([
+        { offset: 0, left: '0px', top: '0px' },
+        { offset: 0.25, left: (CONTAINER_WIDTH + PLAYER_SIZE) + 'px', top: '0px' },
+        { offset: 0.5, left: (CONTAINER_WIDTH + PLAYER_SIZE) + 'px', top: (CONTAINER_HEIGHT + PLAYER_SIZE) + 'px' },
+        { offset: 0.75, left: '0px', top: (CONTAINER_HEIGHT + PLAYER_SIZE) + 'px' },
+        { offset: 1, left: '0px', top: '0px' },
+      ])
+
+    animation.play().then(() => {
+      // Code à exécuter après l'animation
+    });
   }
-  
-  // Setup
-  onMounted(() => {
-    if (player.value) {
-      console.log(player.value)
-      animation
-        .addElement(player.value)
-        .duration(1500)
-        .iterations(Infinity)
-        .fromTo('transform', 'translateX(0px)', 'translateX(100px)')
-      animation.play()
-    }
-  })
+}
 
-  onIonViewDidEnter(() => {
-    console.log('Page did enter')
-  })
-
-  onIonViewDidLeave(() => {
-    console.log('Page did leave')
-  })
-
-  onIonViewWillEnter(() => {
-    console.log('Page will enter');
-  })
-
-  onIonViewWillLeave(() => {
-    console.log('Page will leave');
-  })
+onMounted(() => {
+  launchPlayer();
+});
 </script>
 
 <style scoped>
-  ion-grid {
-    width: 90%;
-    height: 95%;
-    margin: auto;
-  }
-  #game-area {
-    height: 90%;
-    max-height: 600px;
-  }
-  #container {
-    width: 100%;
-    height: 100%;
-    background-color: var(--ion-color-primary);
-    margin: 2px;
-    padding: 0;
-  }
-  #player {
-    width: 5px;
-    height: 5px;
-    border-radius: 100%;
-    background-color: var(--ion-color-secondary);
-    position: absolute;
-  }
+ion-grid {
+  width: 90%;
+  height: 95%;
+  margin: auto;
+}
+
+#game-area {
+  height: 90%;
+  max-height: 600px;
+}
+
+#container {
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+#player {
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  background-color: var(--ion-color-primary);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 </style>
