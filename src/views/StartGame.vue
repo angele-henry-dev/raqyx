@@ -41,7 +41,7 @@ const container = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   if (player.value && container.value) {
-    container.value.addEventListener('mousemove', movePlayer);
+    // container.value.addEventListener('mousemove', mouseMovePlayer);
     /*const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
@@ -49,16 +49,8 @@ onMounted(() => {
     });
     gesture.enable();*/
   }
-});
-
-const onMove = (detail: GestureDetail) => {
   if (player.value && container.value) {
-    const deltaY = detail.deltaY; // Negatif haut - Positif bas
-    const deltaX = detail.deltaX; // Negatif gauche - Positif droite
-
     container.value.innerHTML = `
-      <div>Delta Y: ${deltaY}</div>
-      <div>Delta X: ${deltaX}</div>
       <div>Player offsetHeight: ${player.value.offsetHeight}</div>
       <div>Player offsetWidth: ${player.value.offsetWidth}</div>
       <div>Player offsetTop: ${player.value.offsetTop}</div>
@@ -67,23 +59,43 @@ const onMove = (detail: GestureDetail) => {
       <div>Player top: ${player.value.style.top}</div>
     `
   }
+});
+
+const onMove = (detail: GestureDetail) => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
     const playerRect = player.value.getBoundingClientRect();
     const offsetX = detail.deltaX - containerRect.left - playerRect.width / 2;
     const offsetY = detail.deltaY - containerRect.top - playerRect.height / 2;
 
-    // Limitez le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
+    // Limiter le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
     const maxX = containerRect.width - playerRect.width;
     const maxY = containerRect.height - playerRect.height;
 
-    // Appliquez les nouvelles coordonnées au joueur.
+    // Appliquer les nouvelles coordonnées au joueur.
     player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
     player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
   }
 }
 
-const movePlayer = (event: MouseEvent) => {
+const automaticMovePlayer = () => {
+  if (player.value && container.value) {
+    const containerRect = container.value.getBoundingClientRect();
+    const playerRect = player.value.getBoundingClientRect();
+    const offsetX = (player.value.offsetLeft + 1);
+    const offsetY = (player.value.offsetTop + 1);
+
+    // Limiter le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
+    const maxX = containerRect.width - playerRect.width;
+    const maxY = containerRect.height - playerRect.height;
+
+    // Appliquer les nouvelles coordonnées au joueur.
+    player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
+    player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
+  }
+}
+
+const mouseMovePlayer = (event: MouseEvent) => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
     const playerRect = player.value.getBoundingClientRect();
@@ -99,6 +111,7 @@ const movePlayer = (event: MouseEvent) => {
     player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
   }
 }
+setInterval(automaticMovePlayer, 10);
 
 
 /*import { onMounted, ref } from 'vue';
