@@ -49,28 +49,41 @@ onMounted(() => {
     });
     gesture.enable();*/
   }
-  if (player.value && container.value) {
-    container.value.innerHTML = `
-      <div>Player offsetHeight: ${player.value.offsetHeight}</div>
-      <div>Player offsetWidth: ${player.value.offsetWidth}</div>
-      <div>Player offsetTop: ${player.value.offsetTop}</div>
-      <div>Player offsetLeft: ${player.value.offsetLeft}</div>
-      <div>Player left: ${player.value.style.left}</div>
-      <div>Player top: ${player.value.style.top}</div>
-    `
-  }
 });
 
-const onMove = (detail: GestureDetail) => {
+const automaticMovePlayer = () => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
-    const playerRect = player.value.getBoundingClientRect();
-    const offsetX = detail.deltaX - containerRect.left - playerRect.width / 2;
-    const offsetY = detail.deltaY - containerRect.top - playerRect.height / 2;
+    const offsetX = (player.value.offsetLeft + 1);
+    const offsetY = (player.value.offsetTop + 1);
 
-    // Limiter le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
-    const maxX = containerRect.width - playerRect.width;
-    const maxY = containerRect.height - playerRect.height;
+    // Limiter les mouvements à autour du rectangle
+    let maxX = 0;
+    let maxY = 0;
+    // En haut
+    if (player.value.offsetTop === 0 && player.value.offsetLeft < containerRect.width) {
+      maxY = 0;
+    } else {
+      maxY = containerRect.height;
+    }
+    // A gauche
+    if (player.value.offsetLeft === 0) {
+      maxX = 0;
+    } else {
+      maxX = containerRect.width;
+    }
+    /*// En bas
+    if (player.value.offsetTop === containerRect.height) {
+      maxY = containerRect.height;
+    } else {
+      maxY = 0;
+    }
+    // A droite
+    if (player.value.offsetLeft === containerRect.width) {
+      maxX = containerRect.width;
+    } else {
+      maxX = 0;
+    }*/
 
     // Appliquer les nouvelles coordonnées au joueur.
     player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
@@ -78,12 +91,12 @@ const onMove = (detail: GestureDetail) => {
   }
 }
 
-const automaticMovePlayer = () => {
+const onMove = (detail: GestureDetail) => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
     const playerRect = player.value.getBoundingClientRect();
-    const offsetX = (player.value.offsetLeft + 1);
-    const offsetY = (player.value.offsetTop + 1);
+    const offsetX = detail.deltaX - containerRect.left - playerRect.width / 2;
+    const offsetY = detail.deltaY - containerRect.top - playerRect.height / 2;
 
     // Limiter le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
     const maxX = containerRect.width - playerRect.width;
@@ -281,6 +294,6 @@ ion-grid {
   background-color: var(--ion-color-primary);
   position: absolute;
   top: 0;
-  left: 0;
+  left: 1;
 }
 </style>
