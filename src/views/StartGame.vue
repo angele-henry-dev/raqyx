@@ -32,7 +32,152 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
+import { createGesture } from '@ionic/vue';
+
+const player = ref<HTMLElement | null>(null);
+const container = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+  if (player.value && container.value) {
+    container.value.addEventListener('mousemove', movePlayer);
+    /*const gesture = createGesture({
+      el: container.value,
+      gestureName: 'move-player',
+      onMove: (detail) => { onMove(detail); }
+    });
+    gesture.enable();*/
+  }
+});
+
+const onMove = (detail: GestureDetail) => {
+  if (player.value && container.value) {
+    const deltaY = detail.deltaY; // Negatif haut - Positif bas
+    const deltaX = detail.deltaX; // Negatif gauche - Positif droite
+
+    container.value.innerHTML = `
+      <div>Delta Y: ${deltaY}</div>
+      <div>Delta X: ${deltaX}</div>
+      <div>Player offsetHeight: ${player.value.offsetHeight}</div>
+      <div>Player offsetWidth: ${player.value.offsetWidth}</div>
+      <div>Player offsetTop: ${player.value.offsetTop}</div>
+      <div>Player offsetLeft: ${player.value.offsetLeft}</div>
+      <div>Player left: ${player.value.style.left}</div>
+      <div>Player top: ${player.value.style.top}</div>
+    `
+  }
+  if (player.value && container.value) {
+    const containerRect = container.value.getBoundingClientRect();
+    const playerRect = player.value.getBoundingClientRect();
+    const offsetX = detail.deltaX - containerRect.left - playerRect.width / 2;
+    const offsetY = detail.deltaY - containerRect.top - playerRect.height / 2;
+
+    // Limitez le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
+    const maxX = containerRect.width - playerRect.width;
+    const maxY = containerRect.height - playerRect.height;
+
+    // Appliquez les nouvelles coordonnées au joueur.
+    player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
+    player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
+  }
+}
+
+const movePlayer = (event: MouseEvent) => {
+  if (player.value && container.value) {
+    const containerRect = container.value.getBoundingClientRect();
+    const playerRect = player.value.getBoundingClientRect();
+    const offsetX = event.clientX - containerRect.left - playerRect.width / 2;
+    const offsetY = event.clientY - containerRect.top - playerRect.height / 2;
+
+    // Limiter le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
+    const maxX = containerRect.width - playerRect.width;
+    const maxY = containerRect.height - playerRect.height;
+
+    // Appliquer les nouvelles coordonnées au joueur.
+    player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
+    player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
+  }
+}
+
+
+/*import { onMounted, ref } from 'vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
+import { createGesture } from '@ionic/vue';
+
+const player = ref<HTMLDivElement | null>(null);
+const container = ref<HTMLDivElement | null>(null);
+
+const initialize = () => {
+  if (player.value && container.value) {
+    player.value.style.position = 'absolute';
+    player.value.style.top = "0px";
+    player.value.style.left = "0px";
+  }
+};
+
+onMounted(() => {
+  initialize();
+  if (player.value && container.value) {
+    const gesture = createGesture({
+      el: container.value,
+      gestureName: 'move-player',
+      onMove: (detail) => { onMove(detail); }
+    });
+    gesture.enable();
+  }
+});
+
+const movePlayer = () => {
+  if (player.value && container.value) {
+    const playerTop = player.value.offsetTop;
+    const playerLeft = player.value.offsetLeft;
+    const containerTop = container.value.offsetTop;
+    const containerLeft = container.value.offsetLeft;
+    const containerWidth = container.value.offsetWidth;
+    const containerHeight = container.value.offsetHeight;
+
+    // Déplacement du joueur vers le haut
+    if (playerTop < containerTop) {
+      player.value.style.top = (playerTop + 1).toString() + "px";
+    }
+    // Déplacement du joueur vers le bas
+    else if (playerTop > containerTop + containerHeight) {
+      player.value.style.top = (playerTop - 1).toString() + "px";
+    }
+
+    // Déplacement du joueur vers la gauche
+    if (playerLeft < containerLeft) {
+      player.value.style.left = (playerLeft + 1).toString() + "px";
+    }
+    // Déplacement du joueur vers la droite
+    else if (playerLeft > containerLeft + containerWidth) {
+      player.value.style.left = (playerLeft - 1).toString() + "px";
+    }
+  }
+};
+
+const onMove = (detail: GestureDetail) => {
+  if (player.value && container.value) {
+    const deltaY = detail.deltaY; // Negatif haut - Positif bas
+    const deltaX = detail.deltaX; // Negatif gauche - Positif droite
+
+    container.value.innerHTML = `
+      <div>Delta Y: ${deltaY}</div>
+      <div>Delta X: ${deltaX}</div>
+      <div>Player offsetHeight: ${player.value.offsetHeight}</div>
+      <div>Player offsetWidth: ${player.value.offsetWidth}</div>
+      <div>Player offsetTop: ${player.value.offsetTop}</div>
+      <div>Player offsetLeft: ${player.value.offsetLeft}</div>
+      <div>Player left: ${player.value.style.left}</div>
+      <div>Player top: ${player.value.style.top}</div>
+    `
+  }
+}
+
+setInterval(movePlayer, 10);*/
+
+/*import { onMounted, ref } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createAnimation, createGesture  } from '@ionic/vue';
 
@@ -92,7 +237,7 @@ const launchPlayer = () => {
 onMounted(() => {
   initialize();
   launchPlayer();
-});
+});*/
 </script>
 
 <style scoped>
@@ -104,7 +249,7 @@ ion-grid {
 
 #game-area {
   height: 90%;
-  max-height: 600px;
+  max-height: 500px;
 }
 
 #container {
@@ -113,7 +258,7 @@ ion-grid {
   border: 1px solid black;
   margin: 0;
   padding: 0;
-  position: relative;
+  /*position: relative;*/
 }
 
 #player {
