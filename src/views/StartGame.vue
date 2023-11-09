@@ -38,6 +38,7 @@ import { createGesture } from '@ionic/vue';
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
+const playerSize = 6;
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -54,43 +55,30 @@ onMounted(() => {
 const automaticMovePlayer = () => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
-    let offsetX = 0;
-    let offsetY = 0;
-    let maxX = 0;
-    let maxY = 0;
+    const containerRectWidth = containerRect.width + playerSize;
+    const containerRectHeight = containerRect.height + playerSize;
+    let offsetX = player.value.offsetLeft;
+    let offsetY = player.value.offsetTop;
 
-    // Stay left and go up
     if (player.value.offsetLeft === 0 && player.value.offsetTop > 0) {
-      maxX = 0;
-      maxY = containerRect.height;
-      offsetX = player.value.offsetLeft;
       offsetY = (player.value.offsetTop - 1);
     }
-    // Stay right and go down
-    if (player.value.offsetLeft === containerRect.width) {
-      maxX = containerRect.width;
-      maxY = containerRect.height;
-      offsetX = player.value.offsetLeft;
+    else if (player.value.offsetLeft === containerRectWidth && player.value.offsetTop < containerRectHeight) {
       offsetY = (player.value.offsetTop + 1);
     }
-    // Stay top and go right
-    if (player.value.offsetTop === 0 && player.value.offsetLeft < containerRect.width) {
-      maxY = 0;
-      maxX = containerRect.width;
+    else if (player.value.offsetTop === 0 && player.value.offsetLeft < containerRectWidth) {
       offsetX = (player.value.offsetLeft + 1);
-      offsetY = player.value.offsetTop;
     }
-    // Stay down and go left
-    if (player.value.offsetTop === containerRect.height && player.value.offsetLeft > 0) {
-      maxY = containerRect.height;
-      maxX = containerRect.width;
+    else if (player.value.offsetTop === containerRectHeight && player.value.offsetLeft > 0) {
       offsetX = (player.value.offsetLeft - 1);
-      offsetY = player.value.offsetTop;
+    }
+    else {
+      offsetX = 0;
+      offsetY = 0;
     }
 
-    // Apply new coordinates to the player
-    player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
-    player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
+    player.value.style.left = offsetX + 'px';
+    player.value.style.top = offsetY + 'px';
   }
 }
 
@@ -130,7 +118,6 @@ ion-grid {
   border: 1px solid black;
   margin: 0;
   padding: 0;
-  /*position: relative;*/
 }
 
 #player {
