@@ -54,22 +54,38 @@ onMounted(() => {
 const automaticMovePlayer = () => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
-    const offsetX = (player.value.offsetLeft + 1);
-    const offsetY = (player.value.offsetTop + 1);
-
+    let offsetX = 0;
+    let offsetY = 0;
     let maxX = 0;
     let maxY = 0;
-    // Go right
-    if (player.value.offsetLeft === 0) {
+
+    // Stay left and go up
+    if (player.value.offsetLeft === 0 && player.value.offsetTop > 0) {
       maxX = 0;
-    } else {
-      maxX = containerRect.width;
+      maxY = containerRect.height;
+      offsetX = player.value.offsetLeft;
+      offsetY = (player.value.offsetTop - 1);
     }
-    // Go down
+    // Stay right and go down
+    if (player.value.offsetLeft === containerRect.width) {
+      maxX = containerRect.width;
+      maxY = containerRect.height;
+      offsetX = player.value.offsetLeft;
+      offsetY = (player.value.offsetTop + 1);
+    }
+    // Stay top and go right
     if (player.value.offsetTop === 0 && player.value.offsetLeft < containerRect.width) {
       maxY = 0;
-    } else {
+      maxX = containerRect.width;
+      offsetX = (player.value.offsetLeft + 1);
+      offsetY = player.value.offsetTop;
+    }
+    // Stay down and go left
+    if (player.value.offsetTop === containerRect.height && player.value.offsetLeft > 0) {
       maxY = containerRect.height;
+      maxX = containerRect.width;
+      offsetX = (player.value.offsetLeft - 1);
+      offsetY = player.value.offsetTop;
     }
 
     // Apply new coordinates to the player
@@ -82,31 +98,13 @@ const onMove = (detail: GestureDetail) => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
     const playerRect = player.value.getBoundingClientRect();
+
     const offsetX = detail.deltaX - containerRect.left - playerRect.width / 2;
     const offsetY = detail.deltaY - containerRect.top - playerRect.height / 2;
 
-    // Limiter le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
     const maxX = containerRect.width - playerRect.width;
     const maxY = containerRect.height - playerRect.height;
 
-    // Appliquer les nouvelles coordonnées au joueur.
-    player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
-    player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
-  }
-}
-
-const mouseMovePlayer = (event: MouseEvent) => {
-  if (player.value && container.value) {
-    const containerRect = container.value.getBoundingClientRect();
-    const playerRect = player.value.getBoundingClientRect();
-    const offsetX = event.clientX - containerRect.left - playerRect.width / 2;
-    const offsetY = event.clientY - containerRect.top - playerRect.height / 2;
-
-    // Limiter le déplacement du joueur pour qu'il reste à l'intérieur du conteneur.
-    const maxX = containerRect.width - playerRect.width;
-    const maxY = containerRect.height - playerRect.height;
-
-    // Appliquer les nouvelles coordonnées au joueur.
     player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
     player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
   }
