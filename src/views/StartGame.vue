@@ -38,7 +38,8 @@ import { createGesture } from '@ionic/vue';
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
-const playerSize = 6;
+const playerSize = 5;
+const startLine = -1;
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -60,21 +61,17 @@ const automaticMovePlayer = () => {
     let offsetX = player.value.offsetLeft;
     let offsetY = player.value.offsetTop;
 
-    if (player.value.offsetLeft === 0 && player.value.offsetTop > 0) {
+    if (player.value.offsetLeft === startLine && player.value.offsetTop > startLine) {
       offsetY = (player.value.offsetTop - 1);
     }
     else if (player.value.offsetLeft === containerRectWidth && player.value.offsetTop < containerRectHeight) {
       offsetY = (player.value.offsetTop + 1);
     }
-    else if (player.value.offsetTop === 0 && player.value.offsetLeft < containerRectWidth) {
+    else if (player.value.offsetTop === startLine && player.value.offsetLeft < containerRectWidth) {
       offsetX = (player.value.offsetLeft + 1);
     }
-    else if (player.value.offsetTop === containerRectHeight && player.value.offsetLeft > 0) {
+    else if (player.value.offsetTop === containerRectHeight && player.value.offsetLeft > startLine) {
       offsetX = (player.value.offsetLeft - 1);
-    }
-    else {
-      offsetX = 0;
-      offsetY = 0;
     }
 
     player.value.style.left = offsetX + 'px';
@@ -126,7 +123,7 @@ ion-grid {
   border-radius: 100%;
   background-color: var(--ion-color-primary);
   position: absolute;
-  top: 0;
-  left: 1;
+  top: -1px;
+  left: 1px;
 }
 </style>
