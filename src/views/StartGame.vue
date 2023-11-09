@@ -43,13 +43,12 @@ const startLine = -1;
 
 onMounted(() => {
   if (player.value && container.value) {
-    // container.value.addEventListener('mousemove', mouseMovePlayer);
-    /*const gesture = createGesture({
+    const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
       onMove: (detail) => { onMove(detail); }
     });
-    gesture.enable();*/
+    //gesture.enable();
   }
 });
 
@@ -58,20 +57,36 @@ const automaticMovePlayer = () => {
     const containerRect = container.value.getBoundingClientRect();
     const containerRectWidth = containerRect.width + playerSize;
     const containerRectHeight = containerRect.height + playerSize;
+    const goLeft = false;
     let offsetX = player.value.offsetLeft;
     let offsetY = player.value.offsetTop;
 
-    if (player.value.offsetLeft === startLine && player.value.offsetTop > startLine) {
-      offsetY = (player.value.offsetTop - 1);
-    }
-    else if (player.value.offsetLeft === containerRectWidth && player.value.offsetTop < containerRectHeight) {
-      offsetY = (player.value.offsetTop + 1);
-    }
-    else if (player.value.offsetTop === startLine && player.value.offsetLeft < containerRectWidth) {
-      offsetX = (player.value.offsetLeft + 1);
-    }
-    else if (player.value.offsetTop === containerRectHeight && player.value.offsetLeft > startLine) {
-      offsetX = (player.value.offsetLeft - 1);
+    if (goLeft) {
+      if (player.value.offsetLeft === startLine && player.value.offsetTop > startLine) {
+        offsetY = (player.value.offsetTop - 1);
+      }
+      else if (player.value.offsetLeft === containerRectWidth && player.value.offsetTop < containerRectHeight) {
+        offsetY = (player.value.offsetTop + 1);
+      }
+      else if (player.value.offsetTop === startLine && player.value.offsetLeft < containerRectWidth) {
+        offsetX = (player.value.offsetLeft + 1);
+      }
+      else if (player.value.offsetTop === containerRectHeight && player.value.offsetLeft > startLine) {
+        offsetX = (player.value.offsetLeft - 1);
+      }
+    } else {
+      if (player.value.offsetLeft === containerRectWidth && player.value.offsetTop > startLine) {
+        offsetY = (player.value.offsetTop - 1);
+      }
+      else if (player.value.offsetLeft === startLine && player.value.offsetTop < containerRectHeight) {
+        offsetY = (player.value.offsetTop + 1);
+      }
+      else if (player.value.offsetTop === containerRectHeight && player.value.offsetLeft < containerRectWidth) {
+        offsetX = (player.value.offsetLeft + 1);
+      }
+      else if (player.value.offsetTop === startLine && player.value.offsetLeft > startLine) {
+        offsetX = (player.value.offsetLeft - 1);
+      }
     }
 
     player.value.style.left = offsetX + 'px';
