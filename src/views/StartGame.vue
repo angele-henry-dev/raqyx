@@ -57,11 +57,11 @@ const automaticMovePlayer = () => {
     const containerRect = container.value.getBoundingClientRect();
     const containerRectWidth = containerRect.width + playerSize;
     const containerRectHeight = containerRect.height + playerSize;
-    const goLeft = false;
+    const goRight = false;
     let offsetX = player.value.offsetLeft;
     let offsetY = player.value.offsetTop;
 
-    if (goLeft) {
+    if (goRight) {
       if (player.value.offsetLeft === startLine && player.value.offsetTop > startLine) {
         offsetY = (player.value.offsetTop - 1);
       }
