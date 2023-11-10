@@ -45,13 +45,14 @@ onMounted(() => {
     const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
-      onMove: (detail) => { onMove(detail, player.value, container.value); }
+      onMove: (detail) => { manualMovePlayer(detail); }
     });
+    setInterval(autoMovePlayer, 10);
     gesture.enable();
   }
 });
 
-const movePlayer = () => {
+const autoMovePlayer = () => {
   if (player.value && container.value) {
     const offsets = automaticMovePlayer(player.value, container.value);
     if (offsets) {
@@ -61,5 +62,14 @@ const movePlayer = () => {
   }
 };
 
-setInterval(movePlayer, 10);
+const manualMovePlayer = (detail: GestureDetail) => {
+  if (player.value && container.value) {
+    const offsets = onMove(detail, player.value, container.value);
+    if (offsets) {
+      player.value.style.left = offsets[0] + 'px';
+      player.value.style.top = offsets[1] + 'px';
+    }
+  }
+};
+
 </script>

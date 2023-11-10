@@ -6,23 +6,31 @@ export const onMove = (
   container: HTMLElement | null
 ) => {
     if (player && container) {
-      let direction = "";
+      let offsetX = player.offsetLeft;
+      let offsetY = player.offsetTop;
+
+      // Right
       if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
-        direction = "right";
         console.log("right");
+        offsetX = (player.offsetLeft + 1);
       }
+      // Left
       else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
-        direction = "left";
         console.log("left");
+        offsetX = (player.offsetLeft - 1);
       }
+      // Down
       else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 5) {
-        direction = "down";
         console.log("down");
+        offsetY = (player.offsetTop + 1);
       }
+      // Up
       else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
-        direction = "up";
         console.log("up");
+        offsetY = (player.offsetTop - 1);
       }
+
+      return [offsetX, offsetY];
   
       //const containerRect = container.getBoundingClientRect();
       //const playerRect = player.getBoundingClientRect();
@@ -53,28 +61,36 @@ export const onMove = (
       let offsetY = player.offsetTop;
   
       if (goRight) {
+        // Up
         if (player.offsetLeft === startLine && player.offsetTop > startLine) {
           offsetY = (player.offsetTop - 1);
         }
+        // Down
         else if (player.offsetLeft === containerRectWidth && player.offsetTop < containerRectHeight) {
           offsetY = (player.offsetTop + 1);
         }
+        // Right
         else if (player.offsetTop === startLine && player.offsetLeft < containerRectWidth) {
           offsetX = (player.offsetLeft + 1);
         }
+        // Left
         else if (player.offsetTop === containerRectHeight && player.offsetLeft > startLine) {
           offsetX = (player.offsetLeft - 1);
         }
       } else {
+        // Up
         if (player.offsetLeft === containerRectWidth && player.offsetTop > startLine) {
           offsetY = (player.offsetTop - 1);
         }
+        // Down
         else if (player.offsetLeft === startLine && player.offsetTop < containerRectHeight) {
           offsetY = (player.offsetTop + 1);
         }
+        // Right
         else if (player.offsetTop === containerRectHeight && player.offsetLeft < containerRectWidth) {
           offsetX = (player.offsetLeft + 1);
         }
+        // Left
         else if (player.offsetTop === startLine && player.offsetLeft > startLine) {
           offsetX = (player.offsetLeft - 1);
         }
