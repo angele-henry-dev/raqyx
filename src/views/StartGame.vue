@@ -38,7 +38,6 @@ import { createGesture } from '@ionic/vue';
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
-const playerSize = 5;
 const startLine = -1;
 
 onMounted(() => {
@@ -48,16 +47,17 @@ onMounted(() => {
       gestureName: 'move-player',
       onMove: (detail) => { onMove(detail); }
     });
-    //gesture.enable();
+    gesture.enable();
   }
 });
 
 const automaticMovePlayer = () => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
-    const containerRectWidth = containerRect.width + playerSize;
-    const containerRectHeight = containerRect.height + playerSize;
-    const goRight = false;
+    const playerRect = player.value.getBoundingClientRect();
+    const containerRectWidth = containerRect.width + playerRect.width - 1;
+    const containerRectHeight = containerRect.height + playerRect.height - 1;
+    const goRight = true;
     let offsetX = player.value.offsetLeft;
     let offsetY = player.value.offsetTop;
 
@@ -96,17 +96,35 @@ const automaticMovePlayer = () => {
 
 const onMove = (detail: GestureDetail) => {
   if (player.value && container.value) {
-    const containerRect = container.value.getBoundingClientRect();
-    const playerRect = player.value.getBoundingClientRect();
+    let direction = "";
+    if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
+      direction = "right";
+      console.log("right");
+    }
+    else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
+      direction = "left";
+      console.log("left");
+    }
+    else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 5) {
+      direction = "down";
+      console.log("down");
+    }
+    else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
+      direction = "up";
+      console.log("up");
+    }
 
-    const offsetX = detail.deltaX - containerRect.left - playerRect.width / 2;
-    const offsetY = detail.deltaY - containerRect.top - playerRect.height / 2;
+    //const containerRect = container.value.getBoundingClientRect();
+    //const playerRect = player.value.getBoundingClientRect();
 
-    const maxX = containerRect.width - playerRect.width;
-    const maxY = containerRect.height - playerRect.height;
+    //const offsetX = detail.deltaX - containerRect.left - playerRect.width / 2;
+    //const offsetY = detail.deltaY - containerRect.top - playerRect.height / 2;
 
-    player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
-    player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
+    //const maxX = containerRect.width - playerRect.width;
+    //const maxY = containerRect.height - playerRect.height;
+
+    //player.value.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
+    //player.value.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
   }
 }
 setInterval(automaticMovePlayer, 10);
@@ -114,14 +132,15 @@ setInterval(automaticMovePlayer, 10);
 
 <style scoped>
 ion-grid {
-  width: 90%;
-  height: 95%;
+  width: 100%;
+  height: 100%;
   margin: auto;
 }
 
 #game-area {
-  height: 90%;
-  max-height: 500px;
+  width: 100%;
+  height: calc(100% - 120px);
+  border: 1px solid red;
 }
 
 #container {
