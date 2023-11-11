@@ -33,22 +33,22 @@ export const onGesture = (
     let offsetY = playerOffsetTop;
 
     // Right
-    if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
+    if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 3) {
       offsetX = (playerOffsetLeft + 1);
       direction = 0;
     }
     // Left
-    else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
+    else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 3) {
       offsetX = (playerOffsetLeft - 1);
       direction = 1;
     }
     // Down
-    else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 5) {
+    else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 3) {
       offsetY = (playerOffsetTop + 1);
       direction = 2;
     }
     // Up
-    else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
+    else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 3) {
       offsetY = (playerOffsetTop - 1);
       direction = 3;
     // No direction

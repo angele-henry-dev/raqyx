@@ -39,6 +39,7 @@ import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isGoingBackOnBord
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
+const speed = 10;
 const startLine = -1;
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
@@ -53,7 +54,7 @@ onMounted(() => {
       onMove: (detail) => { manualMovePlayer(detail); }
     });
     if (autoIntervalId == undefined) {
-      autoIntervalId = setInterval(autoMovePlayer, 10);
+      autoIntervalId = setInterval(autoMovePlayer, speed);
     }
     gesture.enable();
   }
@@ -63,7 +64,7 @@ const goBackAuto = () => {
   clearInterval(manualIntervalId);
   manualIntervalId = undefined;
   if (autoIntervalId == undefined) {
-    autoIntervalId = setInterval(autoMovePlayer, 10);
+    autoIntervalId = setInterval(autoMovePlayer, speed);
   }
 };
 
@@ -97,15 +98,15 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const containerRect = container.value.getBoundingClientRect();
         const playerRect = player.value.getBoundingClientRect();
         const containerRectWidth = containerRect.width + playerRect.width;
-        const containerRectHeight = containerRect.height + playerRect.height;
+        const containerRectHeight = containerRect.height + playerRect.height - 1;
         const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
           if (
-            (direction === 0 && offsets[0] === 1)
-            || (direction === 1 && offsets[0] === 0)
-            || (direction === 2 && offsets[0] === 3)
-            || (direction === 3 && offsets[0] === 2)
+            ((offsets[1] === containerRectWidth) && (direction === 2 && offsets[0] === 3))
+            || ((offsets[1] === startLine) && (direction === 3 && offsets[0] === 2))
+            || ((offsets[2] === startLine) && (direction === 0 && offsets[0] === 1))
+            || ((offsets[2] === containerRectHeight) && (direction === 1 && offsets[0] === 0))
           ) {
             console.log("Inverse");
             isInversed = true;
@@ -129,7 +130,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
       } else {
         return goBackAuto();
       }
-    }, 10);
+    }, speed);
   }
 };
 
