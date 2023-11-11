@@ -4,7 +4,7 @@ export const isAlreadyOnDirection = (
   offsets: Array<number>,
   containerRectWidth: number,
   containerRectHeight: number,
-  direction: number,
+  direction: number, // 0=right, 1=left, 2=down, 3=up
   startLine: number
 ) => {
   return ((direction === 0 && offsets[1] >= containerRectWidth)
@@ -27,7 +27,7 @@ export const onGesture = (
   detail: GestureDetail,
   playerOffsetLeft: number,
   playerOffsetTop: number,
-  direction: number
+  direction: number // 0=right, 1=left, 2=down, 3=up
 ) => {
     let offsetX = playerOffsetLeft;
     let offsetY = playerOffsetTop;
@@ -73,12 +73,12 @@ export const onGesture = (
     containerRectWidth: number,
     containerRectHeight: number,
     startLine: number,
-    direction: number // 0=right, 1=left, 2=down, 3=up
+    isInversed: boolean
   ) => {
     let offsetX = playerOffsetLeft;
     let offsetY = playerOffsetTop;
 
-    if (direction === 1) {
+    if (isInversed) {
       // Up
       if (playerOffsetLeft === containerRectWidth && playerOffsetTop > startLine) {
         offsetY = (playerOffsetTop - 1);

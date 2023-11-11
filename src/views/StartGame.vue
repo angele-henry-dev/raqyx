@@ -43,6 +43,7 @@ const startLine = -1;
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
+const inversed = false;
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -78,7 +79,7 @@ const autoMovePlayer = () => {
       containerRectWidth,
       containerRectHeight,
       startLine,
-      direction
+      inversed
     );
     if (offsets) {
       player.value.style.left = offsets[0] + 'px';
@@ -98,6 +99,17 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
+          // TODO try to inverse
+          /*if (
+            (direction === 0 && offsets[0] === 1)
+            || (direction === 1 && offsets[0] === 0)
+            || (direction === 2 && offsets[0] === 3)
+            || (direction === 3 && offsets[0] === 2)
+          ) {
+            inversed = true;
+          } else {
+            inversed = false;
+          }*/
           direction = offsets[0];
           if (isAlreadyOnDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine)) {
             return goBackAuto();
