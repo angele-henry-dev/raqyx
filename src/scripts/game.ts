@@ -48,7 +48,7 @@ export const onMove = (
       let offsetX = player.offsetLeft;
       let offsetY = player.offsetTop;
   
-      if (direction === 0 || direction === 2) {
+      if (direction === 0 || direction === 2 || direction === 3) {
         // Up
         if (player.offsetLeft === startLine && player.offsetTop > startLine) {
           offsetY = (player.offsetTop - 1);

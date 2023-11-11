@@ -51,7 +51,7 @@ onMounted(() => {
       gestureName: 'move-player',
       onMove: (detail) => { manualMovePlayer(detail); }
     });
-    autoIntervalId = setInterval(autoMovePlayer, 10, direction);
+    autoIntervalId = setInterval(autoMovePlayer, 10);
     gesture.enable();
   }
 });
@@ -75,26 +75,26 @@ const manualMovePlayer = (detail: GestureDetail) => {
           player.value.style.top = offsets[2] + 'px';
           if (offsets[1] <= startLine || offsets[1] >= containerRectWidth
           || offsets[2] <= startLine || offsets[2] >= containerRectHeight) {
-              clearInterval(manualIntervalId);
-              manualIntervalId = undefined;
-              return;
+            return goBackAuto();
           }
 
         } else {
-          clearInterval(manualIntervalId);
-          manualIntervalId = undefined;
-          return;
+          return goBackAuto();
         }
       } else {
-        clearInterval(manualIntervalId);
-        manualIntervalId = undefined;
-        return;
+        return goBackAuto();
       }
     }, 10);
   }
 };
 
-const autoMovePlayer = (direction: number) => {
+const goBackAuto = () => {
+  clearInterval(manualIntervalId);
+  manualIntervalId = undefined;
+  autoIntervalId = setInterval(autoMovePlayer, 10);
+};
+
+const autoMovePlayer = () => {
   if (player.value && container.value) {
     const offsets = automaticMovePlayer(player.value, container.value, startLine, direction);
     if (offsets) {
