@@ -92,13 +92,21 @@ const autoMovePlayer = () => {
 };
 
 const manualMovePlayer = (detail: GestureDetail) => {
+  /*if (
+    manualIntervalId == undefined && (
+      (detail.currentX - detail.startX) > 10
+      || (detail.startX - detail.currentX) > 10
+      || (detail.currentY - detail.startY) > 10
+      || (detail.startY - detail.currentY) > 10
+    )
+  )*/
   if (manualIntervalId == undefined) {
     manualIntervalId = setInterval(function(){
       if (player.value && container.value) {
         const containerRect = container.value.getBoundingClientRect();
         const playerRect = player.value.getBoundingClientRect();
         const containerRectWidth = containerRect.width + playerRect.width;
-        const containerRectHeight = containerRect.height + playerRect.height - 1;
+        const containerRectHeight = containerRect.height + playerRect.height;
         const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
