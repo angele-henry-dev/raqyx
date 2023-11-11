@@ -68,7 +68,18 @@ const goBackAuto = () => {
 
 const autoMovePlayer = () => {
   if (player.value && container.value) {
-    const offsets = automaticMovePlayer(player.value, container.value, startLine, direction);
+    const containerRect = container.value.getBoundingClientRect();
+    const playerRect = player.value.getBoundingClientRect();
+    const containerRectWidth = containerRect.width + playerRect.width - 1;
+    const containerRectHeight = containerRect.height + playerRect.height - 1;
+    const offsets = automaticMovePlayer(
+      player.value.offsetLeft,
+      player.value.offsetTop,
+      containerRectWidth,
+      containerRectHeight,
+      startLine,
+      direction
+    );
     if (offsets) {
       player.value.style.left = offsets[0] + 'px';
       player.value.style.top = offsets[1] + 'px';
@@ -84,7 +95,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const playerRect = player.value.getBoundingClientRect();
         const containerRectWidth = containerRect.width + playerRect.width;
         const containerRectHeight = containerRect.height + playerRect.height;
-        const offsets = onGesture(detail, player.value, container.value, direction);
+        const offsets = onGesture(detail, player.value.offsetLeft, container.value.offsetTop, direction);
 
         if (offsets) {
           direction = offsets[0];
