@@ -11,38 +11,22 @@ export const onMove = (
 
       // Right
       if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
-        //console.log("right");
         offsetX = (player.offsetLeft + 1);
       }
       // Left
       else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
-        //console.log("left");
         offsetX = (player.offsetLeft - 1);
       }
       // Down
       else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 5) {
-        //console.log("down");
         offsetY = (player.offsetTop + 1);
       }
       // Up
       else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
-        //console.log("up");
         offsetY = (player.offsetTop - 1);
       }
 
       return [offsetX, offsetY];
-  
-      //const containerRect = container.getBoundingClientRect();
-      //const playerRect = player.getBoundingClientRect();
-  
-      //const offsetX = detail.deltaX - containerRect.left - playerRect.width / 2;
-      //const offsetY = detail.deltaY - containerRect.top - playerRect.height / 2;
-  
-      //const maxX = containerRect.width - playerRect.width;
-      //const maxY = containerRect.height - playerRect.height;
-  
-      //player.style.left = Math.min(maxX, Math.max(0, offsetX)) + 'px';
-      //player.style.top = Math.min(maxY, Math.max(0, offsetY)) + 'px';
     }
   };
 
