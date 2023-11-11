@@ -11,22 +11,22 @@ export const onMove = (
 
       // Right
       if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
-        console.log("right");
+        //console.log("right");
         offsetX = (player.offsetLeft + 1);
       }
       // Left
       else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
-        console.log("left");
+        //console.log("left");
         offsetX = (player.offsetLeft - 1);
       }
       // Down
       else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 5) {
-        console.log("down");
+        //console.log("down");
         offsetY = (player.offsetTop + 1);
       }
       // Up
       else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
-        console.log("up");
+        //console.log("up");
         offsetY = (player.offsetTop - 1);
       }
 
@@ -48,10 +48,10 @@ export const onMove = (
 
   export const automaticMovePlayer = (
     player: HTMLElement | null,
-    container: HTMLElement | null
+    container: HTMLElement | null,
+    startLine: number
   ) => {
     if (player && container) {
-      const startLine = -1;
       const containerRect = container.getBoundingClientRect();
       const playerRect = player.getBoundingClientRect();
       const containerRectWidth = containerRect.width + playerRect.width - 1;
