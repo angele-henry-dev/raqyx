@@ -1,5 +1,28 @@
 import { GestureDetail } from '@ionic/vue';
 
+export const isAlreadyOnDirection = (
+  offsets: Array<number>,
+  containerRectWidth: number,
+  containerRectHeight: number,
+  direction: number,
+  startLine: number
+) => {
+  return ((direction === 0 && offsets[1] >= containerRectWidth)
+    || (direction === 1 && offsets[1] <= startLine-1)
+    || (direction === 2 && offsets[2] >= containerRectHeight)
+    || (direction === 3 && offsets[2] <= startLine-1))
+};
+
+export const isGoingBackOnBorder = (
+  offsets: Array<number>,
+  containerRectWidth: number,
+  containerRectHeight: number,
+  startLine: number
+) => {
+  return (offsets[1] <= startLine || offsets[1] >= containerRectWidth
+          || offsets[2] <= startLine || offsets[2] >= containerRectHeight)
+};
+
 export const onGesture = (
   detail: GestureDetail,
   player: HTMLElement | null,

@@ -35,7 +35,7 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { onGesture, automaticMovePlayer } from '@/scripts/player';
+import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isGoingBackOnBorder } from '@/scripts/player';
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
@@ -58,45 +58,6 @@ onMounted(() => {
   }
 });
 
-const manualMovePlayer = (detail: GestureDetail) => {
-  if (manualIntervalId == undefined) {
-    manualIntervalId = setInterval(function(){
-      if (player.value && container.value) {
-        const containerRect = container.value.getBoundingClientRect();
-        const playerRect = player.value.getBoundingClientRect();
-        const containerRectWidth = containerRect.width + playerRect.width;
-        const containerRectHeight = containerRect.height + playerRect.height;
-        const offsets = onGesture(detail, player.value, container.value, direction);
-
-        if (offsets) {
-          direction = offsets[0];
-
-          if ((direction === 0 && offsets[1] >= containerRectWidth)
-          || (direction === 1 && offsets[1] <= startLine-1)
-          || (direction === 2 && offsets[2] >= containerRectHeight)
-          || (direction === 3 && offsets[2] <= startLine-1)) {
-            return goBackAuto();
-          }
-          clearInterval(autoIntervalId);
-          autoIntervalId = undefined;
-
-          player.value.style.left = offsets[1] + 'px';
-          player.value.style.top = offsets[2] + 'px';
-          if (offsets[1] <= startLine || offsets[1] >= containerRectWidth
-          || offsets[2] <= startLine || offsets[2] >= containerRectHeight) {
-            return goBackAuto();
-          }
-
-        } else {
-          return goBackAuto();
-        }
-      } else {
-        return goBackAuto();
-      }
-    }, 10);
-  }
-};
-
 const goBackAuto = () => {
   clearInterval(manualIntervalId);
   manualIntervalId = undefined;
@@ -112,6 +73,38 @@ const autoMovePlayer = () => {
       player.value.style.left = offsets[0] + 'px';
       player.value.style.top = offsets[1] + 'px';
     }
+  }
+};
+
+const manualMovePlayer = (detail: GestureDetail) => {
+  if (manualIntervalId == undefined) {
+    manualIntervalId = setInterval(function(){
+      if (player.value && container.value) {
+        const containerRect = container.value.getBoundingClientRect();
+        const playerRect = player.value.getBoundingClientRect();
+        const containerRectWidth = containerRect.width + playerRect.width;
+        const containerRectHeight = containerRect.height + playerRect.height;
+        const offsets = onGesture(detail, player.value, container.value, direction);
+
+        if (offsets) {
+          direction = offsets[0];
+          if (isAlreadyOnDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine)) {
+            return goBackAuto();
+          }
+          clearInterval(autoIntervalId);
+          autoIntervalId = undefined;
+          player.value.style.left = offsets[1] + 'px';
+          player.value.style.top = offsets[2] + 'px';
+          if (isGoingBackOnBorder(offsets, containerRectWidth, containerRectHeight, startLine)) {
+            return goBackAuto();
+          }
+        } else {
+          return goBackAuto();
+        }
+      } else {
+        return goBackAuto();
+      }
+    }, 10);
   }
 };
 
