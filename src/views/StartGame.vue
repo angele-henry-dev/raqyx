@@ -35,7 +35,7 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { onMove, automaticMovePlayer } from '@/scripts/game';
+import { onGesture, automaticMovePlayer } from '@/scripts/game';
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
@@ -64,16 +64,16 @@ const manualMovePlayer = (detail: GestureDetail) => {
       if (player.value && container.value) {
         const containerRect = container.value.getBoundingClientRect();
         const playerRect = player.value.getBoundingClientRect();
-        const containerRectWidth = containerRect.width + playerRect.width - 1;
-        const containerRectHeight = containerRect.height + playerRect.height - 1;
-        const offsets = onMove(detail, player.value, container.value);
+        const containerRectWidth = containerRect.width + playerRect.width;
+        const containerRectHeight = containerRect.height + playerRect.height;
+        const offsets = onGesture(detail, player.value, container.value, direction);
 
         if (offsets) {
           direction = offsets[0];
           if ((direction === 0 && offsets[1] >= containerRectWidth)
-          || (direction === 1 && offsets[1] <= startLine)
+          || (direction === 1 && offsets[1] <= startLine-1)
           || (direction === 2 && offsets[2] >= containerRectHeight)
-          || (direction === 3 && offsets[2] <= startLine)) {
+          || (direction === 3 && offsets[2] <= startLine-1)) {
             return goBackAuto();
           }
           clearInterval(autoIntervalId);

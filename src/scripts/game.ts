@@ -1,18 +1,19 @@
 import { GestureDetail } from '@ionic/vue';
 
-export const onMove = (
+export const onGesture = (
   detail: GestureDetail,
   player: HTMLElement | null,
-  container: HTMLElement | null
+  container: HTMLElement | null,
+  direction: number
 ) => {
     if (player && container) {
       let offsetX = player.offsetLeft;
       let offsetY = player.offsetTop;
-      let direction = 0;
 
       // Right
       if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
         offsetX = (player.offsetLeft + 1);
+        direction = 0;
       }
       // Left
       else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
@@ -28,6 +29,17 @@ export const onMove = (
       else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
         offsetY = (player.offsetTop - 1);
         direction = 3;
+      // No direction
+      } else {
+        if (direction === 0) {
+          offsetX = (player.offsetLeft + 1);
+        } else if (direction === 1) {
+          offsetX = (player.offsetLeft - 1);
+        } else if (direction === 2) {
+          offsetY = (player.offsetTop + 1);
+        } else if (direction === 3) {
+          offsetY = (player.offsetTop - 1);
+        }
       }
 
       return [direction, offsetX, offsetY];
