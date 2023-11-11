@@ -26,10 +26,9 @@ export const isGoingBackOnBorder = (
 export const onGesture = (
   detail: GestureDetail,
   player: HTMLElement | null,
-  container: HTMLElement | null,
   direction: number
 ) => {
-    if (player && container) {
+    if (player) {
       let offsetX = player.offsetLeft;
       let offsetY = player.offsetTop;
 
