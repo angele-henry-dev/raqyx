@@ -35,7 +35,7 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { onGesture, automaticMovePlayer } from '@/scripts/game';
+import { onGesture, automaticMovePlayer } from '@/scripts/player';
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
