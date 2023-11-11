@@ -25,46 +25,48 @@ export const isGoingBackOnBorder = (
 
 export const onGesture = (
   detail: GestureDetail,
-  playerOffsetLeft: number,
-  playerOffsetTop: number,
+  player: HTMLElement | null,
+  container: HTMLElement | null,
   direction: number
 ) => {
-    let offsetX = playerOffsetLeft;
-    let offsetY = playerOffsetTop;
+    if (player && container) {
+      let offsetX = player.offsetLeft;
+      let offsetY = player.offsetTop;
 
-    // Right
-    if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
-      offsetX = (playerOffsetLeft + 1);
-      direction = 0;
-    }
-    // Left
-    else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
-      offsetX = (playerOffsetLeft - 1);
-      direction = 1;
-    }
-    // Down
-    else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 5) {
-      offsetY = (playerOffsetTop + 1);
-      direction = 2;
-    }
-    // Up
-    else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
-      offsetY = (playerOffsetTop - 1);
-      direction = 3;
-    // No direction
-    } else {
-      if (direction === 0) {
-        offsetX = (playerOffsetLeft + 1);
-      } else if (direction === 1) {
-        offsetX = (playerOffsetLeft - 1);
-      } else if (direction === 2) {
-        offsetY = (playerOffsetTop + 1);
-      } else if (direction === 3) {
-        offsetY = (playerOffsetTop - 1);
+      // Right
+      if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
+        offsetX = (player.offsetLeft + 1);
+        direction = 0;
       }
-    }
+      // Left
+      else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
+        offsetX = (player.offsetLeft - 1);
+        direction = 1;
+      }
+      // Down
+      else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 5) {
+        offsetY = (player.offsetTop + 1);
+        direction = 2;
+      }
+      // Up
+      else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
+        offsetY = (player.offsetTop - 1);
+        direction = 3;
+      // No direction
+      } else {
+        if (direction === 0) {
+          offsetX = (player.offsetLeft + 1);
+        } else if (direction === 1) {
+          offsetX = (player.offsetLeft - 1);
+        } else if (direction === 2) {
+          offsetY = (player.offsetTop + 1);
+        } else if (direction === 3) {
+          offsetY = (player.offsetTop - 1);
+        }
+      }
 
-    return [direction, offsetX, offsetY];
+      return [direction, offsetX, offsetY];
+    }
   };
 
   export const automaticMovePlayer = (
@@ -113,6 +115,5 @@ export const onGesture = (
         offsetX = (playerOffsetLeft - 1);
       }
     }
-
     return [offsetX, offsetY];
   };
