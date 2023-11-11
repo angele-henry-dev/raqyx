@@ -51,16 +51,15 @@ onMounted(() => {
       gestureName: 'move-player',
       onMove: (detail) => { manualMovePlayer(detail); }
     });
-    autoIntervalId = setInterval(autoMovePlayer, 10);
+    if (autoIntervalId == undefined) {
+      autoIntervalId = setInterval(autoMovePlayer, 10);
+    }
     gesture.enable();
   }
 });
 
 const manualMovePlayer = (detail: GestureDetail) => {
   if (manualIntervalId == undefined) {
-    clearInterval(autoIntervalId);
-    autoIntervalId = undefined;
-
     manualIntervalId = setInterval(function(){
       if (player.value && container.value) {
         const containerRect = container.value.getBoundingClientRect();
@@ -71,6 +70,15 @@ const manualMovePlayer = (detail: GestureDetail) => {
 
         if (offsets) {
           direction = offsets[0];
+          if ((direction === 0 && offsets[1] >= containerRectWidth)
+          || (direction === 1 && offsets[1] <= startLine)
+          || (direction === 2 && offsets[2] >= containerRectHeight)
+          || (direction === 3 && offsets[2] <= startLine)) {
+            return goBackAuto();
+          }
+          clearInterval(autoIntervalId);
+          autoIntervalId = undefined;
+
           player.value.style.left = offsets[1] + 'px';
           player.value.style.top = offsets[2] + 'px';
           if (offsets[1] <= startLine || offsets[1] >= containerRectWidth
@@ -91,7 +99,9 @@ const manualMovePlayer = (detail: GestureDetail) => {
 const goBackAuto = () => {
   clearInterval(manualIntervalId);
   manualIntervalId = undefined;
-  autoIntervalId = setInterval(autoMovePlayer, 10);
+  if (autoIntervalId == undefined) {
+    autoIntervalId = setInterval(autoMovePlayer, 10);
+  }
 };
 
 const autoMovePlayer = () => {
