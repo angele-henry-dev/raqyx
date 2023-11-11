@@ -95,7 +95,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const playerRect = player.value.getBoundingClientRect();
         const containerRectWidth = containerRect.width + playerRect.width;
         const containerRectHeight = containerRect.height + playerRect.height;
-        const offsets = onGesture(detail, player.value, direction);
+        const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
           direction = offsets[0];
