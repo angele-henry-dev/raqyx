@@ -59,25 +59,8 @@ export const onGesture = (
       const containerRectHeight = containerRect.height + playerRect.height - 1;
       let offsetX = player.offsetLeft;
       let offsetY = player.offsetTop;
-  
-      if (direction === 0 || direction === 2 || direction === 3) {
-        // Up
-        if (player.offsetLeft === startLine && player.offsetTop > startLine) {
-          offsetY = (player.offsetTop - 1);
-        }
-        // Down
-        else if (player.offsetLeft === containerRectWidth && player.offsetTop < containerRectHeight) {
-          offsetY = (player.offsetTop + 1);
-        }
-        // Right
-        else if (player.offsetTop === startLine && player.offsetLeft < containerRectWidth) {
-          offsetX = (player.offsetLeft + 1);
-        }
-        // Left
-        else if (player.offsetTop === containerRectHeight && player.offsetLeft > startLine) {
-          offsetX = (player.offsetLeft - 1);
-        }
-      } else {
+
+      if (direction === 1) {
         // Up
         if (player.offsetLeft === containerRectWidth && player.offsetTop > startLine) {
           offsetY = (player.offsetTop - 1);
@@ -92,6 +75,23 @@ export const onGesture = (
         }
         // Left
         else if (player.offsetTop === startLine && player.offsetLeft > startLine) {
+          offsetX = (player.offsetLeft - 1);
+        }
+      } else {
+        // Up
+        if (player.offsetLeft === startLine && player.offsetTop > startLine) {
+          offsetY = (player.offsetTop - 1);
+        }
+        // Down
+        else if (player.offsetLeft === containerRectWidth && player.offsetTop < containerRectHeight) {
+          offsetY = (player.offsetTop + 1);
+        }
+        // Right
+        else if (player.offsetTop === startLine && player.offsetLeft < containerRectWidth) {
+          offsetX = (player.offsetLeft + 1);
+        }
+        // Left
+        else if (player.offsetTop === containerRectHeight && player.offsetLeft > startLine) {
           offsetX = (player.offsetLeft - 1);
         }
       }

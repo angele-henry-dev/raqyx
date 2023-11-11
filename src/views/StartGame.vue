@@ -70,6 +70,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
 
         if (offsets) {
           direction = offsets[0];
+
           if ((direction === 0 && offsets[1] >= containerRectWidth)
           || (direction === 1 && offsets[1] <= startLine-1)
           || (direction === 2 && offsets[2] >= containerRectHeight)
