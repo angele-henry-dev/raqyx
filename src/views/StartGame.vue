@@ -42,6 +42,7 @@ const container = ref<HTMLElement | null>(null);
 const startLine = -1;
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
+let direction = 0; // 0=right, 1=left, 2=down, 3=up
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -50,7 +51,7 @@ onMounted(() => {
       gestureName: 'move-player',
       onMove: (detail) => { manualMovePlayer(detail); }
     });
-    autoIntervalId = setInterval(autoMovePlayer, 10);
+    autoIntervalId = setInterval(autoMovePlayer, 10, direction);
     gesture.enable();
   }
 });
@@ -69,10 +70,11 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const offsets = onMove(detail, player.value, container.value);
 
         if (offsets) {
-          player.value.style.left = offsets[0] + 'px';
-          player.value.style.top = offsets[1] + 'px';
-          if (offsets[0] <= startLine || offsets[0] >= containerRectWidth
-          || offsets[1] <= startLine || offsets[1] >= containerRectHeight) {
+          direction = offsets[0];
+          player.value.style.left = offsets[1] + 'px';
+          player.value.style.top = offsets[2] + 'px';
+          if (offsets[1] <= startLine || offsets[1] >= containerRectWidth
+          || offsets[2] <= startLine || offsets[2] >= containerRectHeight) {
               clearInterval(manualIntervalId);
               manualIntervalId = undefined;
               return;
@@ -92,9 +94,9 @@ const manualMovePlayer = (detail: GestureDetail) => {
   }
 };
 
-const autoMovePlayer = () => {
+const autoMovePlayer = (direction: number) => {
   if (player.value && container.value) {
-    const offsets = automaticMovePlayer(player.value, container.value, startLine);
+    const offsets = automaticMovePlayer(player.value, container.value, startLine, direction);
     if (offsets) {
       player.value.style.left = offsets[0] + 'px';
       player.value.style.top = offsets[1] + 'px';

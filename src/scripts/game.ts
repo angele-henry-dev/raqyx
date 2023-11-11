@@ -8,6 +8,7 @@ export const onMove = (
     if (player && container) {
       let offsetX = player.offsetLeft;
       let offsetY = player.offsetTop;
+      let direction = 0;
 
       // Right
       if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 5) {
@@ -16,35 +17,38 @@ export const onMove = (
       // Left
       else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 5) {
         offsetX = (player.offsetLeft - 1);
+        direction = 1;
       }
       // Down
       else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 5) {
         offsetY = (player.offsetTop + 1);
+        direction = 2;
       }
       // Up
       else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 5) {
         offsetY = (player.offsetTop - 1);
+        direction = 3;
       }
 
-      return [offsetX, offsetY];
+      return [direction, offsetX, offsetY];
     }
   };
 
   export const automaticMovePlayer = (
     player: HTMLElement | null,
     container: HTMLElement | null,
-    startLine: number
+    startLine: number,
+    direction: number // 0=right, 1=left, 2=down, 3=up
   ) => {
     if (player && container) {
       const containerRect = container.getBoundingClientRect();
       const playerRect = player.getBoundingClientRect();
       const containerRectWidth = containerRect.width + playerRect.width - 1;
       const containerRectHeight = containerRect.height + playerRect.height - 1;
-      const goRight = true;
       let offsetX = player.offsetLeft;
       let offsetY = player.offsetTop;
   
-      if (goRight) {
+      if (direction === 0 || direction === 2) {
         // Up
         if (player.offsetLeft === startLine && player.offsetTop > startLine) {
           offsetY = (player.offsetTop - 1);
