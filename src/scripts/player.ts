@@ -73,6 +73,7 @@ export const onGesture = (
     containerRectWidth: number,
     containerRectHeight: number,
     startLine: number,
+    direction: number, // 0=right, 1=left, 2=down, 3=up
     isInversed: boolean
   ) => {
     let offsetX = playerOffsetLeft;
@@ -82,36 +83,44 @@ export const onGesture = (
       // Up
       if (playerOffsetLeft === containerRectWidth && playerOffsetTop > startLine) {
         offsetY = (playerOffsetTop - 1);
+        direction = 3;
       }
       // Down
       else if (playerOffsetLeft === startLine && playerOffsetTop < containerRectHeight) {
         offsetY = (playerOffsetTop + 1);
+        direction = 2;
       }
       // Right
       else if (playerOffsetTop === containerRectHeight && playerOffsetLeft < containerRectWidth) {
         offsetX = (playerOffsetLeft + 1);
+        direction = 0;
       }
       // Left
       else if (playerOffsetTop === startLine && playerOffsetLeft > startLine) {
         offsetX = (playerOffsetLeft - 1);
+        direction = 1;
       }
     } else {
       // Up
       if (playerOffsetLeft === startLine && playerOffsetTop > startLine) {
         offsetY = (playerOffsetTop - 1);
+        direction = 3;
       }
       // Down
       else if (playerOffsetLeft === containerRectWidth && playerOffsetTop < containerRectHeight) {
         offsetY = (playerOffsetTop + 1);
+        direction = 2;
       }
       // Right
       else if (playerOffsetTop === startLine && playerOffsetLeft < containerRectWidth) {
         offsetX = (playerOffsetLeft + 1);
+        direction = 0;
       }
       // Left
       else if (playerOffsetTop === containerRectHeight && playerOffsetLeft > startLine) {
         offsetX = (playerOffsetLeft - 1);
+        direction = 1;
       }
     }
-    return [offsetX, offsetY];
+    return [direction, offsetX, offsetY];
   };
