@@ -35,7 +35,7 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isGoingBackOnBorder } from '@/scripts/player';
+import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isGoingBackOnBorder, isUserChangingDirection } from '@/scripts/player';
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
@@ -51,7 +51,7 @@ onMounted(() => {
     const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
-      onMove: (detail) => { manualMovePlayer(detail); }
+      onEnd: (detail) => { manualMovePlayer(detail); }
     });
     if (autoIntervalId == undefined) {
       autoIntervalId = setInterval(autoMovePlayer, speed);
@@ -92,14 +92,6 @@ const autoMovePlayer = () => {
 };
 
 const manualMovePlayer = (detail: GestureDetail) => {
-  /*if (
-    manualIntervalId == undefined && (
-      (detail.currentX - detail.startX) > 10
-      || (detail.startX - detail.currentX) > 10
-      || (detail.currentY - detail.startY) > 10
-      || (detail.startY - detail.currentY) > 10
-    )
-  )*/
   if (manualIntervalId == undefined) {
     manualIntervalId = setInterval(function(){
       if (player.value && container.value) {
@@ -110,17 +102,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
-          if (
-            ((offsets[1] === containerRectWidth) && (direction === 2 && offsets[0] === 3))
-            || ((offsets[1] === startLine) && (direction === 3 && offsets[0] === 2))
-            || ((offsets[2] === startLine) && (direction === 0 && offsets[0] === 1))
-            || ((offsets[2] === containerRectHeight) && (direction === 1 && offsets[0] === 0))
-          ) {
-            console.log("Inverse");
-            isInversed = true;
-          } else {
-            isInversed = false;
-          }
+          isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine) ? true : false;
           direction = offsets[0];
           if (isAlreadyOnDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine)) {
             return goBackAuto();
