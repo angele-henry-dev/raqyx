@@ -10,12 +10,10 @@
             0% / 75%
           </ion-col>
         </ion-row>
-        <ion-row id="game-area">
+        <ion-row class="game-area">
           <ion-col>
-            <div ref="player" id="player"></div>
-            <div ref="container" id="container">
-              <div id="enemies"></div>
-            </div>
+            <div ref="player" class="player"></div>
+            <div ref="container" id="container" class="container"></div>
           </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-between">
@@ -45,6 +43,7 @@ let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let isInversed = false;
+const numberOfEnnemies = 1;
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -56,9 +55,37 @@ onMounted(() => {
     if (autoIntervalId == undefined) {
       autoIntervalId = setInterval(autoMovePlayer, speed);
     }
+    createEnnemies();
     gesture.enable();
   }
 });
+
+/* Ennemies scripts */
+
+const createEnnemies = () => {
+  if (player.value && container.value) {
+    for (let i=0; i<numberOfEnnemies; i++) {
+      const ennemy = document.createElement("div");
+      ennemy.setAttribute("ref", `ennemy${i}`);
+      ennemy.setAttribute("class", `ennemy`);
+
+      // TODO generate a random top and left position
+      const containerRect = container.value.getBoundingClientRect();
+      console.log(containerRect);
+      const left = randomIntFromInterval(1, containerRect.width-1)
+      const top = randomIntFromInterval(1, containerRect.height-1)
+      ennemy.style.left = `${left}px`;
+      ennemy.style.top = `${top}px`;
+
+      document.getElementById("container")?.appendChild(ennemy);
+    }
+  }
+};
+const randomIntFromInterval = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+};
+
+/* Player scripts */
 
 const goBackAuto = () => {
   clearInterval(manualIntervalId);
