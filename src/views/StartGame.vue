@@ -34,6 +34,7 @@ import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
 import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isGoingBackOnBorder, isUserChangingDirection } from '@/scripts/player';
+import { randomIntFromInterval } from '@/scripts/utils'
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
@@ -64,13 +65,13 @@ onMounted(() => {
 
 const createEnnemies = () => {
   if (player.value && container.value) {
+    const containerRect = container.value.getBoundingClientRect();
     for (let i=0; i<numberOfEnnemies; i++) {
       const ennemy = document.createElement("div");
       ennemy.setAttribute("ref", `ennemy${i}`);
       ennemy.setAttribute("class", `ennemy`);
 
       // TODO generate a random top and left position
-      const containerRect = container.value.getBoundingClientRect();
       console.log(containerRect);
       const left = randomIntFromInterval(1, containerRect.width-1)
       const top = randomIntFromInterval(1, containerRect.height-1)
@@ -80,9 +81,6 @@ const createEnnemies = () => {
       document.getElementById("container")?.appendChild(ennemy);
     }
   }
-};
-const randomIntFromInterval = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min + 1) + min)
 };
 
 /* Player scripts */
