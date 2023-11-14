@@ -40,11 +40,12 @@ const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
 const speed = 10;
 const startLine = -1;
+const numberOfEnnemies = 1;
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let isInversed = false;
-const numberOfEnnemies = 1;
+let areEnnemiesActivated = false;
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -56,23 +57,19 @@ onMounted(() => {
     if (autoIntervalId == undefined) {
       autoIntervalId = setInterval(autoMovePlayer, speed);
     }
-    createEnnemies();
     gesture.enable();
   }
 });
 
 /* Ennemies scripts */
 
-const createEnnemies = () => {
+const createEnnemies = (containerRect: DOMRect) => {
   if (player.value && container.value) {
-    const containerRect = container.value.getBoundingClientRect();
     for (let i=0; i<numberOfEnnemies; i++) {
       const ennemy = document.createElement("div");
       ennemy.setAttribute("ref", `ennemy${i}`);
       ennemy.setAttribute("class", `ennemy`);
 
-      // TODO generate a random top and left position
-      console.log(containerRect);
       const left = randomIntFromInterval(1, containerRect.width-1)
       const top = randomIntFromInterval(1, containerRect.height-1)
       ennemy.style.left = `${left}px`;
@@ -80,7 +77,9 @@ const createEnnemies = () => {
 
       document.getElementById("container")?.appendChild(ennemy);
     }
+    return true;
   }
+  return false;
 };
 
 /* Player scripts */
@@ -99,6 +98,11 @@ const autoMovePlayer = () => {
     const playerRect = player.value.getBoundingClientRect();
     const containerRectWidth = containerRect.width + playerRect.width - 1;
     const containerRectHeight = containerRect.height + playerRect.height - 1;
+
+    if (!areEnnemiesActivated) {
+      areEnnemiesActivated = createEnnemies(containerRect);
+    }
+
     const offsets = automaticMovePlayer(
       player.value.offsetLeft,
       player.value.offsetTop,
