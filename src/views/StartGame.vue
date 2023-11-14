@@ -45,7 +45,7 @@ let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let isInversed = false;
-let areEnnemiesActivated = false;
+let numberCurrentEnnemies = 0;
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -65,9 +65,12 @@ onMounted(() => {
 
 const createEnnemies = (containerRect: DOMRect) => {
   if (player.value && container.value) {
-    for (let i=0; i<numberOfEnnemies; i++) {
+    numberCurrentEnnemies = document.querySelectorAll('[id^="ennemy"]').length;
+
+    for (let i=0; i<(numberOfEnnemies-numberCurrentEnnemies); i++) {
       const ennemy = document.createElement("div");
       ennemy.setAttribute("ref", `ennemy${i}`);
+      ennemy.setAttribute("id", `ennemy${i}`);
       ennemy.setAttribute("class", `ennemy`);
 
       const left = randomIntFromInterval(1, containerRect.width-1)
@@ -76,10 +79,9 @@ const createEnnemies = (containerRect: DOMRect) => {
       ennemy.style.top = `${top}px`;
 
       document.getElementById("container")?.appendChild(ennemy);
+      numberCurrentEnnemies += 1;
     }
-    return true;
   }
-  return false;
 };
 
 /* Player scripts */
@@ -99,8 +101,8 @@ const autoMovePlayer = () => {
     const containerRectWidth = containerRect.width + playerRect.width - 1;
     const containerRectHeight = containerRect.height + playerRect.height - 1;
 
-    if (!areEnnemiesActivated) {
-      areEnnemiesActivated = createEnnemies(containerRect);
+    if (numberCurrentEnnemies < numberOfEnnemies) {
+      createEnnemies(containerRect);
     }
 
     const offsets = automaticMovePlayer(
