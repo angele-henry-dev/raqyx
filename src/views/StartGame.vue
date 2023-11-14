@@ -80,9 +80,47 @@ const createEnnemies = (containerRect: DOMRect) => {
 
       document.getElementById("container")?.appendChild(ennemy);
       numberCurrentEnnemies += 1;
+
+      setInterval(moveEnnemy, speed, containerRect, `ennemy${i}`);
     }
   }
 };
+
+function moveEnnemy(containerRect: DOMRect, ennemyId: string) {
+  const ennemy = document.getElementById(ennemyId);
+  const ennemyRect = ennemy?.getBoundingClientRect();
+
+  if (ennemy && ennemyRect) {
+    // const direction = Math.floor(Math.random() * 4);
+    // let offsetX = 0;
+    // let offsetY = 0;
+
+    // switch (direction) {
+    //   case 0: // Top
+    //     offsetX = 0;
+    //     offsetY = -1;
+    //     break;
+    //   case 1: // Down
+    //     offsetX = 0;
+    //     offsetY = 1;
+    //     break;
+    //   case 2: // Left
+    //     offsetX = -1;
+    //     offsetY = 0;
+    //     break;
+    //   case 3: // Right
+    //     offsetX = 1;
+    //     offsetY = 0;
+    //     break;
+    // }
+
+    // const newX = Math.max(0, Math.min(containerRect.width, ennemyRect.width + offsetX));
+    // const newY = Math.max(0, Math.min(containerRect.height, ennemyRect.height + offsetY));
+
+    // ennemy.style.left = `${newX}px`;
+    // ennemy.style.top = `${newY}px`;
+  }
+}
 
 /* Player scripts */
 
@@ -116,8 +154,8 @@ const autoMovePlayer = () => {
     );
     if (offsets) {
       direction = offsets[0];
-      player.value.style.left = offsets[1] + 'px';
-      player.value.style.top = offsets[2] + 'px';
+      player.value.style.left = `${offsets[1]}px`;
+      player.value.style.top = `${offsets[2]}px`;
     }
   }
 };
@@ -140,8 +178,8 @@ const manualMovePlayer = (detail: GestureDetail) => {
           }
           clearInterval(autoIntervalId);
           autoIntervalId = undefined;
-          player.value.style.left = offsets[1] + 'px';
-          player.value.style.top = offsets[2] + 'px';
+          player.value.style.left = `${offsets[1]}px`;
+          player.value.style.top = `${offsets[2]}px`;
           if (isGoingBackOnBorder(offsets, containerRectWidth, containerRectHeight, startLine)) {
             return goBackAuto();
           }
