@@ -13,7 +13,7 @@
         <ion-row class="game-area">
           <ion-col>
             <div ref="player" class="player"></div>
-            <div ref="container" id="container" class="container"></div>
+            <canvas ref="container" id="container" class="container"></canvas>
           </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-between">
@@ -171,7 +171,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
-          isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine) ? true : false;
+          isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine, isInversed) ? true : false;
           direction = offsets[0];
           if (isAlreadyOnDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine)) {
             return goBackAuto();

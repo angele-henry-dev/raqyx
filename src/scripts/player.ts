@@ -5,16 +5,27 @@ export const isUserChangingDirection = (
   containerRectWidth: number,
   containerRectHeight: number,
   direction: number, // 0=right, 1=left, 2=down, 3=up
-  startLine: number
+  startLine: number,
+  isInversed: boolean
 ) => {
+  // TODO
+  // if (offsets[1] === containerRectWidth || offsets[1] === startLine || offsets[2] === startLine || offsets[2] === containerRectHeight-1)
+  // {
+  //   isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine) ? true : false;
+  // }
   if (
     ((offsets[1] === containerRectWidth) && (direction === 2 && offsets[0] === 3))
     || ((offsets[1] === startLine) && (direction === 3 && offsets[0] === 2))
     || ((offsets[2] === startLine) && (direction === 0 && offsets[0] === 1))
     || ((offsets[2] === containerRectHeight-1) && (direction === 1 && offsets[0] === 0))
   ) {
+    console.log("Inverse");
     return true;
+  } else if (offsets[1] != containerRectWidth && offsets[1] != startLine && offsets[2] != startLine && offsets[2] != containerRectHeight-1) {
+    console.log("I don't know");
+    return isInversed;
   } else {
+    console.log("Do not inverse");
     return false;
   }
 }
