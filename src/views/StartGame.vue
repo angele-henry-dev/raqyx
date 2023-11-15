@@ -33,9 +33,9 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isUserChangingDirection } from '@/scripts/player';
-import { randomIntFromInterval, isGoingBackOnBorder } from '@/scripts/utils'
-import { Ennemy } from '@/scripts/ennemy'
+import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isUserChangingDirection, isGoingBackOnBorder } from '@/scripts/player';
+import { randomIntFromInterval } from '@/scripts/utils'
+import { Ennemy, collideBorder } from '@/scripts/ennemy'
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
@@ -82,33 +82,32 @@ const createEnnemies = (containerRect: DOMRect) => {
       document.getElementById("container")?.appendChild(ennemy);
       numberCurrentEnnemies += 1;
 
-      const ennemyIntervalId = setInterval(moveEnnemy, speed, containerRect, `ennemy${i}`);
+      const ennemyIntervalId = setInterval(moveEnnemy, speed, containerRect, ennemy, `ennemy${i}`);
 
       ennemiesTable[`ennemy${i}`] = {
         "x": left,
         "y": top,
-        "speed": speed,
+        "speedX": 1,
+        "speedY": 1,
         "intervalId": ennemyIntervalId
       };
     }
   }
 };
 
-const moveEnnemy = (containerRect: DOMRect, ennemyId: string) => {
-  const ennemy = document.getElementById(ennemyId);
-
-  if (ennemy && container.value) {
+const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: string) => {
+  if (ennemyDiv && container.value) {
     const containerRectWidth = containerRect.width;
     const containerRectHeight = containerRect.height;
 
-    ennemiesTable[ennemyId].x = ennemiesTable[ennemyId].x + 1;
-    ennemiesTable[ennemyId].y = ennemiesTable[ennemyId].y + 1;
-    ennemy.style.left = `${ennemiesTable[ennemyId].x}px`;
-    ennemy.style.top = `${ennemiesTable[ennemyId].y}px`;
+    ennemiesTable[ennemyId].x = ennemiesTable[ennemyId].x + ennemiesTable[ennemyId].speedX;
+    ennemiesTable[ennemyId].y = ennemiesTable[ennemyId].y + ennemiesTable[ennemyId].speedY;
+    ennemyDiv.style.left = `${ennemiesTable[ennemyId].x}px`;
+    ennemyDiv.style.top = `${ennemiesTable[ennemyId].y}px`;
 
-    if (isGoingBackOnBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth-2, containerRectHeight-1, startLine+1)) {
-      clearInterval(ennemiesTable[ennemyId].intervalId);
-    }
+    const newOffset = collideBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth-2, containerRectHeight-1, startLine+5)
+    ennemiesTable[ennemyId].speedX *= newOffset[0];
+    ennemiesTable[ennemyId].speedY *= newOffset[1];
   }
 };
 

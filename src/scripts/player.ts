@@ -32,6 +32,17 @@ export const isAlreadyOnDirection = (
     || (direction === 3 && offsets[2] <= startLine-1))
 };
 
+export const isGoingBackOnBorder = (
+  x: number,
+  y: number,
+  containerRectWidth: number,
+  containerRectHeight: number,
+  startLine: number
+) => {
+  return (x <= startLine || x >= containerRectWidth
+      || y <= startLine || y >= containerRectHeight-1)
+};
+
 export const onGesture = (
   detail: GestureDetail,
   playerOffsetLeft: number,
