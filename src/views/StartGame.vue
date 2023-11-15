@@ -58,7 +58,7 @@ const ennemiesTable: Record<string, Ennemy>  = {};
 const territoriesTable: Record<string, Territory>  = {};
 
 onMounted(() => {
-  if (player.value && container.value) {
+  if (container.value) {
     const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
@@ -134,13 +134,13 @@ const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: st
 const drawTerritories = (left: number, top: number, containerRect: DOMRect) => {
   let width = 0;
   let height = 0;
-  if (direction === 0) { // 0=right, 1=left, 2=down, 3=up
+  if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
     width = left - PLAYER_SIZE;
     left = START_LINE + PLAYER_SIZE;
-  } else if (direction === 1) {
+  } else if (playerTable.direction === 1) {
     left = left + PLAYER_SIZE;
     width = (containerRect.width - left) + (PLAYER_SIZE / 2) + 1;
-  } else if (direction === 2) {
+  } else if (playerTable.direction === 2) {
     height = top - PLAYER_SIZE;
     top = START_LINE + PLAYER_SIZE + 1;
   } else {
@@ -214,12 +214,12 @@ const manualMovePlayer = (detail: GestureDetail) => {
         }
         clearInterval(autoIntervalId);
         autoIntervalId = undefined;
-        player.value.style.left = `${playerTable.x}px`;
-        player.value.style.top = `${playerTable.y}px`;
 
         if (isGoingBackOnBorder(playerTable.x, playerTable.y, containerRectWidth, containerRectHeight, START_LINE)) {
           return goBackAuto();
         }
+        player.value.style.left = `${playerTable.x}px`;
+        player.value.style.top = `${playerTable.y}px`;
 
         drawTerritories(playerTable.x, playerTable.y, containerRect);
 
