@@ -13,7 +13,7 @@
         <ion-row class="game-area">
           <ion-col>
             <div ref="player" class="player"></div>
-            <canvas ref="container" id="container" class="container"></canvas>
+            <div ref="container" id="container" class="container"></div>
           </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-between">
