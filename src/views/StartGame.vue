@@ -41,7 +41,7 @@ const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
 const speed = 10;
 const startLine = -1;
-const numberOfEnnemies = 1;
+const numberOfEnnemies = 5;
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
@@ -67,9 +67,9 @@ onMounted(() => {
 
 const createEnnemies = (containerRect: DOMRect) => {
   if (player.value && container.value) {
-    numberCurrentEnnemies = document.querySelectorAll('[id^="ennemy"]').length;
+    const numberCurrentDivEnnemies = numberCurrentEnnemies = document.querySelectorAll('[id^="ennemy"]').length;
 
-    for (let i=0; i<(numberOfEnnemies-numberCurrentEnnemies); i++) {
+    for (let i=0; i<(numberOfEnnemies-numberCurrentDivEnnemies); i++) {
       const ennemy = document.createElement("div");
       ennemy.setAttribute("id", `ennemy${i}`);
       ennemy.setAttribute("class", `ennemy`);
