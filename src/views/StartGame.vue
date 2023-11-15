@@ -185,8 +185,11 @@ const manualMovePlayer = (detail: GestureDetail) => {
           }
 
           for (const key of Object.keys(ennemiesTable)) {
-            if (offsets[1] === ennemiesTable[key].x && offsets[2] === ennemiesTable[key].y) {
-              console.log("Plop");
+            const ennemy = ennemiesTable[key];
+            if (
+              (offsets[1] <= (ennemy.x + playerRect.width - 2) && offsets[1] >= (ennemy.x - playerRect.width + 2)) &&
+              (offsets[2] <= (ennemy.y + playerRect.height - 2) && offsets[2] >= (ennemy.y - playerRect.height + 2))
+            ) {
               return gameOver();
             }
           }
