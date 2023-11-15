@@ -171,7 +171,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
-          isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine, isInversed) ? true : false;
+          isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine) ? true : false;
           direction = offsets[0];
           if (isAlreadyOnDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine)) {
             return goBackAuto();
