@@ -84,11 +84,12 @@ const createEnnemies = (containerRect: DOMRect) => {
 
       const ennemyIntervalId = setInterval(moveEnnemy, speed, containerRect, ennemy, `ennemy${i}`);
 
+      const possibleSpeed = [1, -1];
       ennemiesTable[`ennemy${i}`] = {
         "x": left,
         "y": top,
-        "speedX": 1,
-        "speedY": 1,
+        "speedX": possibleSpeed[randomIntFromInterval(0, 1)],
+        "speedY": possibleSpeed[randomIntFromInterval(0, 1)],
         "intervalId": ennemyIntervalId
       };
     }
