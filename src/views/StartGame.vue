@@ -98,7 +98,6 @@ const moveEnnemy = (containerRect: DOMRect, ennemyId: string) => {
   const ennemy = document.getElementById(ennemyId);
 
   if (ennemy && container.value) {
-    const containerRect = container.value.getBoundingClientRect();
     const containerRectWidth = containerRect.width;
     const containerRectHeight = containerRect.height;
 
@@ -107,7 +106,7 @@ const moveEnnemy = (containerRect: DOMRect, ennemyId: string) => {
     ennemy.style.left = `${ennemiesTable[ennemyId].x}px`;
     ennemy.style.top = `${ennemiesTable[ennemyId].y}px`;
 
-    if (isGoingBackOnBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth, containerRectHeight, startLine)) {
+    if (isGoingBackOnBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth-2, containerRectHeight-1, startLine+1)) {
       clearInterval(ennemiesTable[ennemyId].intervalId);
     }
   }
