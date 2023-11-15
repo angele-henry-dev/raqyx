@@ -49,12 +49,10 @@ let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let isInversed = false;
 let numberCurrentEnnemies = 0;
-const playerTable: Player = {
+let playerTable: Player = {
   x: 0,
   y: 0,
-  speedX: 0,
-  speedY: 0,
-  intervalId: 0
+  direction: 0
 };
 const ennemiesTable: Record<string, Ennemy>  = {};
 const territoriesTable: Record<string, Territory>  = {};
@@ -185,7 +183,7 @@ const autoMovePlayer = () => {
       createEnnemies(containerRect);
     }
 
-    const offsets = automaticMovePlayer(
+    playerTable = automaticMovePlayer(
       player.value.offsetLeft,
       player.value.offsetTop,
       containerRectWidth,
@@ -194,11 +192,9 @@ const autoMovePlayer = () => {
       direction,
       isInversed
     );
-    if (offsets) {
-      direction = offsets[0];
-      player.value.style.left = `${offsets[1]}px`;
-      player.value.style.top = `${offsets[2]}px`;
-    }
+    direction = playerTable.direction;
+    player.value.style.left = `${playerTable.x}px`;
+    player.value.style.top = `${playerTable.y}px`;
   }
 };
 
@@ -207,9 +203,9 @@ const manualMovePlayer = (detail: GestureDetail) => {
     manualIntervalId = setInterval(function() {
       if (player.value && container.value) {
         const containerRect = container.value.getBoundingClientRect();
-        const playerRect = player.value.getBoundingClientRect();
-        const containerRectWidth = containerRect.width + playerRect.width;
-        const containerRectHeight = containerRect.height + playerRect.height;
+        //const playerRect = player.value.getBoundingClientRect();
+        const containerRectWidth = containerRect.width + PLAYER_SIZE;
+        const containerRectHeight = containerRect.height + PLAYER_SIZE;
         const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
@@ -232,8 +228,8 @@ const manualMovePlayer = (detail: GestureDetail) => {
           for (const key of Object.keys(ennemiesTable)) {
             const ennemy = ennemiesTable[key];
             if (
-              (offsets[1] <= (ennemy.x + playerRect.width - 2) && offsets[1] >= (ennemy.x - playerRect.width + 2)) &&
-              (offsets[2] <= (ennemy.y + playerRect.height - 2) && offsets[2] >= (ennemy.y - playerRect.height + 2))
+              (offsets[1] <= (ennemy.x + PLAYER_SIZE - 2) && offsets[1] >= (ennemy.x - PLAYER_SIZE + 2)) &&
+              (offsets[2] <= (ennemy.y + PLAYER_SIZE - 2) && offsets[2] >= (ennemy.y - PLAYER_SIZE + 2))
             ) {
               return gameOver();
             }

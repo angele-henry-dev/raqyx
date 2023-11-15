@@ -3,9 +3,7 @@ import { GestureDetail } from '@ionic/vue';
 export interface Player {
   x: number;
   y: number;
-  speedX: number;
-  speedY: number;
-  intervalId: number;
+  direction: number;
 }
 
 export const isUserChangingDirection = (
@@ -149,5 +147,5 @@ export const onGesture = (
         direction = 1;
       }
     }
-    return [direction, offsetX, offsetY];
+    return {direction: direction, x: offsetX, y: offsetY};
   };
