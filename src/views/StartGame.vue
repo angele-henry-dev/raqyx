@@ -33,8 +33,9 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isGoingBackOnBorder, isUserChangingDirection } from '@/scripts/player';
-import { randomIntFromInterval } from '@/scripts/utils'
+import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isUserChangingDirection } from '@/scripts/player';
+import { randomIntFromInterval, isGoingBackOnBorder } from '@/scripts/utils'
+import { Ennemy } from '@/scripts/ennemy'
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
@@ -46,6 +47,7 @@ let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let isInversed = false;
 let numberCurrentEnnemies = 0;
+const ennemiesTable: Record<string, Ennemy>  = {};
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -69,7 +71,6 @@ const createEnnemies = (containerRect: DOMRect) => {
 
     for (let i=0; i<(numberOfEnnemies-numberCurrentEnnemies); i++) {
       const ennemy = document.createElement("div");
-      ennemy.setAttribute("ref", `ennemy${i}`);
       ennemy.setAttribute("id", `ennemy${i}`);
       ennemy.setAttribute("class", `ennemy`);
 
@@ -81,46 +82,36 @@ const createEnnemies = (containerRect: DOMRect) => {
       document.getElementById("container")?.appendChild(ennemy);
       numberCurrentEnnemies += 1;
 
-      setInterval(moveEnnemy, speed, containerRect, `ennemy${i}`);
+      const ennemyIntervalId = setInterval(moveEnnemy, speed, containerRect, `ennemy${i}`);
+
+      ennemiesTable[`ennemy${i}`] = {
+        "x": left,
+        "y": top,
+        "speed": speed,
+        "intervalId": ennemyIntervalId
+      };
     }
   }
 };
 
-function moveEnnemy(containerRect: DOMRect, ennemyId: string) {
+const moveEnnemy = (containerRect: DOMRect, ennemyId: string) => {
   const ennemy = document.getElementById(ennemyId);
-  const ennemyRect = ennemy?.getBoundingClientRect();
 
-  if (ennemy && ennemyRect) {
-    // const direction = Math.floor(Math.random() * 4);
-    // let offsetX = 0;
-    // let offsetY = 0;
+  if (ennemy && container.value) {
+    const containerRect = container.value.getBoundingClientRect();
+    const containerRectWidth = containerRect.width;
+    const containerRectHeight = containerRect.height;
 
-    // switch (direction) {
-    //   case 0: // Top
-    //     offsetX = 0;
-    //     offsetY = -1;
-    //     break;
-    //   case 1: // Down
-    //     offsetX = 0;
-    //     offsetY = 1;
-    //     break;
-    //   case 2: // Left
-    //     offsetX = -1;
-    //     offsetY = 0;
-    //     break;
-    //   case 3: // Right
-    //     offsetX = 1;
-    //     offsetY = 0;
-    //     break;
-    // }
+    ennemiesTable[ennemyId].x = ennemiesTable[ennemyId].x + 1;
+    ennemiesTable[ennemyId].y = ennemiesTable[ennemyId].y + 1;
+    ennemy.style.left = `${ennemiesTable[ennemyId].x}px`;
+    ennemy.style.top = `${ennemiesTable[ennemyId].y}px`;
 
-    // const newX = Math.max(0, Math.min(containerRect.width, ennemyRect.width + offsetX));
-    // const newY = Math.max(0, Math.min(containerRect.height, ennemyRect.height + offsetY));
-
-    // ennemy.style.left = `${newX}px`;
-    // ennemy.style.top = `${newY}px`;
+    if (isGoingBackOnBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth, containerRectHeight, startLine)) {
+      clearInterval(ennemiesTable[ennemyId].intervalId);
+    }
   }
-}
+};
 
 /* Player scripts */
 
@@ -180,7 +171,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
           autoIntervalId = undefined;
           player.value.style.left = `${offsets[1]}px`;
           player.value.style.top = `${offsets[2]}px`;
-          if (isGoingBackOnBorder(offsets, containerRectWidth, containerRectHeight, startLine)) {
+          if (isGoingBackOnBorder(offsets[1], offsets[2], containerRectWidth, containerRectHeight, startLine)) {
             return goBackAuto();
           }
         } else {
