@@ -74,8 +74,8 @@ const createEnnemies = (containerRect: DOMRect) => {
       ennemy.setAttribute("id", `ennemy${i}`);
       ennemy.setAttribute("class", `ennemy`);
 
-      const left = randomIntFromInterval(1, containerRect.width-1)
-      const top = randomIntFromInterval(1, containerRect.height-1)
+      const left = randomIntFromInterval(10, containerRect.width-10)
+      const top = randomIntFromInterval(10, containerRect.height-10)
       ennemy.style.left = `${left}px`;
       ennemy.style.top = `${top}px`;
 
