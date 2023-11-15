@@ -39,7 +39,7 @@ import { Ennemy, collideBorder } from '@/scripts/ennemy'
 
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
-const speed = 10;
+const gameSpeed = 10;
 const startLine = -1;
 const numberOfEnnemies = 5;
 let autoIntervalId: number | undefined = undefined;
@@ -57,11 +57,20 @@ onMounted(() => {
       onEnd: (detail) => { manualMovePlayer(detail); }
     });
     if (autoIntervalId == undefined) {
-      autoIntervalId = setInterval(autoMovePlayer, speed);
+      autoIntervalId = setInterval(autoMovePlayer, gameSpeed);
     }
     gesture.enable();
   }
 });
+
+const gameOver = () => {
+  clearInterval(manualIntervalId);
+  clearInterval(autoIntervalId);
+  for (const key of Object.keys(ennemiesTable)) {
+    clearInterval(ennemiesTable[key].intervalId);
+  }
+  console.log("Game over");
+};
 
 /* Ennemies scripts */
 
@@ -82,7 +91,7 @@ const createEnnemies = (containerRect: DOMRect) => {
       document.getElementById("container")?.appendChild(ennemy);
       numberCurrentEnnemies += 1;
 
-      const ennemyIntervalId = setInterval(moveEnnemy, speed, containerRect, ennemy, `ennemy${i}`);
+      const ennemyIntervalId = setInterval(moveEnnemy, gameSpeed, containerRect, ennemy, `ennemy${i}`);
 
       const possibleSpeed = [1, -1];
       ennemiesTable[`ennemy${i}`] = {
@@ -118,7 +127,7 @@ const goBackAuto = () => {
   clearInterval(manualIntervalId);
   manualIntervalId = undefined;
   if (autoIntervalId == undefined) {
-    autoIntervalId = setInterval(autoMovePlayer, speed);
+    autoIntervalId = setInterval(autoMovePlayer, gameSpeed);
   }
 };
 
@@ -152,7 +161,7 @@ const autoMovePlayer = () => {
 
 const manualMovePlayer = (detail: GestureDetail) => {
   if (manualIntervalId == undefined) {
-    manualIntervalId = setInterval(function(){
+    manualIntervalId = setInterval(function() {
       if (player.value && container.value) {
         const containerRect = container.value.getBoundingClientRect();
         const playerRect = player.value.getBoundingClientRect();
@@ -170,8 +179,16 @@ const manualMovePlayer = (detail: GestureDetail) => {
           autoIntervalId = undefined;
           player.value.style.left = `${offsets[1]}px`;
           player.value.style.top = `${offsets[2]}px`;
+
           if (isGoingBackOnBorder(offsets[1], offsets[2], containerRectWidth, containerRectHeight, startLine)) {
             return goBackAuto();
+          }
+
+          for (const key of Object.keys(ennemiesTable)) {
+            if (offsets[1] === ennemiesTable[key].x && offsets[2] === ennemiesTable[key].y) {
+              console.log("Plop");
+              return gameOver();
+            }
           }
         } else {
           return goBackAuto();
@@ -179,7 +196,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
       } else {
         return goBackAuto();
       }
-    }, speed);
+    }, gameSpeed);
   }
 };
 
