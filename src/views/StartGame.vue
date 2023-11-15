@@ -50,8 +50,8 @@ let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let isInversed = false;
 let numberCurrentEnnemies = 0;
 let playerTable: Player = {
-  x: 0,
-  y: 0,
+  x: 1,
+  y: -1,
   direction: 0
 };
 const ennemiesTable: Record<string, Ennemy>  = {};
@@ -184,8 +184,8 @@ const autoMovePlayer = () => {
     }
 
     playerTable = automaticMovePlayer(
-      player.value.offsetLeft,
-      player.value.offsetTop,
+      playerTable.x,
+      playerTable.y,
       containerRectWidth,
       containerRectHeight,
       START_LINE,
@@ -203,10 +203,9 @@ const manualMovePlayer = (detail: GestureDetail) => {
     manualIntervalId = setInterval(function() {
       if (player.value && container.value) {
         const containerRect = container.value.getBoundingClientRect();
-        //const playerRect = player.value.getBoundingClientRect();
         const containerRectWidth = containerRect.width + PLAYER_SIZE;
         const containerRectHeight = containerRect.height + PLAYER_SIZE;
-        playerTable = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
+        playerTable = onGesture(detail, playerTable.x, playerTable.y, direction);
 
         isInversed = isUserChangingDirection(playerTable, containerRectWidth, containerRectHeight, direction, START_LINE) ? true : false;
         direction = playerTable.direction;
