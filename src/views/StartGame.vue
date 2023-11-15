@@ -37,11 +37,12 @@ import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isUserChangingDir
 import { randomIntFromInterval } from '@/scripts/utils'
 import { Ennemy, collideBorder } from '@/scripts/ennemy'
 
+const GAME_SPEED = 10;
+const START_LINE = -1;
+const NUMBER_OF_ENNEMIES = 1;
+const PLAYER_SIZE = 6;
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
-const gameSpeed = 10;
-const startLine = -1;
-const numberOfEnnemies = 5;
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
@@ -57,7 +58,7 @@ onMounted(() => {
       onEnd: (detail) => { manualMovePlayer(detail); }
     });
     if (autoIntervalId == undefined) {
-      autoIntervalId = setInterval(autoMovePlayer, gameSpeed);
+      autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
     }
     gesture.enable();
   }
@@ -72,13 +73,49 @@ const gameOver = () => {
   console.log("Game over");
 };
 
+/* Territory scripts */
+
+const drawTerritories = (left: number, top: number, containerRect: DOMRect) => {
+  if (player.value && container.value) {
+    let width = 0;
+    let height = 0;
+    if (direction === 0) { // 0=right, 1=left, 2=down, 3=up
+      width = left - PLAYER_SIZE;
+      left = START_LINE + PLAYER_SIZE;
+    } else if (direction === 1) {
+      left = left + PLAYER_SIZE;
+      width = (containerRect.width - left) + (PLAYER_SIZE / 2) + 1;
+    } else if (direction === 2) {
+      height = top - PLAYER_SIZE;
+      top = START_LINE + PLAYER_SIZE + 1;
+    } else {
+      top = top + PLAYER_SIZE;
+      height = (containerRect.height - top) + (PLAYER_SIZE / 2) + 1;
+    }
+
+    let territory = document.getElementById("territory");
+    if (territory == null) {
+      territory = document.createElement("div");
+      territory.setAttribute("id", `territory`);
+      territory.style.border = "1px solid green";
+      territory.style.backgroundColor = "yellow";
+      territory.style.position = "absolute";
+    }
+    territory.style.left = `${left}px`;
+    territory.style.top = `${top}px`;
+    territory.style.width = `${width}px`;
+    territory.style.height = `${height}px`;
+    document.getElementById("container")?.appendChild(territory);
+  }
+};
+
 /* Ennemies scripts */
 
 const createEnnemies = (containerRect: DOMRect) => {
   if (player.value && container.value) {
     const numberCurrentDivEnnemies = numberCurrentEnnemies = document.querySelectorAll('[id^="ennemy"]').length;
 
-    for (let i=0; i<(numberOfEnnemies-numberCurrentDivEnnemies); i++) {
+    for (let i=0; i<(NUMBER_OF_ENNEMIES-numberCurrentDivEnnemies); i++) {
       const ennemy = document.createElement("div");
       ennemy.setAttribute("id", `ennemy${i}`);
       ennemy.setAttribute("class", `ennemy`);
@@ -91,7 +128,7 @@ const createEnnemies = (containerRect: DOMRect) => {
       document.getElementById("container")?.appendChild(ennemy);
       numberCurrentEnnemies += 1;
 
-      const ennemyIntervalId = setInterval(moveEnnemy, gameSpeed, containerRect, ennemy, `ennemy${i}`);
+      const ennemyIntervalId = setInterval(moveEnnemy, GAME_SPEED, containerRect, ennemy, `ennemy${i}`);
 
       const possibleSpeed = [1, -1];
       ennemiesTable[`ennemy${i}`] = {
@@ -115,7 +152,7 @@ const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: st
     ennemyDiv.style.left = `${ennemiesTable[ennemyId].x}px`;
     ennemyDiv.style.top = `${ennemiesTable[ennemyId].y}px`;
 
-    const newOffset = collideBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth-2, containerRectHeight-1, startLine+5)
+    const newOffset = collideBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth-2, containerRectHeight-1, START_LINE+PLAYER_SIZE-1)
     ennemiesTable[ennemyId].speedX *= newOffset[0];
     ennemiesTable[ennemyId].speedY *= newOffset[1];
   }
@@ -127,7 +164,7 @@ const goBackAuto = () => {
   clearInterval(manualIntervalId);
   manualIntervalId = undefined;
   if (autoIntervalId == undefined) {
-    autoIntervalId = setInterval(autoMovePlayer, gameSpeed);
+    autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
   }
 };
 
@@ -138,7 +175,7 @@ const autoMovePlayer = () => {
     const containerRectWidth = containerRect.width + playerRect.width - 1;
     const containerRectHeight = containerRect.height + playerRect.height - 1;
 
-    if (numberCurrentEnnemies < numberOfEnnemies) {
+    if (numberCurrentEnnemies < NUMBER_OF_ENNEMIES) {
       createEnnemies(containerRect);
     }
 
@@ -147,7 +184,7 @@ const autoMovePlayer = () => {
       player.value.offsetTop,
       containerRectWidth,
       containerRectHeight,
-      startLine,
+      START_LINE,
       direction,
       isInversed
     );
@@ -170,9 +207,9 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
         if (offsets) {
-          isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine) ? true : false;
+          isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, START_LINE) ? true : false;
           direction = offsets[0];
-          if (isAlreadyOnDirection(offsets, containerRectWidth, containerRectHeight, direction, startLine)) {
+          if (isAlreadyOnDirection(offsets, containerRectWidth, containerRectHeight, direction, START_LINE)) {
             return goBackAuto();
           }
           clearInterval(autoIntervalId);
@@ -180,9 +217,11 @@ const manualMovePlayer = (detail: GestureDetail) => {
           player.value.style.left = `${offsets[1]}px`;
           player.value.style.top = `${offsets[2]}px`;
 
-          if (isGoingBackOnBorder(offsets[1], offsets[2], containerRectWidth, containerRectHeight, startLine)) {
+          if (isGoingBackOnBorder(offsets[1], offsets[2], containerRectWidth, containerRectHeight, START_LINE)) {
             return goBackAuto();
           }
+
+          drawTerritories(offsets[1], offsets[2], containerRect);
 
           for (const key of Object.keys(ennemiesTable)) {
             const ennemy = ennemiesTable[key];
@@ -199,7 +238,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
       } else {
         return goBackAuto();
       }
-    }, gameSpeed);
+    }, GAME_SPEED);
   }
 };
 
