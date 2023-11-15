@@ -7,17 +7,17 @@ export interface Player {
 }
 
 export const isUserChangingDirection = (
-  offsets: Array<number>,
+  playerTable: Player,
   containerRectWidth: number,
   containerRectHeight: number,
   direction: number, // 0=right, 1=left, 2=down, 3=up
   startLine: number,
 ) => {
   if (
-    ((offsets[1] === containerRectWidth) && (direction === 2 && offsets[0] === 3))
-    || ((offsets[1] === startLine) && (direction === 3 && offsets[0] === 2))
-    || ((offsets[2] === startLine) && (direction === 0 && offsets[0] === 1))
-    || ((offsets[2] === containerRectHeight-1) && (direction === 1 && offsets[0] === 0))
+    ((playerTable.x === containerRectWidth) && (direction === 2 && playerTable.direction === 3))
+    || ((playerTable.x === startLine) && (direction === 3 && playerTable.direction === 2))
+    || ((playerTable.y === startLine) && (direction === 0 && playerTable.direction === 1))
+    || ((playerTable.y === containerRectHeight-1) && (direction === 1 && playerTable.direction === 0))
   ) {
     return true;
   } else {
@@ -26,16 +26,16 @@ export const isUserChangingDirection = (
 }
 
 export const isAlreadyOnDirection = (
-  offsets: Array<number>,
+  playerTable: Player,
   containerRectWidth: number,
   containerRectHeight: number,
   direction: number, // 0=right, 1=left, 2=down, 3=up
   startLine: number
 ) => {
-  return ((direction === 0 && offsets[1] >= containerRectWidth)
-    || (direction === 1 && offsets[1] <= startLine-1)
-    || (direction === 2 && offsets[2] >= containerRectHeight)
-    || (direction === 3 && offsets[2] <= startLine-1))
+  return ((direction === 0 && playerTable.x >= containerRectWidth)
+    || (direction === 1 && playerTable.x <= startLine-1)
+    || (direction === 2 && playerTable.y >= containerRectHeight)
+    || (direction === 3 && playerTable.y <= startLine-1))
 };
 
 export const isGoingBackOnBorder = (
@@ -89,7 +89,7 @@ export const onGesture = (
         offsetY = (playerOffsetTop - 1);
       }
     }
-    return [direction, offsetX, offsetY];
+    return {direction: direction, x: offsetX, y: offsetY};
   };
 
   export const automaticMovePlayer = (

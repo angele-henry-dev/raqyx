@@ -206,36 +206,32 @@ const manualMovePlayer = (detail: GestureDetail) => {
         //const playerRect = player.value.getBoundingClientRect();
         const containerRectWidth = containerRect.width + PLAYER_SIZE;
         const containerRectHeight = containerRect.height + PLAYER_SIZE;
-        const offsets = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
+        playerTable = onGesture(detail, player.value.offsetLeft, player.value.offsetTop, direction);
 
-        if (offsets) {
-          isInversed = isUserChangingDirection(offsets, containerRectWidth, containerRectHeight, direction, START_LINE) ? true : false;
-          direction = offsets[0];
-          if (isAlreadyOnDirection(offsets, containerRectWidth, containerRectHeight, direction, START_LINE)) {
-            return goBackAuto();
-          }
-          clearInterval(autoIntervalId);
-          autoIntervalId = undefined;
-          player.value.style.left = `${offsets[1]}px`;
-          player.value.style.top = `${offsets[2]}px`;
-
-          if (isGoingBackOnBorder(offsets[1], offsets[2], containerRectWidth, containerRectHeight, START_LINE)) {
-            return goBackAuto();
-          }
-
-          drawTerritories(offsets[1], offsets[2], containerRect);
-
-          for (const key of Object.keys(ennemiesTable)) {
-            const ennemy = ennemiesTable[key];
-            if (
-              (offsets[1] <= (ennemy.x + PLAYER_SIZE - 2) && offsets[1] >= (ennemy.x - PLAYER_SIZE + 2)) &&
-              (offsets[2] <= (ennemy.y + PLAYER_SIZE - 2) && offsets[2] >= (ennemy.y - PLAYER_SIZE + 2))
-            ) {
-              return gameOver();
-            }
-          }
-        } else {
+        isInversed = isUserChangingDirection(playerTable, containerRectWidth, containerRectHeight, direction, START_LINE) ? true : false;
+        direction = playerTable.direction;
+        if (isAlreadyOnDirection(playerTable, containerRectWidth, containerRectHeight, direction, START_LINE)) {
           return goBackAuto();
+        }
+        clearInterval(autoIntervalId);
+        autoIntervalId = undefined;
+        player.value.style.left = `${playerTable.x}px`;
+        player.value.style.top = `${playerTable.y}px`;
+
+        if (isGoingBackOnBorder(playerTable.x, playerTable.y, containerRectWidth, containerRectHeight, START_LINE)) {
+          return goBackAuto();
+        }
+
+        drawTerritories(playerTable.x, playerTable.y, containerRect);
+
+        for (const key of Object.keys(ennemiesTable)) {
+          const ennemy = ennemiesTable[key];
+          if (
+            (playerTable.x <= (ennemy.x + PLAYER_SIZE - 2) && playerTable.x >= (ennemy.x - PLAYER_SIZE + 2)) &&
+            (playerTable.y <= (ennemy.y + PLAYER_SIZE - 2) && playerTable.y >= (ennemy.y - PLAYER_SIZE + 2))
+          ) {
+            return gameOver();
+          }
         }
       } else {
         return goBackAuto();
