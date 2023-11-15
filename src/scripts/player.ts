@@ -1,5 +1,13 @@
 import { GestureDetail } from '@ionic/vue';
 
+export interface Player {
+  x: number;
+  y: number;
+  speedX: number;
+  speedY: number;
+  intervalId: number;
+}
+
 export const isUserChangingDirection = (
   offsets: Array<number>,
   containerRectWidth: number,

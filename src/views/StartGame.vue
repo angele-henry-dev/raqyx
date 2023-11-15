@@ -33,9 +33,10 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { onGesture, automaticMovePlayer, isAlreadyOnDirection, isUserChangingDirection, isGoingBackOnBorder } from '@/scripts/player';
+import { Player, onGesture, automaticMovePlayer, isAlreadyOnDirection, isUserChangingDirection, isGoingBackOnBorder } from '@/scripts/player';
 import { randomIntFromInterval } from '@/scripts/utils'
 import { Ennemy, collideBorder } from '@/scripts/ennemy'
+import { Territory } from '@/scripts/territory'
 
 const GAME_SPEED = 10;
 const START_LINE = -1;
@@ -48,7 +49,15 @@ let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let isInversed = false;
 let numberCurrentEnnemies = 0;
+const playerTable: Player = {
+  x: 0,
+  y: 0,
+  speedX: 0,
+  speedY: 0,
+  intervalId: 0
+};
 const ennemiesTable: Record<string, Ennemy>  = {};
+const territoriesTable: Record<string, Territory>  = {};
 
 onMounted(() => {
   if (player.value && container.value) {
@@ -73,46 +82,10 @@ const gameOver = () => {
   console.log("Game over");
 };
 
-/* Territory scripts */
-
-const drawTerritories = (left: number, top: number, containerRect: DOMRect) => {
-  if (player.value && container.value) {
-    let width = 0;
-    let height = 0;
-    if (direction === 0) { // 0=right, 1=left, 2=down, 3=up
-      width = left - PLAYER_SIZE;
-      left = START_LINE + PLAYER_SIZE;
-    } else if (direction === 1) {
-      left = left + PLAYER_SIZE;
-      width = (containerRect.width - left) + (PLAYER_SIZE / 2) + 1;
-    } else if (direction === 2) {
-      height = top - PLAYER_SIZE;
-      top = START_LINE + PLAYER_SIZE + 1;
-    } else {
-      top = top + PLAYER_SIZE;
-      height = (containerRect.height - top) + (PLAYER_SIZE / 2) + 1;
-    }
-
-    let territory = document.getElementById("territory");
-    if (territory == null) {
-      territory = document.createElement("div");
-      territory.setAttribute("id", `territory`);
-      territory.style.border = "1px solid green";
-      territory.style.backgroundColor = "yellow";
-      territory.style.position = "absolute";
-    }
-    territory.style.left = `${left}px`;
-    territory.style.top = `${top}px`;
-    territory.style.width = `${width}px`;
-    territory.style.height = `${height}px`;
-    document.getElementById("container")?.appendChild(territory);
-  }
-};
-
 /* Ennemies scripts */
 
 const createEnnemies = (containerRect: DOMRect) => {
-  if (player.value && container.value) {
+  if (container.value) {
     const numberCurrentDivEnnemies = numberCurrentEnnemies = document.querySelectorAll('[id^="ennemy"]').length;
 
     for (let i=0; i<(NUMBER_OF_ENNEMIES-numberCurrentDivEnnemies); i++) {
@@ -158,6 +131,40 @@ const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: st
   }
 };
 
+/* Territory scripts */
+
+const drawTerritories = (left: number, top: number, containerRect: DOMRect) => {
+  let width = 0;
+  let height = 0;
+  if (direction === 0) { // 0=right, 1=left, 2=down, 3=up
+    width = left - PLAYER_SIZE;
+    left = START_LINE + PLAYER_SIZE;
+  } else if (direction === 1) {
+    left = left + PLAYER_SIZE;
+    width = (containerRect.width - left) + (PLAYER_SIZE / 2) + 1;
+  } else if (direction === 2) {
+    height = top - PLAYER_SIZE;
+    top = START_LINE + PLAYER_SIZE + 1;
+  } else {
+    top = top + PLAYER_SIZE;
+    height = (containerRect.height - top) + (PLAYER_SIZE / 2) + 1;
+  }
+
+  let territory = document.getElementById("territory");
+  if (territory == null) {
+    territory = document.createElement("div");
+    territory.setAttribute("id", `territory`);
+    territory.style.border = "1px solid green";
+    territory.style.backgroundColor = "yellow";
+    territory.style.position = "absolute";
+  }
+  territory.style.left = `${left}px`;
+  territory.style.top = `${top}px`;
+  territory.style.width = `${width}px`;
+  territory.style.height = `${height}px`;
+  document.getElementById("container")?.appendChild(territory);
+};
+
 /* Player scripts */
 
 const goBackAuto = () => {
@@ -171,9 +178,8 @@ const goBackAuto = () => {
 const autoMovePlayer = () => {
   if (player.value && container.value) {
     const containerRect = container.value.getBoundingClientRect();
-    const playerRect = player.value.getBoundingClientRect();
-    const containerRectWidth = containerRect.width + playerRect.width - 1;
-    const containerRectHeight = containerRect.height + playerRect.height - 1;
+    const containerRectWidth = containerRect.width + PLAYER_SIZE - 1;
+    const containerRectHeight = containerRect.height + PLAYER_SIZE - 1;
 
     if (numberCurrentEnnemies < NUMBER_OF_ENNEMIES) {
       createEnnemies(containerRect);
