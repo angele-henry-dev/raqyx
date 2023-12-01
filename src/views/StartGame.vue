@@ -175,26 +175,9 @@ const drawTerritories = (playerTable: Player) => {
   if (c) {
     const ctx = c.getContext("2d");
     if (ctx) {
-      let lineToX = 0;
-      let lineToY = 0;
-
-      if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
-        lineToX = playerTable.x - (PLAYERS_SIZE / 2);
-        lineToY = playerTable.y - (PLAYERS_SIZE / 2);
-      } else if (playerTable.direction === 1) {
-        lineToX = playerTable.x - (PLAYERS_SIZE / 2);
-        lineToY = playerTable.y - (PLAYERS_SIZE / 2);
-      } else if (playerTable.direction === 2) {
-        lineToX = playerTable.x - (PLAYERS_SIZE / 2);
-        lineToY = playerTable.y - (PLAYERS_SIZE / 2);
-      } else {
-        lineToX = playerTable.x - (PLAYERS_SIZE / 2);
-        lineToY = playerTable.y - (PLAYERS_SIZE / 2);
-      }
-      
       ctx.beginPath();
       ctx.moveTo(playerTable.x, playerTable.y);
-      ctx.lineTo(lineToX, lineToY);
+      ctx.lineTo(playerTable.x - (PLAYERS_SIZE / 2), playerTable.y - (PLAYERS_SIZE / 2));
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
       ctx.strokeStyle = "sienna";
@@ -203,55 +186,6 @@ const drawTerritories = (playerTable: Player) => {
       ctx.closePath();
     }
   }
-
-
-  // const element = container.value.firstElementChild;
-  // const test = document.getElementById("freeTerritory");
-  // if (test) {
-  //   const animation = createAnimation()
-  //     .addElement(test)
-  //     .duration(GAME_SPEED)
-  //     .iterations(Infinity)
-  //     .keyframes([
-  //       { offset: 0, width: '80px' },
-  //       { offset: 0.72, width: 'var(--width)' },
-  //       { offset: 1, width: '240px' },
-  //   ]);
-  //   animation.play();
-  // }
-
-
-  // if (freeTerritory.value) {
-  //   let width = 0;
-  //   let height = 0;
-  //   if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
-  //     width = left - PLAYERS_SIZE;
-  //     left = PLAYERS_SIZE;
-  //   } else if (playerTable.direction === 1) {
-  //     left = left + PLAYERS_SIZE;
-  //     width = (freeTerritory.value.width - left) + PLAYERS_SIZE;
-  //   } else if (playerTable.direction === 2) {
-  //     height = top - PLAYERS_SIZE;
-  //     top = PLAYERS_SIZE + 1;
-  //   } else {
-  //     top = top + PLAYERS_SIZE;
-  //     height = (freeTerritory.value.height - top) + PLAYERS_SIZE;
-  //   }
-
-  //   let newTerritory = document.getElementById("territory");
-  //   if (newTerritory == null) {
-  //     newTerritory = document.createElement("div");
-  //     newTerritory.setAttribute("id", `territory`);
-  //     newTerritory.style.border = "1px solid green";
-  //     newTerritory.style.backgroundColor = "yellow";
-  //     newTerritory.style.position = "absolute";
-  //   }
-  //   newTerritory.style.left = `${left}px`;
-  //   newTerritory.style.top = `${top}px`;
-  //   newTerritory.style.width = `${width}px`;
-  //   newTerritory.style.height = `${height}px`;
-  //   document.getElementById("freeTerritory")?.appendChild(newTerritory);
-  // }
 };
 
 /* Player scripts */
