@@ -6,25 +6,6 @@ export interface Player {
   direction: number;
 }
 
-export const isUserChangingDirection = (
-  playerTable: Player,
-  containerRectWidth: number,
-  containerRectHeight: number,
-  direction: number, // 0=right, 1=left, 2=down, 3=up
-  startLine: number,
-) => {
-  if (
-    ((playerTable.x === containerRectWidth) && (direction === 2 && playerTable.direction === 3))
-    || ((playerTable.x === startLine) && (direction === 3 && playerTable.direction === 2))
-    || ((playerTable.y === startLine) && (direction === 0 && playerTable.direction === 1))
-    || ((playerTable.y === containerRectHeight-1) && (direction === 1 && playerTable.direction === 0))
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 export const isAlreadyOnDirection = (
   playerTable: Player,
   containerRectWidth: number,
@@ -45,7 +26,7 @@ export const isGoingBackOnBorder = (
   containerRectHeight: number,
   startLine: number
 ) => {
-  return (x <= startLine || x >= containerRectWidth
+  return (x <= startLine || x >= containerRectWidth-1
       || y <= startLine || y >= containerRectHeight-1)
 };
 
@@ -99,53 +80,29 @@ export const onGesture = (
     containerRectHeight: number,
     startLine: number,
     direction: number, // 0=right, 1=left, 2=down, 3=up
-    isInversed: boolean
   ) => {
     let offsetX = playerOffsetLeft;
     let offsetY = playerOffsetTop;
 
-    if (isInversed) {
-      // Up
-      if (playerOffsetLeft === containerRectWidth && playerOffsetTop > startLine) {
-        offsetY = (playerOffsetTop - 1);
-        direction = 3;
-      }
-      // Down
-      else if (playerOffsetLeft === startLine && playerOffsetTop < containerRectHeight) {
-        offsetY = (playerOffsetTop + 1);
-        direction = 2;
-      }
-      // Right
-      else if (playerOffsetTop === containerRectHeight && playerOffsetLeft < containerRectWidth) {
-        offsetX = (playerOffsetLeft + 1);
-        direction = 0;
-      }
-      // Left
-      else if (playerOffsetTop === startLine && playerOffsetLeft > startLine) {
-        offsetX = (playerOffsetLeft - 1);
-        direction = 1;
-      }
-    } else {
-      // Up
-      if (playerOffsetLeft === startLine && playerOffsetTop > startLine) {
-        offsetY = (playerOffsetTop - 1);
-        direction = 3;
-      }
-      // Down
-      else if (playerOffsetLeft === containerRectWidth && playerOffsetTop < containerRectHeight) {
-        offsetY = (playerOffsetTop + 1);
-        direction = 2;
-      }
-      // Right
-      else if (playerOffsetTop === startLine && playerOffsetLeft < containerRectWidth) {
-        offsetX = (playerOffsetLeft + 1);
-        direction = 0;
-      }
-      // Left
-      else if (playerOffsetTop === containerRectHeight && playerOffsetLeft > startLine) {
-        offsetX = (playerOffsetLeft - 1);
-        direction = 1;
-      }
+    // Up
+    if (playerOffsetLeft === startLine && playerOffsetTop > startLine) {
+      offsetY = (playerOffsetTop - 1);
+      direction = 3;
+    }
+    // Down
+    else if (playerOffsetLeft === containerRectWidth && playerOffsetTop < containerRectHeight) {
+      offsetY = (playerOffsetTop + 1);
+      direction = 2;
+    }
+    // Right
+    else if (playerOffsetTop === startLine && playerOffsetLeft < containerRectWidth) {
+      offsetX = (playerOffsetLeft + 1);
+      direction = 0;
+    }
+    // Left
+    else if (playerOffsetTop === containerRectHeight && playerOffsetLeft > startLine) {
+      offsetX = (playerOffsetLeft - 1);
+      direction = 1;
     }
     return {direction: direction, x: offsetX, y: offsetY};
   };

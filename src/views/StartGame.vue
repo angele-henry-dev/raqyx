@@ -33,7 +33,7 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { Player, onGesture, automaticMovePlayer, isAlreadyOnDirection, isUserChangingDirection, isGoingBackOnBorder } from '@/scripts/player';
+import { Player, onGesture, automaticMovePlayer, isAlreadyOnDirection, isGoingBackOnBorder } from '@/scripts/player';
 import { randomIntFromInterval } from '@/scripts/utils'
 import { Ennemy, collideBorder } from '@/scripts/ennemy'
 import { Territory } from '@/scripts/territory'
@@ -47,7 +47,6 @@ const container = ref<HTMLElement | null>(null);
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
-let isInversed = false;
 let numberCurrentEnnemies = 0;
 let playerTable: Player = {
   x: 1,
@@ -190,7 +189,6 @@ const autoMovePlayer = () => {
       containerRectHeight,
       START_LINE,
       direction,
-      isInversed
     );
     direction = playerTable.direction;
     player.value.style.left = `${playerTable.x}px`;
@@ -207,7 +205,6 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const containerRectHeight = containerRect.height + PLAYER_SIZE;
         playerTable = onGesture(detail, playerTable.x, playerTable.y, direction);
 
-        isInversed = isUserChangingDirection(playerTable, containerRectWidth, containerRectHeight, direction, START_LINE) ? true : false;
         direction = playerTable.direction;
         if (isAlreadyOnDirection(playerTable, containerRectWidth, containerRectHeight, direction, START_LINE)) {
           return goBackAuto();
