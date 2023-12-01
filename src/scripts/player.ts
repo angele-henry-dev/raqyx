@@ -8,17 +8,6 @@ export interface Player {
   direction: number;
 }
 
-export const isAlreadyOnDirection = (
-  playerTable: Player, // 0=right, 1=left, 2=down, 3=up
-  containerRectWidth: number,
-  containerRectHeight: number,
-) => {
-  return ((playerTable.direction === 0 && playerTable.x >= containerRectWidth)
-    || (playerTable.direction === 1 && playerTable.x <= 0)
-    || (playerTable.direction === 2 && playerTable.y >= containerRectHeight)
-    || (playerTable.direction === 3 && playerTable.y <= 0))
-};
-
 export const isGoingBackOnBorder = (
   x: number,
   y: number,
@@ -33,8 +22,6 @@ export const onGesture = (
   detail: GestureDetail,
   playerTable: Player, // 0=right, 1=left, 2=down, 3=up
 ) => {
-    const startX = playerTable.x;
-    const startY = playerTable.y;
     let offsetX = playerTable.x;
     let offsetY = playerTable.y;
     let direction = playerTable.direction;
@@ -70,7 +57,7 @@ export const onGesture = (
         offsetY = (playerTable.y - 1);
       }
     }
-    return {direction: direction, x: offsetX, y: offsetY, startX: startX, startY: startY};
+    return {direction: direction, x: offsetX, y: offsetY, startX: playerTable.startX, startY: playerTable.startY};
   };
 
   export const automaticMovePlayer = (

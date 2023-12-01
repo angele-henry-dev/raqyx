@@ -35,7 +35,7 @@
 import { ref, onMounted } from 'vue';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@ionic/vue';
 import { createGesture } from '@ionic/vue';
-import { Player, onGesture, automaticMovePlayer, isAlreadyOnDirection, isGoingBackOnBorder } from '@/scripts/player';
+import { Player, onGesture, automaticMovePlayer, isGoingBackOnBorder } from '@/scripts/player';
 import { randomIntFromInterval } from '@/scripts/utils'
 import { Ennemy, collideBorder } from '@/scripts/ennemy'
 import { Territory } from '@/scripts/territory'
@@ -68,11 +68,11 @@ const freeTerritory = ref<Territory> ({
 const ennemiesTable: Record<string, Ennemy>  = {};
 
 onMounted(() => {
-  createGameTable();
+  setupContainer();
   if (autoIntervalId == undefined) {
     autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
   }
-  createGestureManagement();
+  setupGesture();
 });
 
 const calculateTerritoryCaptured = () => {
@@ -82,7 +82,7 @@ const calculateTerritoryCaptured = () => {
   return remainedArea * 100 / ag;
 };
 
-const createGestureManagement = () => {
+const setupGesture = () => {
   const containerDiv = document.getElementById("container");
   if (containerDiv) {
     const gesture = createGesture({
@@ -96,7 +96,7 @@ const createGestureManagement = () => {
   }
 };
 
-const createGameTable = () => {
+const setupContainer = () => {
   const containerDiv = document.getElementById("container");
   if (containerDiv) {
     containerDiv.style.width = `${CONTAINER_WIDTH}px`;
@@ -193,8 +193,9 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
 const drawTerritories = (playerTable: Player) => {
   ctx.value = setupCanvas();
   if (ctx.value) {
-    ctx.value.beginPath();
-    ctx.value.moveTo(playerTable.x, playerTable.y - (PLAYERS_SIZE / 2));
+    // ctx.value.beginPath();
+    ctx.value.moveTo(playerTable.startX, playerTable.startY - (PLAYERS_SIZE / 2));
+    // ctx.value.moveTo(playerTable.x, playerTable.y - (PLAYERS_SIZE / 2));
     ctx.value.lineTo(playerTable.x - (PLAYERS_SIZE / 2), playerTable.y - (PLAYERS_SIZE / 2));
     ctx.value.imageSmoothingEnabled = true;
     ctx.value.imageSmoothingQuality = "high";
@@ -240,18 +241,17 @@ const manualMovePlayer = (detail: GestureDetail) => {
     // ctx.value = setupCanvas();
     manualIntervalId = setInterval(function() {
       if (player.value && freeTerritory.value) {
-        const containerRectWidth = freeTerritory.value.width + PLAYERS_SIZE;
-        const containerRectHeight = freeTerritory.value.height + PLAYERS_SIZE;
         playerTable = onGesture(detail, playerTable);
-
-        if (isAlreadyOnDirection(playerTable, containerRectWidth, containerRectHeight)) {
-          return goBackAuto();
-        }
 
         clearInterval(autoIntervalId);
         autoIntervalId = undefined;
 
-        if (isGoingBackOnBorder(playerTable.x, playerTable.y, containerRectWidth, containerRectHeight)) {
+        if (isGoingBackOnBorder(
+          playerTable.x,
+          playerTable.y,
+          freeTerritory.value.width + PLAYERS_SIZE,
+          freeTerritory.value.height + PLAYERS_SIZE
+        )) {
           return goBackAuto();
         }
         player.value.style.left = `${playerTable.x}px`;
