@@ -46,7 +46,6 @@ const container = ref<HTMLElement | null>(null);
 const numberCurrentEnnemies = ref<number>(0);
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
-let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let playerTable: Player = {
   x: -1,
   y: -1,
@@ -186,9 +185,8 @@ const autoMovePlayer = () => {
       playerTable.y,
       containerRectWidth,
       containerRectHeight,
-      direction,
+      playerTable.direction,
     );
-    direction = playerTable.direction;
     player.value.style.left = `${playerTable.x}px`;
     player.value.style.top = `${playerTable.y}px`;
   }
@@ -201,9 +199,8 @@ const manualMovePlayer = (detail: GestureDetail) => {
         const containerRect = container.value.getBoundingClientRect();
         const containerRectWidth = containerRect.width + PLAYER_SIZE - 1;
         const containerRectHeight = containerRect.height + PLAYER_SIZE - 1;
-        playerTable = onGesture(detail, playerTable.x, playerTable.y, direction);
+        playerTable = onGesture(detail, playerTable);
 
-        direction = playerTable.direction;
         if (isAlreadyOnDirection(playerTable, containerRectWidth, containerRectHeight)) {
           return goBackAuto();
         }

@@ -29,42 +29,41 @@ export const isGoingBackOnBorder = (
 
 export const onGesture = (
   detail: GestureDetail,
-  playerOffsetLeft: number,
-  playerOffsetTop: number,
-  direction: number // 0=right, 1=left, 2=down, 3=up
+  playerTable: Player, // 0=right, 1=left, 2=down, 3=up
 ) => {
-    let offsetX = playerOffsetLeft;
-    let offsetY = playerOffsetTop;
+    let offsetX = playerTable.x;
+    let offsetY = playerTable.y;
+    let direction = playerTable.direction;
 
     // Right
     if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 3) {
-      offsetX = (playerOffsetLeft + 1);
+      offsetX = (playerTable.x + 1);
       direction = 0;
     }
     // Left
     else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 3) {
-      offsetX = (playerOffsetLeft - 1);
+      offsetX = (playerTable.x - 1);
       direction = 1;
     }
     // Down
     else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 3) {
-      offsetY = (playerOffsetTop + 1);
+      offsetY = (playerTable.y + 1);
       direction = 2;
     }
     // Up
     else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 3) {
-      offsetY = (playerOffsetTop - 1);
+      offsetY = (playerTable.y - 1);
       direction = 3;
     // No direction
     } else {
       if (direction === 0) {
-        offsetX = (playerOffsetLeft + 1);
+        offsetX = (playerTable.x + 1);
       } else if (direction === 1) {
-        offsetX = (playerOffsetLeft - 1);
+        offsetX = (playerTable.x - 1);
       } else if (direction === 2) {
-        offsetY = (playerOffsetTop + 1);
+        offsetY = (playerTable.y + 1);
       } else if (direction === 3) {
-        offsetY = (playerOffsetTop - 1);
+        offsetY = (playerTable.y - 1);
       }
     }
     return {direction: direction, x: offsetX, y: offsetY};
