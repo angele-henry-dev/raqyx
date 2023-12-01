@@ -113,10 +113,10 @@ const setupCanvas = (canvas: HTMLCanvasElement) => {
   canvas.style.width = `${CONTAINER_WIDTH}px`;
   canvas.style.height = `${CONTAINER_HEIGHT}px`;
 
-  const ctx = canvas.getContext('2d');
-  if (ctx) {
-    ctx.scale(dpr, dpr);
-    return ctx;
+  const ctxTemp = canvas.getContext('2d');
+  if (ctxTemp) {
+    ctxTemp.scale(dpr, dpr);
+    return ctxTemp;
   }
   return null;
 };
@@ -126,6 +126,9 @@ const gameOver = () => {
   clearInterval(autoIntervalId);
   for (const key of Object.keys(ennemiesTable)) {
     clearInterval(ennemiesTable[key].intervalId);
+  }
+  if (ctx.value) {
+    ctx.value.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
   }
   console.log("Game over");
 };
