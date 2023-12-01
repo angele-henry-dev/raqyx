@@ -3,6 +3,8 @@ import { GestureDetail } from '@ionic/vue';
 export interface Player {
   x: number;
   y: number;
+  startX: number;
+  startY: number;
   direction: number;
 }
 
@@ -31,6 +33,8 @@ export const onGesture = (
   detail: GestureDetail,
   playerTable: Player, // 0=right, 1=left, 2=down, 3=up
 ) => {
+    const startX = playerTable.x;
+    const startY = playerTable.y;
     let offsetX = playerTable.x;
     let offsetY = playerTable.y;
     let direction = playerTable.direction;
@@ -66,38 +70,37 @@ export const onGesture = (
         offsetY = (playerTable.y - 1);
       }
     }
-    return {direction: direction, x: offsetX, y: offsetY};
+    return {direction: direction, x: offsetX, y: offsetY, startX: startX, startY: startY};
   };
 
   export const automaticMovePlayer = (
-    playerOffsetLeft: number,
-    playerOffsetTop: number,
+    playerTable: Player,
     containerRectWidth: number,
     containerRectHeight: number,
-    direction: number, // 0=right, 1=left, 2=down, 3=up
   ) => {
-    let offsetX = playerOffsetLeft;
-    let offsetY = playerOffsetTop;
+    let offsetX = playerTable.x;
+    let offsetY = playerTable.y;
+    let direction = playerTable.direction;
 
     // Up
-    if (playerOffsetLeft === 0 && playerOffsetTop > 0) {
-      offsetY = (playerOffsetTop - 1);
+    if (playerTable.x === 0 && playerTable.y > 0) {
+      offsetY = (playerTable.y - 1);
       direction = 3;
     }
     // Down
-    else if (playerOffsetLeft === containerRectWidth && playerOffsetTop < containerRectHeight) {
-      offsetY = (playerOffsetTop + 1);
+    else if (playerTable.x === containerRectWidth && playerTable.y < containerRectHeight) {
+      offsetY = (playerTable.y + 1);
       direction = 2;
     }
     // Right
-    else if (playerOffsetTop === 0 && playerOffsetLeft < containerRectWidth) {
-      offsetX = (playerOffsetLeft + 1);
+    else if (playerTable.y === 0 && playerTable.x < containerRectWidth) {
+      offsetX = (playerTable.x + 1);
       direction = 0;
     }
     // Left
-    else if (playerOffsetTop === containerRectHeight && playerOffsetLeft > 0) {
-      offsetX = (playerOffsetLeft - 1);
+    else if (playerTable.y === containerRectHeight && playerTable.x > 0) {
+      offsetX = (playerTable.x - 1);
       direction = 1;
     }
-    return {direction: direction, x: offsetX, y: offsetY};
+    return {direction: direction, x: offsetX, y: offsetY, startX: playerTable.startX, startY: playerTable.startY};
   };

@@ -13,7 +13,9 @@
         <ion-row class="game-area">
           <ion-col>
             <div ref="player" class="player"></div>
-            <div ref="container" id="container" class="container"></div>
+            <div ref="container" id="container" class="container">
+              <canvas id="freeTerritory" class="freeTerritory" width="301" height="493"></canvas>
+            </div>
           </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-between">
@@ -51,7 +53,9 @@ let manualIntervalId: number | undefined = undefined;
 let playerTable: Player = {
   x: 0,
   y: 0,
-  direction: 0
+  direction: 0,
+  startX: 0,
+  startY: 0
 };
 const freeTerritory = ref<Territory> ({
   left: 0,
@@ -70,7 +74,9 @@ onMounted(() => {
     const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
-      onEnd: (detail) => { manualMovePlayer(detail); }
+      disableScroll: true,
+      canStart: manualMoveCanStart,
+      onEnd: manualMovePlayer
     });
     gesture.enable();
   }
@@ -89,14 +95,14 @@ const createGameTable = () => {
     containerDiv.style.width = `${CONTAINER_WIDTH}px`;
     containerDiv.style.height = `${CONTAINER_HEIGHT}px`;
 
-    const freeTerritoryDiv = document.createElement("div");
-    freeTerritoryDiv.setAttribute("id", "freeTerritory");
-    freeTerritoryDiv.setAttribute("class", "freeTerritory");
-    freeTerritoryDiv.style.left = `${freeTerritory.value.left}px`;
-    freeTerritoryDiv.style.top = `${freeTerritory.value.top}px`;
-    freeTerritoryDiv.style.width = `${freeTerritory.value.width}px`;
-    freeTerritoryDiv.style.height = `${freeTerritory.value.height}px`;
-    containerDiv?.appendChild(freeTerritoryDiv);
+    // const freeTerritoryDiv = document.createElement("canvas");
+    // freeTerritoryDiv.setAttribute("id", "freeTerritory");
+    // freeTerritoryDiv.setAttribute("class", "freeTerritory");
+    // freeTerritoryDiv.style.left = `${freeTerritory.value.left}px`;
+    // freeTerritoryDiv.style.top = `${freeTerritory.value.top}px`;
+    // freeTerritoryDiv.style.width = `${freeTerritory.value.width}px`;
+    // freeTerritoryDiv.style.height = `${freeTerritory.value.height}px`;
+    // containerDiv?.appendChild(freeTerritoryDiv);
   }
 };
 
@@ -125,7 +131,8 @@ const createEnnemies = () => {
       ennemy.style.left = `${left}px`;
       ennemy.style.top = `${top}px`;
 
-      document.getElementById("freeTerritory")?.appendChild(ennemy);
+      // document.getElementById("freeTerritory")?.appendChild(ennemy);
+      document.getElementById("container")?.appendChild(ennemy);
       numberCurrentEnnemies.value += 1;
 
       const ennemyIntervalId = setInterval(moveEnnemy, GAME_SPEED, ennemy, `ennemy${i}`);
@@ -163,41 +170,95 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
 
 /* Territory scripts */
 
-const drawTerritories = (left: number, top: number) => {
-  if (freeTerritory.value) {
-    let width = 0;
-    let height = 0;
-    if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
-      width = left - PLAYERS_SIZE;
-      left = PLAYERS_SIZE;
-    } else if (playerTable.direction === 1) {
-      left = left + PLAYERS_SIZE;
-      width = (freeTerritory.value.width - left) + PLAYERS_SIZE;
-    } else if (playerTable.direction === 2) {
-      height = top - PLAYERS_SIZE;
-      top = PLAYERS_SIZE + 1;
-    } else {
-      top = top + PLAYERS_SIZE;
-      height = (freeTerritory.value.height - top) + PLAYERS_SIZE;
-    }
+const drawTerritories = (playerTable: Player) => {
+  const c: HTMLCanvasElement = document.getElementById("freeTerritory") as HTMLCanvasElement;
+  if (c) {
+    const ctx = c.getContext("2d");
+    if (ctx) {
+      let lineToX = 0;
+      let lineToY = 0;
 
-    let newTerritory = document.getElementById("territory");
-    if (newTerritory == null) {
-      newTerritory = document.createElement("div");
-      newTerritory.setAttribute("id", `territory`);
-      newTerritory.style.border = "1px solid green";
-      newTerritory.style.backgroundColor = "yellow";
-      newTerritory.style.position = "absolute";
+      if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
+        lineToX = playerTable.x - (PLAYERS_SIZE / 2);
+        lineToY = playerTable.y - (PLAYERS_SIZE / 2);
+      } else if (playerTable.direction === 1) {
+        lineToX = playerTable.x - (PLAYERS_SIZE / 2);
+        lineToY = playerTable.y - (PLAYERS_SIZE / 2);
+      } else if (playerTable.direction === 2) {
+        lineToX = playerTable.x - (PLAYERS_SIZE / 2);
+        lineToY = playerTable.y - (PLAYERS_SIZE / 2);
+      } else {
+        lineToX = playerTable.x - (PLAYERS_SIZE / 2);
+        lineToY = playerTable.y - (PLAYERS_SIZE / 2);
+      }
+      
+      ctx.beginPath();
+      ctx.moveTo(playerTable.x, playerTable.y);
+      ctx.lineTo(lineToX, lineToY);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.strokeStyle = "sienna";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.closePath();
     }
-    newTerritory.style.left = `${left}px`;
-    newTerritory.style.top = `${top}px`;
-    newTerritory.style.width = `${width}px`;
-    newTerritory.style.height = `${height}px`;
-    document.getElementById("freeTerritory")?.appendChild(newTerritory);
   }
+
+
+  // const element = container.value.firstElementChild;
+  // const test = document.getElementById("freeTerritory");
+  // if (test) {
+  //   const animation = createAnimation()
+  //     .addElement(test)
+  //     .duration(GAME_SPEED)
+  //     .iterations(Infinity)
+  //     .keyframes([
+  //       { offset: 0, width: '80px' },
+  //       { offset: 0.72, width: 'var(--width)' },
+  //       { offset: 1, width: '240px' },
+  //   ]);
+  //   animation.play();
+  // }
+
+
+  // if (freeTerritory.value) {
+  //   let width = 0;
+  //   let height = 0;
+  //   if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
+  //     width = left - PLAYERS_SIZE;
+  //     left = PLAYERS_SIZE;
+  //   } else if (playerTable.direction === 1) {
+  //     left = left + PLAYERS_SIZE;
+  //     width = (freeTerritory.value.width - left) + PLAYERS_SIZE;
+  //   } else if (playerTable.direction === 2) {
+  //     height = top - PLAYERS_SIZE;
+  //     top = PLAYERS_SIZE + 1;
+  //   } else {
+  //     top = top + PLAYERS_SIZE;
+  //     height = (freeTerritory.value.height - top) + PLAYERS_SIZE;
+  //   }
+
+  //   let newTerritory = document.getElementById("territory");
+  //   if (newTerritory == null) {
+  //     newTerritory = document.createElement("div");
+  //     newTerritory.setAttribute("id", `territory`);
+  //     newTerritory.style.border = "1px solid green";
+  //     newTerritory.style.backgroundColor = "yellow";
+  //     newTerritory.style.position = "absolute";
+  //   }
+  //   newTerritory.style.left = `${left}px`;
+  //   newTerritory.style.top = `${top}px`;
+  //   newTerritory.style.width = `${width}px`;
+  //   newTerritory.style.height = `${height}px`;
+  //   document.getElementById("freeTerritory")?.appendChild(newTerritory);
+  // }
 };
 
 /* Player scripts */
+
+const manualMoveCanStart = (detail: GestureDetail) => {
+  return true;
+};
 
 const goBackAuto = () => {
   clearInterval(manualIntervalId);
@@ -214,11 +275,9 @@ const autoMovePlayer = () => {
     }
 
     playerTable = automaticMovePlayer(
-      playerTable.x,
-      playerTable.y,
+      playerTable,
       freeTerritory.value.width + PLAYERS_SIZE,
       freeTerritory.value.height + PLAYERS_SIZE,
-      playerTable.direction,
     );
     player.value.style.left = `${playerTable.x}px`;
     player.value.style.top = `${playerTable.y}px`;
@@ -236,6 +295,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
         if (isAlreadyOnDirection(playerTable, containerRectWidth, containerRectHeight)) {
           return goBackAuto();
         }
+
         clearInterval(autoIntervalId);
         autoIntervalId = undefined;
 
@@ -245,7 +305,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
         player.value.style.left = `${playerTable.x}px`;
         player.value.style.top = `${playerTable.y}px`;
 
-        drawTerritories(playerTable.x, playerTable.y);
+        drawTerritories(playerTable);
 
         for (const key of Object.keys(ennemiesTable)) {
           const ennemy = ennemiesTable[key];
