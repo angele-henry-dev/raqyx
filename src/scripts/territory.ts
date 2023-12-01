@@ -3,5 +3,4 @@ export interface Territory {
     top: number;
     width: number;
     height: number;
-    id: number;
 }

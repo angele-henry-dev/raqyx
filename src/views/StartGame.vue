@@ -41,6 +41,8 @@ import { Territory } from '@/scripts/territory'
 const GAME_SPEED = 10;
 const NUMBER_OF_ENNEMIES = 1;
 const PLAYERS_SIZE = 6;
+const CONTAINER_WIDTH = 301;
+const CONTAINER_HEIGHT = 493;
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
 const numberCurrentEnnemies = ref<number>(0);
@@ -51,18 +53,35 @@ let playerTable: Player = {
   y: 0,
   direction: 0
 };
-const freeTerritory = ref<Territory | null> (null);
+const freeTerritory = ref<Territory> ({
+  left: 0,
+  top: 0,
+  width: CONTAINER_WIDTH,
+  height: CONTAINER_HEIGHT
+});
 const ennemiesTable: Record<string, Ennemy>  = {};
 
 onMounted(() => {
   if (container.value) {
-    freeTerritory.value = {
-        left: 0,
-        top: 0,
-        width: 301,
-        height: 493,
-        id: 0
-    };
+    createGameTable();
+    const gesture = createGesture({
+      el: container.value,
+      gestureName: 'move-player',
+      onEnd: (detail) => { manualMovePlayer(detail); }
+    });
+    if (autoIntervalId == undefined) {
+      autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
+    }
+    gesture.enable();
+  }
+});
+
+const createGameTable = () => {
+  const containerDiv = document.getElementById("container");
+  if (containerDiv) {
+    containerDiv.style.width = `${CONTAINER_WIDTH}px`;
+    containerDiv.style.height = `${CONTAINER_HEIGHT}px`;
+
     const freeTerritoryDiv = document.createElement("div");
     freeTerritoryDiv.setAttribute("id", "freeTerritory");
     freeTerritoryDiv.setAttribute("class", "freeTerritory");
@@ -70,20 +89,9 @@ onMounted(() => {
     freeTerritoryDiv.style.top = `${freeTerritory.value.top}px`;
     freeTerritoryDiv.style.width = `${freeTerritory.value.width}px`;
     freeTerritoryDiv.style.height = `${freeTerritory.value.height}px`;
-    document.getElementById("container")?.appendChild(freeTerritoryDiv);
-
-    const gesture = createGesture({
-      el: container.value,
-      gestureName: 'move-player',
-      onEnd: (detail) => { manualMovePlayer(detail); }
-    });
-
-    if (autoIntervalId == undefined) {
-      autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
-    }
-    gesture.enable();
+    containerDiv?.appendChild(freeTerritoryDiv);
   }
-});
+};
 
 const gameOver = () => {
   clearInterval(manualIntervalId);
@@ -157,13 +165,13 @@ const drawTerritories = (left: number, top: number) => {
       left = PLAYERS_SIZE;
     } else if (playerTable.direction === 1) {
       left = left + PLAYERS_SIZE;
-      width = (freeTerritory.value.width - left) + (PLAYERS_SIZE / 2) + 1;
+      width = (freeTerritory.value.width - left) + PLAYERS_SIZE;
     } else if (playerTable.direction === 2) {
       height = top - PLAYERS_SIZE;
       top = PLAYERS_SIZE + 1;
     } else {
       top = top + PLAYERS_SIZE;
-      height = (freeTerritory.value.height - top) + (PLAYERS_SIZE / 2) + 1;
+      height = (freeTerritory.value.height - top) + PLAYERS_SIZE;
     }
 
     let newTerritory = document.getElementById("territory");
