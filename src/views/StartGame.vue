@@ -12,8 +12,8 @@
         </ion-row>
         <ion-row class="game-area">
           <ion-col>
-            <div ref="player" class="player"></div>
             <div ref="container" id="container" class="container">
+              <div ref="player" class="player"></div>
               <canvas id="freeTerritory" class="freeTerritory" width="301" height="493"></canvas>
             </div>
           </ion-col>
@@ -45,8 +45,11 @@ const NUMBER_OF_ENNEMIES = 1;
 const PLAYERS_SIZE = 6;
 const CONTAINER_WIDTH = 301;
 const CONTAINER_HEIGHT = 493;
+
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
+const ctx = ref<CanvasRenderingContext2D | null>(null);
+
 const numberCurrentEnnemies = ref<number>(0);
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
@@ -66,20 +69,11 @@ const freeTerritory = ref<Territory> ({
 const ennemiesTable: Record<string, Ennemy>  = {};
 
 onMounted(() => {
-  if (container.value) {
-    createGameTable();
-    if (autoIntervalId == undefined) {
-      autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
-    }
-    const gesture = createGesture({
-      el: container.value,
-      gestureName: 'move-player',
-      disableScroll: true,
-      canStart: manualMoveCanStart,
-      onEnd: manualMovePlayer
-    });
-    gesture.enable();
+  createGameTable();
+  if (autoIntervalId == undefined) {
+    autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
   }
+  createGestureManagement();
 });
 
 const calculateTerritoryCaptured = () => {
@@ -89,21 +83,42 @@ const calculateTerritoryCaptured = () => {
   return remainedArea * 100 / ag;
 };
 
+const createGestureManagement = () => {
+  if (container.value) {
+    const gesture = createGesture({
+      el: container.value,
+      gestureName: 'move-player',
+      disableScroll: true,
+      canStart: manualMoveCanStart,
+      onEnd: manualMovePlayer
+    });
+    gesture.enable();
+  }
+};
+
 const createGameTable = () => {
   const containerDiv = document.getElementById("container");
   if (containerDiv) {
     containerDiv.style.width = `${CONTAINER_WIDTH}px`;
     containerDiv.style.height = `${CONTAINER_HEIGHT}px`;
-
-    // const freeTerritoryDiv = document.createElement("canvas");
-    // freeTerritoryDiv.setAttribute("id", "freeTerritory");
-    // freeTerritoryDiv.setAttribute("class", "freeTerritory");
-    // freeTerritoryDiv.style.left = `${freeTerritory.value.left}px`;
-    // freeTerritoryDiv.style.top = `${freeTerritory.value.top}px`;
-    // freeTerritoryDiv.style.width = `${freeTerritory.value.width}px`;
-    // freeTerritoryDiv.style.height = `${freeTerritory.value.height}px`;
-    // containerDiv?.appendChild(freeTerritoryDiv);
   }
+  const canvas: HTMLCanvasElement = document.getElementById("freeTerritory") as HTMLCanvasElement;
+  ctx.value = setupCanvas(canvas);
+};
+
+const setupCanvas = (canvas: HTMLCanvasElement) => {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = CONTAINER_WIDTH * dpr;
+  canvas.height = CONTAINER_HEIGHT * dpr;
+  canvas.style.width = `${CONTAINER_WIDTH}px`;
+  canvas.style.height = `${CONTAINER_HEIGHT}px`;
+
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    ctx.scale(dpr, dpr);
+    return ctx;
+  }
+  return null;
 };
 
 const gameOver = () => {
@@ -171,20 +186,16 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
 /* Territory scripts */
 
 const drawTerritories = (playerTable: Player) => {
-  const c: HTMLCanvasElement = document.getElementById("freeTerritory") as HTMLCanvasElement;
-  if (c) {
-    const ctx = c.getContext("2d");
-    if (ctx) {
-      ctx.beginPath();
-      ctx.moveTo(playerTable.x, playerTable.y);
-      ctx.lineTo(playerTable.x - (PLAYERS_SIZE / 2), playerTable.y - (PLAYERS_SIZE / 2));
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-      ctx.strokeStyle = "sienna";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      ctx.closePath();
-    }
+  if (ctx.value) {
+    ctx.value.beginPath();
+    ctx.value.moveTo(playerTable.x, playerTable.y);
+    ctx.value.lineTo(playerTable.x - (PLAYERS_SIZE / 2), playerTable.y - (PLAYERS_SIZE / 2));
+    ctx.value.imageSmoothingEnabled = true;
+    ctx.value.imageSmoothingQuality = "high";
+    ctx.value.strokeStyle = "sienna";
+    ctx.value.lineWidth = 1;
+    ctx.value.stroke();
+    // ctx.value.closePath();
   }
 };
 
