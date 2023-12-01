@@ -7,7 +7,7 @@
             650798
           </ion-col>
           <ion-col size="5" class="ion-text-end">
-            0% / 75%
+            {{ calculateTerritoryCaptured() }}% / 75%
           </ion-col>
         </ion-row>
         <ion-row class="game-area">
@@ -64,17 +64,24 @@ const ennemiesTable: Record<string, Ennemy>  = {};
 onMounted(() => {
   if (container.value) {
     createGameTable();
+    if (autoIntervalId == undefined) {
+      autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
+    }
     const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
       onEnd: (detail) => { manualMovePlayer(detail); }
     });
-    if (autoIntervalId == undefined) {
-      autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
-    }
     gesture.enable();
   }
 });
+
+const calculateTerritoryCaptured = () => {
+  const ag = CONTAINER_WIDTH * CONTAINER_HEIGHT;
+  const af = freeTerritory.value.width * freeTerritory.value.height;
+  const remainedArea = ag - af;
+  return remainedArea * 100 / ag;
+};
 
 const createGameTable = () => {
   const containerDiv = document.getElementById("container");
