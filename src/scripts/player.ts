@@ -23,8 +23,8 @@ export const isGoingBackOnBorder = (
   containerRectWidth: number,
   containerRectHeight: number,
 ) => {
-  return (x <= -1 || x >= containerRectWidth-1
-      || y <= -1 || y >= containerRectHeight-1)
+  return (x <= -1 || x >= containerRectWidth
+      || y <= -1 || y >= containerRectHeight)
 };
 
 export const onGesture = (

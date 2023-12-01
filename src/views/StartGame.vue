@@ -121,7 +121,7 @@ const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: st
     ennemyDiv.style.left = `${ennemiesTable[ennemyId].x}px`;
     ennemyDiv.style.top = `${ennemiesTable[ennemyId].y}px`;
 
-    const newOffset = collideBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth-2, containerRectHeight-1)
+    const newOffset = collideBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth, containerRectHeight, PLAYER_SIZE)
     ennemiesTable[ennemyId].speedX *= newOffset[0];
     ennemiesTable[ennemyId].speedY *= newOffset[1];
   }
@@ -199,8 +199,8 @@ const manualMovePlayer = (detail: GestureDetail) => {
     manualIntervalId = setInterval(function() {
       if (player.value && container.value) {
         const containerRect = container.value.getBoundingClientRect();
-        const containerRectWidth = containerRect.width + PLAYER_SIZE;
-        const containerRectHeight = containerRect.height + PLAYER_SIZE;
+        const containerRectWidth = containerRect.width + PLAYER_SIZE - 1;
+        const containerRectHeight = containerRect.height + PLAYER_SIZE - 1;
         playerTable = onGesture(detail, playerTable.x, playerTable.y, direction);
 
         direction = playerTable.direction;
