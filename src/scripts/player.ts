@@ -7,16 +7,14 @@ export interface Player {
 }
 
 export const isAlreadyOnDirection = (
-  playerTable: Player,
+  playerTable: Player, // 0=right, 1=left, 2=down, 3=up
   containerRectWidth: number,
   containerRectHeight: number,
-  direction: number, // 0=right, 1=left, 2=down, 3=up
-  startLine: number
 ) => {
-  return ((direction === 0 && playerTable.x >= containerRectWidth)
-    || (direction === 1 && playerTable.x <= startLine-1)
-    || (direction === 2 && playerTable.y >= containerRectHeight)
-    || (direction === 3 && playerTable.y <= startLine-1))
+  return ((playerTable.direction === 0 && playerTable.x >= containerRectWidth)
+    || (playerTable.direction === 1 && playerTable.x <= -1)
+    || (playerTable.direction === 2 && playerTable.y >= containerRectHeight)
+    || (playerTable.direction === 3 && playerTable.y <= -1))
 };
 
 export const isGoingBackOnBorder = (
@@ -24,10 +22,9 @@ export const isGoingBackOnBorder = (
   y: number,
   containerRectWidth: number,
   containerRectHeight: number,
-  startLine: number
 ) => {
-  return (x <= startLine || x >= containerRectWidth-1
-      || y <= startLine || y >= containerRectHeight-1)
+  return (x <= -1 || x >= containerRectWidth-1
+      || y <= -1 || y >= containerRectHeight-1)
 };
 
 export const onGesture = (
@@ -78,14 +75,13 @@ export const onGesture = (
     playerOffsetTop: number,
     containerRectWidth: number,
     containerRectHeight: number,
-    startLine: number,
     direction: number, // 0=right, 1=left, 2=down, 3=up
   ) => {
     let offsetX = playerOffsetLeft;
     let offsetY = playerOffsetTop;
 
     // Up
-    if (playerOffsetLeft === startLine && playerOffsetTop > startLine) {
+    if (playerOffsetLeft === -1 && playerOffsetTop > -1) {
       offsetY = (playerOffsetTop - 1);
       direction = 3;
     }
@@ -95,12 +91,12 @@ export const onGesture = (
       direction = 2;
     }
     // Right
-    else if (playerOffsetTop === startLine && playerOffsetLeft < containerRectWidth) {
+    else if (playerOffsetTop === -1 && playerOffsetLeft < containerRectWidth) {
       offsetX = (playerOffsetLeft + 1);
       direction = 0;
     }
     // Left
-    else if (playerOffsetTop === containerRectHeight && playerOffsetLeft > startLine) {
+    else if (playerOffsetTop === containerRectHeight && playerOffsetLeft > -1) {
       offsetX = (playerOffsetLeft - 1);
       direction = 1;
     }

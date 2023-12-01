@@ -21,7 +21,7 @@
             Level 1
           </ion-col>
           <ion-col size="5" class="ion-text-end">
-            o x1
+            Number of ennemies: 0
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -39,7 +39,6 @@ import { Ennemy, collideBorder } from '@/scripts/ennemy'
 import { Territory } from '@/scripts/territory'
 
 const GAME_SPEED = 10;
-const START_LINE = -1;
 const NUMBER_OF_ENNEMIES = 1;
 const PLAYER_SIZE = 6;
 const player = ref<HTMLElement | null>(null);
@@ -49,7 +48,7 @@ let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
 let numberCurrentEnnemies = 0;
 let playerTable: Player = {
-  x: 1,
+  x: -1,
   y: -1,
   direction: 0
 };
@@ -122,7 +121,7 @@ const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: st
     ennemyDiv.style.left = `${ennemiesTable[ennemyId].x}px`;
     ennemyDiv.style.top = `${ennemiesTable[ennemyId].y}px`;
 
-    const newOffset = collideBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth-2, containerRectHeight-1, START_LINE+PLAYER_SIZE-1)
+    const newOffset = collideBorder(ennemiesTable[ennemyId].x, ennemiesTable[ennemyId].y, containerRectWidth-2, containerRectHeight-1)
     ennemiesTable[ennemyId].speedX *= newOffset[0];
     ennemiesTable[ennemyId].speedY *= newOffset[1];
   }
@@ -135,13 +134,13 @@ const drawTerritories = (left: number, top: number, containerRect: DOMRect) => {
   let height = 0;
   if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
     width = left - PLAYER_SIZE;
-    left = START_LINE + PLAYER_SIZE;
+    left = PLAYER_SIZE;
   } else if (playerTable.direction === 1) {
     left = left + PLAYER_SIZE;
     width = (containerRect.width - left) + (PLAYER_SIZE / 2) + 1;
   } else if (playerTable.direction === 2) {
     height = top - PLAYER_SIZE;
-    top = START_LINE + PLAYER_SIZE + 1;
+    top = PLAYER_SIZE + 1;
   } else {
     top = top + PLAYER_SIZE;
     height = (containerRect.height - top) + (PLAYER_SIZE / 2) + 1;
@@ -187,7 +186,6 @@ const autoMovePlayer = () => {
       playerTable.y,
       containerRectWidth,
       containerRectHeight,
-      START_LINE,
       direction,
     );
     direction = playerTable.direction;
@@ -206,13 +204,13 @@ const manualMovePlayer = (detail: GestureDetail) => {
         playerTable = onGesture(detail, playerTable.x, playerTable.y, direction);
 
         direction = playerTable.direction;
-        if (isAlreadyOnDirection(playerTable, containerRectWidth, containerRectHeight, direction, START_LINE)) {
+        if (isAlreadyOnDirection(playerTable, containerRectWidth, containerRectHeight)) {
           return goBackAuto();
         }
         clearInterval(autoIntervalId);
         autoIntervalId = undefined;
 
-        if (isGoingBackOnBorder(playerTable.x, playerTable.y, containerRectWidth, containerRectHeight, START_LINE)) {
+        if (isGoingBackOnBorder(playerTable.x, playerTable.y, containerRectWidth, containerRectHeight)) {
           return goBackAuto();
         }
         player.value.style.left = `${playerTable.x}px`;
