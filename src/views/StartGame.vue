@@ -14,7 +14,7 @@
           <ion-col>
             <div ref="container" id="container" class="container">
               <div ref="player" class="player"></div>
-              <canvas id="freeTerritory" class="freeTerritory" width="301" height="493"></canvas>
+              <canvas ref="canvas" id="freeTerritory" class="freeTerritory" width="301" height="493"></canvas>
             </div>
           </ion-col>
         </ion-row>
@@ -47,7 +47,6 @@ const CONTAINER_WIDTH = 301;
 const CONTAINER_HEIGHT = 493;
 
 const player = ref<HTMLElement | null>(null);
-const container = ref<HTMLElement | null>(null);
 const ctx = ref<CanvasRenderingContext2D | null>(null);
 
 const numberCurrentEnnemies = ref<number>(0);
@@ -84,9 +83,10 @@ const calculateTerritoryCaptured = () => {
 };
 
 const createGestureManagement = () => {
-  if (container.value) {
+  const containerDiv = document.getElementById("container");
+  if (containerDiv) {
     const gesture = createGesture({
-      el: container.value,
+      el: containerDiv,
       gestureName: 'move-player',
       disableScroll: true,
       canStart: manualMoveCanStart,
@@ -102,21 +102,23 @@ const createGameTable = () => {
     containerDiv.style.width = `${CONTAINER_WIDTH}px`;
     containerDiv.style.height = `${CONTAINER_HEIGHT}px`;
   }
-  const canvas: HTMLCanvasElement = document.getElementById("freeTerritory") as HTMLCanvasElement;
-  ctx.value = setupCanvas(canvas);
+  // ctx.value = setupCanvas();
 };
 
-const setupCanvas = (canvas: HTMLCanvasElement) => {
+const setupCanvas = () => {
+  const canvas = document.getElementById("freeTerritory") as HTMLCanvasElement;
   const dpr = window.devicePixelRatio || 1;
-  canvas.width = CONTAINER_WIDTH * dpr;
-  canvas.height = CONTAINER_HEIGHT * dpr;
-  canvas.style.width = `${CONTAINER_WIDTH}px`;
-  canvas.style.height = `${CONTAINER_HEIGHT}px`;
+  if (canvas) {
+    canvas.width = CONTAINER_WIDTH * dpr;
+    canvas.height = CONTAINER_HEIGHT * dpr;
+    canvas.style.width = `${CONTAINER_WIDTH}px`;
+    canvas.style.height = `${CONTAINER_HEIGHT}px`;
 
-  const ctxTemp = canvas.getContext('2d');
-  if (ctxTemp) {
-    ctxTemp.scale(dpr, dpr);
-    return ctxTemp;
+    const ctxTemp = canvas.getContext('2d');
+    if (ctxTemp) {
+      ctxTemp.scale(dpr, dpr);
+      return ctxTemp;
+    }
   }
   return null;
 };
@@ -189,9 +191,10 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
 /* Territory scripts */
 
 const drawTerritories = (playerTable: Player) => {
+  ctx.value = setupCanvas();
   if (ctx.value) {
     ctx.value.beginPath();
-    ctx.value.moveTo(playerTable.x, playerTable.y);
+    ctx.value.moveTo(playerTable.x, playerTable.y - (PLAYERS_SIZE / 2));
     ctx.value.lineTo(playerTable.x - (PLAYERS_SIZE / 2), playerTable.y - (PLAYERS_SIZE / 2));
     ctx.value.imageSmoothingEnabled = true;
     ctx.value.imageSmoothingQuality = "high";
@@ -234,6 +237,7 @@ const autoMovePlayer = () => {
 
 const manualMovePlayer = (detail: GestureDetail) => {
   if (manualIntervalId == undefined) {
+    // ctx.value = setupCanvas();
     manualIntervalId = setInterval(function() {
       if (player.value && freeTerritory.value) {
         const containerRectWidth = freeTerritory.value.width + PLAYERS_SIZE;
