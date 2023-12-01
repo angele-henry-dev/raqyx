@@ -15,7 +15,7 @@ export const collideBorder = (
 ) => {
     if (x <= startLines || x >= containerRectWidth) {
         return [-1, 1];
-    } else if (y <= startLines || y >= containerRectHeight-1) {
+    } else if (y <= startLines || y >= containerRectHeight) {
         return [1, -1];
     } else return [1, 1];
 };

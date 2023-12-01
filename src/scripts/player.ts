@@ -12,9 +12,9 @@ export const isAlreadyOnDirection = (
   containerRectHeight: number,
 ) => {
   return ((playerTable.direction === 0 && playerTable.x >= containerRectWidth)
-    || (playerTable.direction === 1 && playerTable.x <= -1)
+    || (playerTable.direction === 1 && playerTable.x <= 0)
     || (playerTable.direction === 2 && playerTable.y >= containerRectHeight)
-    || (playerTable.direction === 3 && playerTable.y <= -1))
+    || (playerTable.direction === 3 && playerTable.y <= 0))
 };
 
 export const isGoingBackOnBorder = (
@@ -23,8 +23,8 @@ export const isGoingBackOnBorder = (
   containerRectWidth: number,
   containerRectHeight: number,
 ) => {
-  return (x <= -1 || x >= containerRectWidth
-      || y <= -1 || y >= containerRectHeight)
+  return (x <= 0 || x >= containerRectWidth
+      || y <= 0 || y >= containerRectHeight)
 };
 
 export const onGesture = (
@@ -80,7 +80,7 @@ export const onGesture = (
     let offsetY = playerOffsetTop;
 
     // Up
-    if (playerOffsetLeft === -1 && playerOffsetTop > -1) {
+    if (playerOffsetLeft === 0 && playerOffsetTop > 0) {
       offsetY = (playerOffsetTop - 1);
       direction = 3;
     }
@@ -90,12 +90,12 @@ export const onGesture = (
       direction = 2;
     }
     // Right
-    else if (playerOffsetTop === -1 && playerOffsetLeft < containerRectWidth) {
+    else if (playerOffsetTop === 0 && playerOffsetLeft < containerRectWidth) {
       offsetX = (playerOffsetLeft + 1);
       direction = 0;
     }
     // Left
-    else if (playerOffsetTop === containerRectHeight && playerOffsetLeft > -1) {
+    else if (playerOffsetTop === containerRectHeight && playerOffsetLeft > 0) {
       offsetX = (playerOffsetLeft - 1);
       direction = 1;
     }

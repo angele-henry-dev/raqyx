@@ -47,20 +47,37 @@ const numberCurrentEnnemies = ref<number>(0);
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let playerTable: Player = {
-  x: -1,
-  y: -1,
+  x: 0,
+  y: 0,
   direction: 0
 };
+const freeTerritory = ref<Territory | null> (null);
 const ennemiesTable: Record<string, Ennemy>  = {};
-const territoriesTable: Record<string, Territory>  = {};
 
 onMounted(() => {
   if (container.value) {
+    freeTerritory.value = {
+        left: 0,
+        top: 0,
+        width: 301,
+        height: 493,
+        id: 0
+    };
+    const freeTerritoryDiv = document.createElement("div");
+    freeTerritoryDiv.setAttribute("id", "freeTerritory");
+    freeTerritoryDiv.setAttribute("class", "freeTerritory");
+    freeTerritoryDiv.style.left = `${freeTerritory.value.left}px`;
+    freeTerritoryDiv.style.top = `${freeTerritory.value.top}px`;
+    freeTerritoryDiv.style.width = `${freeTerritory.value.width}px`;
+    freeTerritoryDiv.style.height = `${freeTerritory.value.height}px`;
+    document.getElementById("container")?.appendChild(freeTerritoryDiv);
+
     const gesture = createGesture({
       el: container.value,
       gestureName: 'move-player',
       onEnd: (detail) => { manualMovePlayer(detail); }
     });
+
     if (autoIntervalId == undefined) {
       autoIntervalId = setInterval(autoMovePlayer, GAME_SPEED);
     }
@@ -79,8 +96,8 @@ const gameOver = () => {
 
 /* Ennemies scripts */
 
-const createEnnemies = (containerRect: DOMRect) => {
-  if (container.value) {
+const createEnnemies = () => {
+  if (freeTerritory.value) {
     const numberCurrentDivEnnemies = numberCurrentEnnemies.value = document.querySelectorAll('[id^="ennemy"]').length;
 
     for (let i=0; i<(NUMBER_OF_ENNEMIES-numberCurrentDivEnnemies); i++) {
@@ -88,15 +105,15 @@ const createEnnemies = (containerRect: DOMRect) => {
       ennemy.setAttribute("id", `ennemy${i}`);
       ennemy.setAttribute("class", `ennemy`);
 
-      const left = randomIntFromInterval(10, containerRect.width-10)
-      const top = randomIntFromInterval(10, containerRect.height-10)
+      const left = randomIntFromInterval(10, freeTerritory.value.width-10)
+      const top = randomIntFromInterval(10, freeTerritory.value.height-10)
       ennemy.style.left = `${left}px`;
       ennemy.style.top = `${top}px`;
 
-      document.getElementById("container")?.appendChild(ennemy);
+      document.getElementById("freeTerritory")?.appendChild(ennemy);
       numberCurrentEnnemies.value += 1;
 
-      const ennemyIntervalId = setInterval(moveEnnemy, GAME_SPEED, containerRect, ennemy, `ennemy${i}`);
+      const ennemyIntervalId = setInterval(moveEnnemy, GAME_SPEED, ennemy, `ennemy${i}`);
 
       const possibleSpeed = [1, -1];
       ennemiesTable[`ennemy${i}`] = {
@@ -110,11 +127,8 @@ const createEnnemies = (containerRect: DOMRect) => {
   }
 };
 
-const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: string) => {
-  if (ennemyDiv && container.value) {
-    const containerRectWidth = containerRect.width;
-    const containerRectHeight = containerRect.height;
-
+const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
+  if (ennemyDiv && freeTerritory.value) {
     ennemiesTable[ennemyId].x = ennemiesTable[ennemyId].x + ennemiesTable[ennemyId].speedX;
     ennemiesTable[ennemyId].y = ennemiesTable[ennemyId].y + ennemiesTable[ennemyId].speedY;
     ennemyDiv.style.left = `${ennemiesTable[ennemyId].x}px`;
@@ -123,9 +137,9 @@ const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: st
     const newOffset = collideBorder(
       ennemiesTable[ennemyId].x,
       ennemiesTable[ennemyId].y,
-      containerRectWidth,
-      containerRectHeight,
-      (PLAYERS_SIZE / 2) + 1
+      freeTerritory.value.width,
+      freeTerritory.value.height,
+      PLAYERS_SIZE
     )
     ennemiesTable[ennemyId].speedX *= newOffset[0];
     ennemiesTable[ennemyId].speedY *= newOffset[1];
@@ -134,36 +148,38 @@ const moveEnnemy = (containerRect: DOMRect, ennemyDiv: HTMLElement, ennemyId: st
 
 /* Territory scripts */
 
-const drawTerritories = (left: number, top: number, containerRect: DOMRect) => {
-  let width = 0;
-  let height = 0;
-  if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
-    width = left - PLAYERS_SIZE;
-    left = PLAYERS_SIZE;
-  } else if (playerTable.direction === 1) {
-    left = left + PLAYERS_SIZE;
-    width = (containerRect.width - left) + (PLAYERS_SIZE / 2) + 1;
-  } else if (playerTable.direction === 2) {
-    height = top - PLAYERS_SIZE;
-    top = PLAYERS_SIZE + 1;
-  } else {
-    top = top + PLAYERS_SIZE;
-    height = (containerRect.height - top) + (PLAYERS_SIZE / 2) + 1;
-  }
+const drawTerritories = (left: number, top: number) => {
+  if (freeTerritory.value) {
+    let width = 0;
+    let height = 0;
+    if (playerTable.direction === 0) { // 0=right, 1=left, 2=down, 3=up
+      width = left - PLAYERS_SIZE;
+      left = PLAYERS_SIZE;
+    } else if (playerTable.direction === 1) {
+      left = left + PLAYERS_SIZE;
+      width = (freeTerritory.value.width - left) + (PLAYERS_SIZE / 2) + 1;
+    } else if (playerTable.direction === 2) {
+      height = top - PLAYERS_SIZE;
+      top = PLAYERS_SIZE + 1;
+    } else {
+      top = top + PLAYERS_SIZE;
+      height = (freeTerritory.value.height - top) + (PLAYERS_SIZE / 2) + 1;
+    }
 
-  let territory = document.getElementById("territory");
-  if (territory == null) {
-    territory = document.createElement("div");
-    territory.setAttribute("id", `territory`);
-    territory.style.border = "1px solid green";
-    territory.style.backgroundColor = "yellow";
-    territory.style.position = "absolute";
+    let newTerritory = document.getElementById("territory");
+    if (newTerritory == null) {
+      newTerritory = document.createElement("div");
+      newTerritory.setAttribute("id", `territory`);
+      newTerritory.style.border = "1px solid green";
+      newTerritory.style.backgroundColor = "yellow";
+      newTerritory.style.position = "absolute";
+    }
+    newTerritory.style.left = `${left}px`;
+    newTerritory.style.top = `${top}px`;
+    newTerritory.style.width = `${width}px`;
+    newTerritory.style.height = `${height}px`;
+    document.getElementById("freeTerritory")?.appendChild(newTerritory);
   }
-  territory.style.left = `${left}px`;
-  territory.style.top = `${top}px`;
-  territory.style.width = `${width}px`;
-  territory.style.height = `${height}px`;
-  document.getElementById("container")?.appendChild(territory);
 };
 
 /* Player scripts */
@@ -177,20 +193,16 @@ const goBackAuto = () => {
 };
 
 const autoMovePlayer = () => {
-  if (player.value && container.value) {
-    const containerRect = container.value.getBoundingClientRect();
-    const containerRectWidth = containerRect.width + PLAYERS_SIZE - 1;
-    const containerRectHeight = containerRect.height + PLAYERS_SIZE - 1;
-
+  if (player.value && freeTerritory.value) {
     if (numberCurrentEnnemies.value < NUMBER_OF_ENNEMIES) {
-      createEnnemies(containerRect);
+      createEnnemies();
     }
 
     playerTable = automaticMovePlayer(
       playerTable.x,
       playerTable.y,
-      containerRectWidth,
-      containerRectHeight,
+      freeTerritory.value.width + PLAYERS_SIZE,
+      freeTerritory.value.height + PLAYERS_SIZE,
       playerTable.direction,
     );
     player.value.style.left = `${playerTable.x}px`;
@@ -201,10 +213,9 @@ const autoMovePlayer = () => {
 const manualMovePlayer = (detail: GestureDetail) => {
   if (manualIntervalId == undefined) {
     manualIntervalId = setInterval(function() {
-      if (player.value && container.value) {
-        const containerRect = container.value.getBoundingClientRect();
-        const containerRectWidth = containerRect.width + PLAYERS_SIZE - 1;
-        const containerRectHeight = containerRect.height + PLAYERS_SIZE - 1;
+      if (player.value && freeTerritory.value) {
+        const containerRectWidth = freeTerritory.value.width + PLAYERS_SIZE;
+        const containerRectHeight = freeTerritory.value.height + PLAYERS_SIZE;
         playerTable = onGesture(detail, playerTable);
 
         if (isAlreadyOnDirection(playerTable, containerRectWidth, containerRectHeight)) {
@@ -219,7 +230,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
         player.value.style.left = `${playerTable.x}px`;
         player.value.style.top = `${playerTable.y}px`;
 
-        drawTerritories(playerTable.x, playerTable.y, containerRect);
+        drawTerritories(playerTable.x, playerTable.y);
 
         for (const key of Object.keys(ennemiesTable)) {
           const ennemy = ennemiesTable[key];
