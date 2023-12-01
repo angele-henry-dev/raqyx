@@ -11,11 +11,11 @@ export const collideBorder = (
     y: number,
     containerRectWidth: number,
     containerRectHeight: number,
-    PLAYER_SIZE: number,
+    startLines: number,
 ) => {
-    if (x <= (PLAYER_SIZE / 2) + 1 || x >= containerRectWidth) {
+    if (x <= startLines || x >= containerRectWidth) {
         return [-1, 1];
-    } else if (y <= (PLAYER_SIZE / 2) + 1 || y >= containerRectHeight-1) {
+    } else if (y <= startLines || y >= containerRectHeight-1) {
         return [1, -1];
     } else return [1, 1];
 };
