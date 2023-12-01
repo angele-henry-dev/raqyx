@@ -21,7 +21,7 @@
             Level 1
           </ion-col>
           <ion-col size="5" class="ion-text-end">
-            Number of ennemies: 0
+            Number of ennemies: {{ numberCurrentEnnemies }}
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -43,10 +43,10 @@ const NUMBER_OF_ENNEMIES = 1;
 const PLAYER_SIZE = 6;
 const player = ref<HTMLElement | null>(null);
 const container = ref<HTMLElement | null>(null);
+const numberCurrentEnnemies = ref<number>(0);
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let direction = 0; // 0=right, 1=left, 2=down, 3=up
-let numberCurrentEnnemies = 0;
 let playerTable: Player = {
   x: -1,
   y: -1,
@@ -82,7 +82,7 @@ const gameOver = () => {
 
 const createEnnemies = (containerRect: DOMRect) => {
   if (container.value) {
-    const numberCurrentDivEnnemies = numberCurrentEnnemies = document.querySelectorAll('[id^="ennemy"]').length;
+    const numberCurrentDivEnnemies = numberCurrentEnnemies.value = document.querySelectorAll('[id^="ennemy"]').length;
 
     for (let i=0; i<(NUMBER_OF_ENNEMIES-numberCurrentDivEnnemies); i++) {
       const ennemy = document.createElement("div");
@@ -95,7 +95,7 @@ const createEnnemies = (containerRect: DOMRect) => {
       ennemy.style.top = `${top}px`;
 
       document.getElementById("container")?.appendChild(ennemy);
-      numberCurrentEnnemies += 1;
+      numberCurrentEnnemies.value += 1;
 
       const ennemyIntervalId = setInterval(moveEnnemy, GAME_SPEED, containerRect, ennemy, `ennemy${i}`);
 
@@ -177,7 +177,7 @@ const autoMovePlayer = () => {
     const containerRectWidth = containerRect.width + PLAYER_SIZE - 1;
     const containerRectHeight = containerRect.height + PLAYER_SIZE - 1;
 
-    if (numberCurrentEnnemies < NUMBER_OF_ENNEMIES) {
+    if (numberCurrentEnnemies.value < NUMBER_OF_ENNEMIES) {
       createEnnemies(containerRect);
     }
 
