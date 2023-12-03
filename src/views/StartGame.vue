@@ -45,6 +45,7 @@ const NUMBER_OF_ENNEMIES = 1;
 const PLAYERS_SIZE = 6;
 const CONTAINER_WIDTH = 301;
 const CONTAINER_HEIGHT = 493;
+const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
 
 const player = ref<HTMLElement | null>(null);
 const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -117,7 +118,6 @@ const setupCanvas = () => {
     const ctxTemp = canvas.getContext('2d');
     if (ctxTemp) {
       ctxTemp.scale(dpr, dpr);
-      ctxTemp.strokeStyle = "sienna";
       ctxTemp.lineWidth = 1;
       return ctxTemp;
     }
@@ -233,6 +233,7 @@ const autoMovePlayer = () => {
 const manualMovePlayer = (detail: GestureDetail) => {
   if (manualIntervalId == undefined && ctx.value) {
     const newTerritory = new Path2D();
+    ctx.value.strokeStyle = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length)];
     manualIntervalId = setInterval(function() {
       if (player.value && freeTerritory.value) {
         playerTable = onGesture(detail, playerTable);
