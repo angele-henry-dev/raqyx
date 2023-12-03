@@ -211,6 +211,7 @@ const drawTerritory = (playerTable: Player, newTerritory: Path2D) => {
 };
 const endTerritory = (newTerritory: Path2D) => {
   if (ctx.value) {
+    // TODO Manually complete the new territory to fill it correctly
     newTerritory.closePath();
     ctx.value.fill(newTerritory);
   }
