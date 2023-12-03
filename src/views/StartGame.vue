@@ -115,7 +115,7 @@ const setupCanvas = () => {
     canvas.style.width = `${CONTAINER_WIDTH}px`;
     canvas.style.height = `${CONTAINER_HEIGHT}px`;
 
-    const ctxTemp = canvas.getContext('2d');
+    const ctxTemp = canvas.getContext('2d', { alpha: false });
     if (ctxTemp) {
       ctxTemp.scale(dpr, dpr);
       ctxTemp.lineWidth = 1;
@@ -192,11 +192,27 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
 
 /* Territory scripts */
 
-const drawTerritories = (playerTable: Player, newTerritory: Path2D) => {
+const startTerritory = (playerTable: Player) => {
   if (ctx.value) {
+    const newTerritory = new Path2D();
     newTerritory.moveTo(playerTable.x, playerTable.y - (PLAYERS_SIZE / 2));
+    const randomColorIndex = randomIntFromInterval(0, TERRITORIES_COLORS.length);
+    ctx.value.strokeStyle = TERRITORIES_COLORS[randomColorIndex];
+    ctx.value.fillStyle = TERRITORIES_COLORS[randomColorIndex];
+    return newTerritory;
+  }
+  return null;
+};
+const drawTerritory = (playerTable: Player, newTerritory: Path2D) => {
+  if (ctx.value) {
     newTerritory.lineTo(playerTable.x - (PLAYERS_SIZE / 2), playerTable.y - (PLAYERS_SIZE / 2));
     ctx.value.stroke(newTerritory);
+  }
+};
+const endTerritory = (newTerritory: Path2D) => {
+  if (ctx.value) {
+    newTerritory.closePath();
+    ctx.value.fill(newTerritory);
   }
 };
 
@@ -232,8 +248,8 @@ const autoMovePlayer = () => {
 
 const manualMovePlayer = (detail: GestureDetail) => {
   if (manualIntervalId == undefined && ctx.value) {
-    const newTerritory = new Path2D();
-    ctx.value.strokeStyle = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length)];
+    const newTerritory = startTerritory(playerTable);
+
     manualIntervalId = setInterval(function() {
       if (player.value && freeTerritory.value) {
         playerTable = onGesture(detail, playerTable);
@@ -242,20 +258,19 @@ const manualMovePlayer = (detail: GestureDetail) => {
         autoIntervalId = undefined;
 
         if (isGoingBackOnBorder(
-          playerTable.x,
-          playerTable.y,
-          freeTerritory.value.width + PLAYERS_SIZE,
-          freeTerritory.value.height + PLAYERS_SIZE
-        ) && ctx.value) {
-          newTerritory.closePath();
-          ctx.value.fillStyle = "green";
-          ctx.value.fill(newTerritory, "evenodd");
+          playerTable.x, playerTable.y,
+          (freeTerritory.value.width + PLAYERS_SIZE),
+          (freeTerritory.value.height + PLAYERS_SIZE)
+        ) && newTerritory) {
+          endTerritory(newTerritory);
           return goBackAuto();
         }
         player.value.style.left = `${playerTable.x}px`;
         player.value.style.top = `${playerTable.y}px`;
 
-        drawTerritories(playerTable, newTerritory);
+        if (newTerritory) {
+          drawTerritory(playerTable, newTerritory);
+        }
 
         for (const key of Object.keys(ennemiesTable)) {
           const ennemy = ennemiesTable[key];
