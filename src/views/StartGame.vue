@@ -54,7 +54,7 @@ const numberCurrentEnnemies = ref<number>(0);
 let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let playerTable: Player = {
-  x: 0,
+  x: 300,
   y: 0,
   direction: 0,
   startX: 0,
@@ -66,6 +66,7 @@ const freeTerritory = ref<Territory> ({
   width: CONTAINER_WIDTH,
   height: CONTAINER_HEIGHT
 });
+let inProgressTerritory: TerritoryTemp[] = [];
 const ennemiesTable: Record<string, Ennemy>  = {};
 
 onMounted(() => {
@@ -134,6 +135,7 @@ const gameOver = () => {
   // if (ctx.value) {
   //   ctx.value.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
   // }
+  console.log(inProgressTerritory);
   console.log("Game over");
 };
 
@@ -193,6 +195,7 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
 
 const startTerritory = () => {
   if (ctx.value) {
+    inProgressTerritory = [];
     const newTerritory = new Path2D();
     newTerritory.moveTo(playerTable.x, playerTable.y - (PLAYERS_SIZE / 2));
     const randomColorIndex = randomIntFromInterval(0, TERRITORIES_COLORS.length);
@@ -202,36 +205,57 @@ const startTerritory = () => {
   }
   return null;
 };
-const drawTerritory = (newTerritory: Path2D, territoryPoints: TerritoryTemp[]) => {
+const drawTerritory = (newTerritory: Path2D) => {
   if (ctx.value) {
     const x = playerTable.x - (PLAYERS_SIZE / 2);
     const y = playerTable.y - (PLAYERS_SIZE / 2);
-    if (territoryPoints.length == 0 || territoryPoints[territoryPoints.length - 1].direction != playerTable.direction) {
-      territoryPoints.push({
+
+    if (inProgressTerritory.length < 1) {
+      inProgressTerritory.push({
         left: x,
         top: y,
         direction: playerTable.direction
       });
+    } else if (inProgressTerritory[inProgressTerritory.length - 1].direction != playerTable.direction) {
+      inProgressTerritory.push({
+        left: x,
+        top: y,
+        direction: playerTable.direction
+      });
+    } else {
+      // TODO Get the current position and remove it after
+      if (inProgressTerritory.length > 1 && inProgressTerritory[inProgressTerritory.length - 1].direction == playerTable.direction) {
+        inProgressTerritory[inProgressTerritory.length - 1] = {
+          left: x,
+          top: y,
+          direction: playerTable.direction
+        };
+      } else {
+        inProgressTerritory[inProgressTerritory.length] = {
+          left: x,
+          top: y,
+          direction: playerTable.direction
+        };
+      }
     }
     newTerritory.lineTo(x, y);
     ctx.value.stroke(newTerritory);
   }
-  return territoryPoints;
 };
-const endTerritory = (newTerritory: Path2D, territoryPoints: TerritoryTemp[]) => {
+const endTerritory = (newTerritory: Path2D) => {
   if (ctx.value) {
     const x = playerTable.x - (PLAYERS_SIZE / 2);
     const y = playerTable.y - (PLAYERS_SIZE / 2);
     // TODO Manually complete the new territory to fill it correctly
     newTerritory.closePath();
     ctx.value.fill(newTerritory);
-    territoryPoints.push({
+    inProgressTerritory.push({
       left: x,
       top: y,
       direction: playerTable.direction
     });
+    console.log(inProgressTerritory);
   }
-  return territoryPoints;
 };
 
 /* Player scripts */
@@ -267,7 +291,6 @@ const autoMovePlayer = () => {
 const manualMovePlayer = (detail: GestureDetail) => {
   if (manualIntervalId == undefined && ctx.value) {
     const newTerritory = startTerritory();
-    let territoryPoints: TerritoryTemp[] = [];
 
     manualIntervalId = setInterval(function() {
       if (player.value && freeTerritory.value && ctx.value) {
@@ -281,20 +304,19 @@ const manualMovePlayer = (detail: GestureDetail) => {
           (freeTerritory.value.width + PLAYERS_SIZE),
           (freeTerritory.value.height + PLAYERS_SIZE)
         ) && newTerritory) {
-          territoryPoints = endTerritory(newTerritory, territoryPoints);
-          console.log(territoryPoints);
+          endTerritory(newTerritory);
           return goBackAuto();
         }
         player.value.style.left = `${playerTable.x}px`;
         player.value.style.top = `${playerTable.y}px`;
 
         if (newTerritory) {
-          territoryPoints = drawTerritory(newTerritory, territoryPoints);
+          drawTerritory(newTerritory);
         }
 
         for (const key of Object.keys(ennemiesTable)) {
           const ennemy = ennemiesTable[key];
-          if (collidePlayer(ennemy, playerTable, PLAYERS_SIZE) || collideTerritories(territoryPoints, ennemy)) {
+          if (collidePlayer(ennemy, playerTable, PLAYERS_SIZE) || collideTerritories(inProgressTerritory, ennemy)) {
             return gameOver();
           }
         }
