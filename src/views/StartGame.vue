@@ -223,7 +223,6 @@ const drawTerritory = (newTerritory: Path2D) => {
         direction: playerTable.direction
       });
     } else {
-      // TODO Get the current position and remove it after
       if (inProgressTerritory.length > 1 && inProgressTerritory[inProgressTerritory.length - 1].direction == playerTable.direction) {
         inProgressTerritory[inProgressTerritory.length - 1] = {
           left: x,
