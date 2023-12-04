@@ -37,7 +37,7 @@ import { IonPage, IonContent, IonGrid, IonRow, IonCol, GestureDetail } from '@io
 import { createGesture } from '@ionic/vue';
 import { Player, onGesture, automaticMovePlayer, isGoingBackOnBorder } from '@/scripts/player';
 import { randomIntFromInterval } from '@/scripts/utils'
-import { Ennemy, collideBorder } from '@/scripts/ennemy'
+import { Ennemy, collideBorder, collidePlayer, collideTerritories } from '@/scripts/ennemy'
 import { Territory } from '@/scripts/territory'
 
 const GAME_SPEED = 10;
@@ -45,7 +45,7 @@ const NUMBER_OF_ENNEMIES = 1;
 const PLAYERS_SIZE = 6;
 const CONTAINER_WIDTH = 301;
 const CONTAINER_HEIGHT = 493;
-const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
+// const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
 
 const player = ref<HTMLElement | null>(null);
 const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -115,7 +115,7 @@ const setupCanvas = () => {
     canvas.style.width = `${CONTAINER_WIDTH}px`;
     canvas.style.height = `${CONTAINER_HEIGHT}px`;
 
-    const ctxTemp = canvas.getContext('2d', { alpha: false });
+    const ctxTemp = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
     if (ctxTemp) {
       ctxTemp.scale(dpr, dpr);
       ctxTemp.lineWidth = 1;
@@ -131,9 +131,9 @@ const gameOver = () => {
   for (const key of Object.keys(ennemiesTable)) {
     clearInterval(ennemiesTable[key].intervalId);
   }
-  if (ctx.value) {
-    ctx.value.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-  }
+  // if (ctx.value) {
+  //   ctx.value.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+  // }
   console.log("Game over");
 };
 
@@ -177,7 +177,7 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
     ennemiesTable[ennemyId].y = ennemiesTable[ennemyId].y + ennemiesTable[ennemyId].speedY;
     ennemyDiv.style.left = `${ennemiesTable[ennemyId].x}px`;
     ennemyDiv.style.top = `${ennemiesTable[ennemyId].y}px`;
-
+    
     const newOffset = collideBorder(
       ennemiesTable[ennemyId].x,
       ennemiesTable[ennemyId].y,
@@ -196,9 +196,11 @@ const startTerritory = (playerTable: Player) => {
   if (ctx.value) {
     const newTerritory = new Path2D();
     newTerritory.moveTo(playerTable.x, playerTable.y - (PLAYERS_SIZE / 2));
-    const randomColorIndex = randomIntFromInterval(0, TERRITORIES_COLORS.length);
-    ctx.value.strokeStyle = TERRITORIES_COLORS[randomColorIndex];
-    ctx.value.fillStyle = TERRITORIES_COLORS[randomColorIndex];
+    // const randomColorIndex = randomIntFromInterval(0, TERRITORIES_COLORS.length);
+    // ctx.value.strokeStyle = TERRITORIES_COLORS[randomColorIndex];
+    // ctx.value.fillStyle = TERRITORIES_COLORS[randomColorIndex];
+    ctx.value.strokeStyle = "green";
+    ctx.value.fillStyle = "green";
     return newTerritory;
   }
   return null;
@@ -252,7 +254,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
     const newTerritory = startTerritory(playerTable);
 
     manualIntervalId = setInterval(function() {
-      if (player.value && freeTerritory.value) {
+      if (player.value && freeTerritory.value && ctx.value) {
         playerTable = onGesture(detail, playerTable);
 
         clearInterval(autoIntervalId);
@@ -275,13 +277,11 @@ const manualMovePlayer = (detail: GestureDetail) => {
 
         for (const key of Object.keys(ennemiesTable)) {
           const ennemy = ennemiesTable[key];
-          if (
-            (playerTable.x <= (ennemy.x + PLAYERS_SIZE - 2) && playerTable.x >= (ennemy.x - PLAYERS_SIZE + 2)) &&
-            (playerTable.y <= (ennemy.y + PLAYERS_SIZE - 2) && playerTable.y >= (ennemy.y - PLAYERS_SIZE + 2))
-          ) {
+          if (collidePlayer(ennemy, playerTable, PLAYERS_SIZE) || collideTerritories(ctx.value, ennemy)) {
             return gameOver();
           }
         }
+
       } else {
         return goBackAuto();
       }
