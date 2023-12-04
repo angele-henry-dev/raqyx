@@ -135,7 +135,6 @@ const gameOver = () => {
   // if (ctx.value) {
   //   ctx.value.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
   // }
-  console.log(inProgressTerritory);
   console.log("Game over");
 };
 
@@ -229,7 +228,7 @@ const drawTerritory = (newTerritory: Path2D) => {
         direction: playerTable.direction
       });
     }
-
+    
     newTerritory.lineTo(x, y);
     ctx.value.stroke(newTerritory);
   }
@@ -246,7 +245,6 @@ const endTerritory = (newTerritory: Path2D) => {
       top: y,
       direction: playerTable.direction
     });
-    console.log(inProgressTerritory);
   }
 };
 
