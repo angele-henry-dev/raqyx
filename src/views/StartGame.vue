@@ -210,33 +210,26 @@ const drawTerritory = (newTerritory: Path2D) => {
     const x = playerTable.x - (PLAYERS_SIZE / 2);
     const y = playerTable.y - (PLAYERS_SIZE / 2);
 
-    if (inProgressTerritory.length < 1) {
+    if (inProgressTerritory.length < 1 || inProgressTerritory[inProgressTerritory.length - 1].direction !== playerTable.direction) {
       inProgressTerritory.push({
         left: x,
         top: y,
         direction: playerTable.direction
       });
-    } else if (inProgressTerritory[inProgressTerritory.length - 1].direction != playerTable.direction) {
-      inProgressTerritory.push({
+    } else if (inProgressTerritory.length > 1 && inProgressTerritory[inProgressTerritory.length - 1].direction === playerTable.direction) {
+      inProgressTerritory[inProgressTerritory.length - 1] = {
         left: x,
         top: y,
         direction: playerTable.direction
-      });
+      };
     } else {
-      if (inProgressTerritory.length > 1 && inProgressTerritory[inProgressTerritory.length - 1].direction == playerTable.direction) {
-        inProgressTerritory[inProgressTerritory.length - 1] = {
-          left: x,
-          top: y,
-          direction: playerTable.direction
-        };
-      } else {
-        inProgressTerritory[inProgressTerritory.length] = {
-          left: x,
-          top: y,
-          direction: playerTable.direction
-        };
-      }
+      inProgressTerritory.push({
+        left: x,
+        top: y,
+        direction: playerTable.direction
+      });
     }
+
     newTerritory.lineTo(x, y);
     ctx.value.stroke(newTerritory);
   }
