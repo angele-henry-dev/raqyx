@@ -45,7 +45,7 @@ const NUMBER_OF_ENNEMIES = 1;
 const PLAYERS_SIZE = 6;
 const CONTAINER_WIDTH = 301;
 const CONTAINER_HEIGHT = 493;
-// const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
+const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
 
 const player = ref<HTMLElement | null>(null);
 const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -67,6 +67,12 @@ const freeTerritory = ref<Territory> ({
   height: CONTAINER_HEIGHT
 });
 const ennemiesTable: Record<string, Ennemy>  = {};
+
+interface TerritoryTemp {
+  left: number;
+  top: number;
+  direction: number;
+}
 
 onMounted(() => {
   setupContainer();
@@ -192,31 +198,47 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
 
 /* Territory scripts */
 
-const startTerritory = (playerTable: Player) => {
+const startTerritory = () => {
   if (ctx.value) {
     const newTerritory = new Path2D();
     newTerritory.moveTo(playerTable.x, playerTable.y - (PLAYERS_SIZE / 2));
-    // const randomColorIndex = randomIntFromInterval(0, TERRITORIES_COLORS.length);
-    // ctx.value.strokeStyle = TERRITORIES_COLORS[randomColorIndex];
-    // ctx.value.fillStyle = TERRITORIES_COLORS[randomColorIndex];
-    ctx.value.strokeStyle = "green";
-    ctx.value.fillStyle = "green";
+    const randomColorIndex = randomIntFromInterval(0, TERRITORIES_COLORS.length);
+    ctx.value.strokeStyle = TERRITORIES_COLORS[randomColorIndex];
+    ctx.value.fillStyle = TERRITORIES_COLORS[randomColorIndex];
     return newTerritory;
   }
   return null;
 };
-const drawTerritory = (playerTable: Player, newTerritory: Path2D) => {
+const drawTerritory = (newTerritory: Path2D, territoryPoints: TerritoryTemp[]) => {
   if (ctx.value) {
-    newTerritory.lineTo(playerTable.x - (PLAYERS_SIZE / 2), playerTable.y - (PLAYERS_SIZE / 2));
+    const x = playerTable.x - (PLAYERS_SIZE / 2);
+    const y = playerTable.y - (PLAYERS_SIZE / 2);
+    if (territoryPoints.length == 0 || territoryPoints[territoryPoints.length - 1].direction != playerTable.direction) {
+      territoryPoints.push({
+        left: x,
+        top: y,
+        direction: playerTable.direction
+      });
+    }
+    newTerritory.lineTo(x, y);
     ctx.value.stroke(newTerritory);
   }
+  return territoryPoints;
 };
-const endTerritory = (newTerritory: Path2D) => {
+const endTerritory = (newTerritory: Path2D, territoryPoints: TerritoryTemp[]) => {
   if (ctx.value) {
+    const x = playerTable.x - (PLAYERS_SIZE / 2);
+    const y = playerTable.y - (PLAYERS_SIZE / 2);
     // TODO Manually complete the new territory to fill it correctly
     newTerritory.closePath();
     ctx.value.fill(newTerritory);
+    territoryPoints.push({
+      left: x,
+      top: y,
+      direction: playerTable.direction
+    });
   }
+  return territoryPoints;
 };
 
 /* Player scripts */
@@ -251,7 +273,8 @@ const autoMovePlayer = () => {
 
 const manualMovePlayer = (detail: GestureDetail) => {
   if (manualIntervalId == undefined && ctx.value) {
-    const newTerritory = startTerritory(playerTable);
+    const newTerritory = startTerritory();
+    let territoryPoints: TerritoryTemp[] = [];
 
     manualIntervalId = setInterval(function() {
       if (player.value && freeTerritory.value && ctx.value) {
@@ -265,14 +288,15 @@ const manualMovePlayer = (detail: GestureDetail) => {
           (freeTerritory.value.width + PLAYERS_SIZE),
           (freeTerritory.value.height + PLAYERS_SIZE)
         ) && newTerritory) {
-          endTerritory(newTerritory);
+          territoryPoints = endTerritory(newTerritory, territoryPoints);
+          console.log(territoryPoints);
           return goBackAuto();
         }
         player.value.style.left = `${playerTable.x}px`;
         player.value.style.top = `${playerTable.y}px`;
 
         if (newTerritory) {
-          drawTerritory(playerTable, newTerritory);
+          territoryPoints = drawTerritory(newTerritory, territoryPoints);
         }
 
         for (const key of Object.keys(ennemiesTable)) {
