@@ -2,30 +2,32 @@
   <ion-page>
     <ion-content>
       <ion-grid>
-        <ion-row class="ion-justify-content-between">
-          <ion-col size="5" class="ion-text-start">
-            650798
-          </ion-col>
-          <ion-col size="5" class="ion-text-end">
-            {{ calculateTerritoryCaptured() }}% / 75%
-          </ion-col>
-        </ion-row>
-        <ion-row class="game-area">
-          <ion-col>
-            <div ref="container" id="container" class="container">
-              <div ref="player" class="player"></div>
-              <canvas ref="canvas" id="freeTerritory" class="freeTerritory" width="301" height="493"></canvas>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row class="ion-justify-content-between">
-          <ion-col size="5" class="ion-text-start">
-            Level 1
-          </ion-col>
-          <ion-col size="5" class="ion-text-end">
-            Number of ennemies: {{ numberCurrentEnnemies }}
-          </ion-col>
-        </ion-row>
+        <ion-grid class="game-content">
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="5" class="ion-text-start">
+              650798
+            </ion-col>
+            <ion-col size="5" class="ion-text-end">
+              {{ calculateTerritoryCaptured() }}% / 75%
+            </ion-col>
+          </ion-row>
+          <ion-row class="game-area">
+            <ion-col>
+              <div ref="container" id="container" class="container">
+                <div ref="player" class="player"></div>
+                <canvas ref="canvas" id="freeTerritory" class="freeTerritory" width="301" height="493"></canvas>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row class="ion-justify-content-between">
+            <ion-col size="5" class="ion-text-start">
+              Level 1
+            </ion-col>
+            <ion-col size="5" class="ion-text-end">
+              Number of ennemies: {{ numberCurrentEnnemies }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-grid>
     </ion-content>
   </ion-page>
@@ -43,6 +45,7 @@ import { Territory, TerritoryTemp } from '@/scripts/territory'
 const GAME_SPEED = 10;
 const NUMBER_OF_ENNEMIES = 1;
 const PLAYERS_SIZE = 6;
+const START_LINE = -1;
 const CONTAINER_WIDTH = 301;
 const CONTAINER_HEIGHT = 493;
 const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
@@ -55,7 +58,7 @@ let autoIntervalId: number | undefined = undefined;
 let manualIntervalId: number | undefined = undefined;
 let playerTable: Player = {
   x: 300,
-  y: 0,
+  y: START_LINE,
   direction: 0,
   startX: 0,
   startY: 0
@@ -183,7 +186,7 @@ const moveEnnemy = (ennemyDiv: HTMLElement, ennemyId: string) => {
       ennemiesTable[ennemyId].y,
       freeTerritory.value.width,
       freeTerritory.value.height,
-      PLAYERS_SIZE
+      PLAYERS_SIZE/2+1
     )
     ennemiesTable[ennemyId].speedX *= newOffset[0];
     ennemiesTable[ennemyId].speedY *= newOffset[1];
@@ -270,8 +273,9 @@ const autoMovePlayer = () => {
 
     playerTable = automaticMovePlayer(
       playerTable,
-      freeTerritory.value.width + PLAYERS_SIZE,
-      freeTerritory.value.height + PLAYERS_SIZE,
+      freeTerritory.value.width + PLAYERS_SIZE - 1,
+      freeTerritory.value.height + PLAYERS_SIZE - 1,
+      START_LINE
     );
     player.value.style.left = `${playerTable.x}px`;
     player.value.style.top = `${playerTable.y}px`;
@@ -291,8 +295,9 @@ const manualMovePlayer = (detail: GestureDetail) => {
 
         if (isGoingBackOnBorder(
           playerTable.x, playerTable.y,
-          (freeTerritory.value.width + PLAYERS_SIZE),
-          (freeTerritory.value.height + PLAYERS_SIZE)
+          (freeTerritory.value.width + PLAYERS_SIZE - 1),
+          (freeTerritory.value.height + PLAYERS_SIZE - 1),
+          START_LINE
         ) && newTerritory) {
           endTerritory(newTerritory);
           return goBackAuto();
