@@ -1,5 +1,6 @@
 import { Player } from "./player";
 import { TerritoryTemp } from "./territory";
+import { isBetween } from "./utils";
 
 export interface Ennemy {
     x: number;
@@ -33,19 +34,18 @@ export const collidePlayer = (ennemy: Ennemy, playerTable: Player, PLAYERS_SIZE:
     return false;
 };
 
-export const isBetween = function(point: number, a: number, b: number) {
-    const min = Math.min.apply(Math, [a, b]);
-    const max = Math.max.apply(Math, [a, b]);
-    return point > min && point < max;
-};
-
-export const collideTerritories = (territoryPoints: TerritoryTemp[], ennemy: Ennemy) => {
+export const collideTerritories = (territoryPoints: TerritoryTemp[], ennemy: Ennemy, PLAYERS_SIZE: number) => {
     if (territoryPoints.length <= 1) {
         return false;
     }
     for (let i = 1; i < territoryPoints.length; i++) {
-        if ((ennemy.y == territoryPoints[i].top && isBetween(ennemy.x, territoryPoints[i].left, territoryPoints[i - 1].left))
-        || (ennemy.x == territoryPoints[i].left && isBetween(ennemy.y, territoryPoints[i].top, territoryPoints[i - 1].top))) {
+        let top = territoryPoints[i].top;
+        let left = territoryPoints[i].left;
+        if (ennemy.speedY < 0) { top = territoryPoints[i].top + PLAYERS_SIZE; }
+        else if (ennemy.speedX < 0) { left = territoryPoints[i].left + PLAYERS_SIZE; }
+
+        if ((ennemy.y == top && isBetween(ennemy.x, left, territoryPoints[i - 1].left))
+        || (ennemy.x == left && isBetween(ennemy.y, top, territoryPoints[i - 1].top))) {
             return true;
         }
     }

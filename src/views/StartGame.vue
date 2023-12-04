@@ -306,7 +306,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
 
         for (const key of Object.keys(ennemiesTable)) {
           const ennemy = ennemiesTable[key];
-          if (collidePlayer(ennemy, playerTable, PLAYERS_SIZE) || collideTerritories(inProgressTerritory, ennemy)) {
+          if (collidePlayer(ennemy, playerTable, PLAYERS_SIZE) || collideTerritories(inProgressTerritory, ennemy, PLAYERS_SIZE)) {
             return gameOver();
           }
         }
