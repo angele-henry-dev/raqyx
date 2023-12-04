@@ -1,4 +1,5 @@
 import { Player } from "./player";
+import { TerritoryTemp } from "./territory";
 
 export interface Ennemy {
     x: number;
@@ -32,13 +33,21 @@ export const collidePlayer = (ennemy: Ennemy, playerTable: Player, PLAYERS_SIZE:
     return false;
 };
 
-export const collideTerritories = (ctx: CanvasRenderingContext2D, ennemy: Ennemy) => {
-    // if (ctx) {
-    //   const p = ctx.getImageData(ennemy.x, ennemy.y, 1, 1).data;
-    //   if (p[0] != 0 || p[1] != 0 || p[2] != 0 || p[3] != 255) {
-    //     console.log(p[1]);
-    //     return true;
-    //   } else {console.log(p[1]);}
-    // }
+export const isBetween = function(point: number, a: number, b: number) {
+    const min = Math.min.apply(Math, [a, b]);
+    const max = Math.max.apply(Math, [a, b]);
+    return point > min && point < max;
+};
+
+export const collideTerritories = (territoryPoints: TerritoryTemp[], ennemy: Ennemy) => {
+    if (territoryPoints.length <= 1) {
+        return false;
+    }
+    for (let i = 1; i < territoryPoints.length; i++) {
+        if ((ennemy.y == territoryPoints[i].top && isBetween(ennemy.x, territoryPoints[i].left, territoryPoints[i - 1].left))
+        || (ennemy.x == territoryPoints[i].left && isBetween(ennemy.y, territoryPoints[i].top, territoryPoints[i - 1].top))) {
+            return true;
+        }
+    }
     return false;
 };

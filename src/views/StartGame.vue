@@ -38,7 +38,7 @@ import { createGesture } from '@ionic/vue';
 import { Player, onGesture, automaticMovePlayer, isGoingBackOnBorder } from '@/scripts/player';
 import { randomIntFromInterval } from '@/scripts/utils'
 import { Ennemy, collideBorder, collidePlayer, collideTerritories } from '@/scripts/ennemy'
-import { Territory } from '@/scripts/territory'
+import { Territory, TerritoryTemp } from '@/scripts/territory'
 
 const GAME_SPEED = 10;
 const NUMBER_OF_ENNEMIES = 1;
@@ -67,12 +67,6 @@ const freeTerritory = ref<Territory> ({
   height: CONTAINER_HEIGHT
 });
 const ennemiesTable: Record<string, Ennemy>  = {};
-
-interface TerritoryTemp {
-  left: number;
-  top: number;
-  direction: number;
-}
 
 onMounted(() => {
   setupContainer();
@@ -159,7 +153,6 @@ const createEnnemies = () => {
       ennemy.style.left = `${left}px`;
       ennemy.style.top = `${top}px`;
 
-      // document.getElementById("freeTerritory")?.appendChild(ennemy);
       document.getElementById("container")?.appendChild(ennemy);
       numberCurrentEnnemies.value += 1;
 
@@ -301,7 +294,7 @@ const manualMovePlayer = (detail: GestureDetail) => {
 
         for (const key of Object.keys(ennemiesTable)) {
           const ennemy = ennemiesTable[key];
-          if (collidePlayer(ennemy, playerTable, PLAYERS_SIZE) || collideTerritories(ctx.value, ennemy)) {
+          if (collidePlayer(ennemy, playerTable, PLAYERS_SIZE) || collideTerritories(territoryPoints, ennemy)) {
             return gameOver();
           }
         }

@@ -4,3 +4,9 @@ export interface Territory {
     width: number;
     height: number;
 }
+
+export interface TerritoryTemp {
+  left: number;
+  top: number;
+  direction: number;
+}
