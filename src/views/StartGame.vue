@@ -40,7 +40,7 @@ import { createGesture } from '@ionic/vue';
 import { Player, onGesture, automaticMovePlayer, isGoingBackOnBorder } from '@/scripts/player';
 import { randomIntFromInterval } from '@/scripts/utils'
 import { Ennemy, collideBorder, collidePlayer, collideTerritories } from '@/scripts/ennemy'
-import { Territory, TerritoryTemp } from '@/scripts/territory'
+import { Territory, TerritoryTemp, closeTerritory } from '@/scripts/territory'
 
 const GAME_SPEED = 10;
 const NUMBER_OF_ENNEMIES = 1;
@@ -138,7 +138,7 @@ const gameOver = () => {
   // if (ctx.value) {
   //   ctx.value.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
   // }
-  console.log("Game over");
+  alert("Game over");
 };
 
 /* Ennemies scripts */
@@ -240,14 +240,12 @@ const endTerritory = (newTerritory: Path2D) => {
   if (ctx.value) {
     const x = playerTable.x - (PLAYERS_SIZE / 2);
     const y = playerTable.y - (PLAYERS_SIZE / 2);
-    // TODO Manually complete the new territory to fill it correctly
+    inProgressTerritory = inProgressTerritory.concat(
+      closeTerritory(inProgressTerritory, CONTAINER_WIDTH, CONTAINER_HEIGHT, START_LINE)
+    );
     newTerritory.closePath();
     ctx.value.fill(newTerritory);
-    inProgressTerritory.push({
-      left: x,
-      top: y,
-      direction: playerTable.direction
-    });
+    console.log(inProgressTerritory);
   }
 };
 
