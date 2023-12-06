@@ -240,9 +240,11 @@ const endTerritory = (newTerritory: Path2D) => {
   if (ctx.value) {
     const x = playerTable.x - (PLAYERS_SIZE / 2);
     const y = playerTable.y - (PLAYERS_SIZE / 2);
-    inProgressTerritory = inProgressTerritory.concat(
-      closeTerritory(inProgressTerritory, CONTAINER_WIDTH, CONTAINER_HEIGHT, START_LINE)
-    );
+    const endingTerritory = closeTerritory(inProgressTerritory, CONTAINER_WIDTH, CONTAINER_HEIGHT, START_LINE);
+    for (const territory of endingTerritory) {
+      inProgressTerritory.push(territory);
+      newTerritory.lineTo(territory.left, territory.top);
+    }
     newTerritory.closePath();
     ctx.value.fill(newTerritory);
     console.log(inProgressTerritory);
