@@ -46,10 +46,26 @@ export const closeTerritory = (
     top = lastPath.top;
     left = firstPath.left;
   }
-  endingPaths.push({
+  const tempPath = {
     left: left,
     top: top,
     direction: direction
-  });
+  };
+  endingPaths.push(tempPath);
+  if (firstPath.left != left || firstPath.top != top) {
+    if ((lastPath.left <= START_LINE || lastPath.left >= CONTAINER_WIDTH)) {
+      if (lastPath.top < CONTAINER_HEIGHT/2) {
+        // On monte
+      } else {
+        // On descend
+      }
+    } else {
+      if (lastPath.left < CONTAINER_WIDTH/2) {
+        // On va à gauche
+      } else {
+        // On va à droite
+      }
+    }
+  }
   return endingPaths; // 0=right, 1=left, 2=down, 3=up
 };
