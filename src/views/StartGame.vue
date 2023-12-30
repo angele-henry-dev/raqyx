@@ -16,11 +16,7 @@
         <ion-row class="ion-justify-content-between">
           <ion-col size="5" class="ion-text-start">
             <!-- Level 1 -->
-            <ion-button @click="addNode()">Add node</ion-button>
-            <ion-button @click="addLink()">Add link</ion-button>
-            <ion-button onclick="removeNode()">Remove node</ion-button>
-            <ion-button onclick="removeLink()">Remove link</ion-button>
-            <ion-button onclick="removeAll()">Clear</ion-button>
+            <ion-button @click="clearCanvas()">Clear</ion-button>
           </ion-col>
           <ion-col size="5" class="ion-text-end">
             Ennemies: <!-- {{ numberCurrentEnnemies }} -->
@@ -95,4 +91,38 @@
       graph.draw(ctx);
     }
   };
+
+  const removeLink = () => {
+    if (graph.links.length == 0) {
+      console.log("No links");
+      return;
+    }
+    if (ctx) {
+      const index = Math.floor(Math.random() * graph.links.length);
+      graph.removeLink(graph.links[index]);
+      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+      graph.draw(ctx);
+    }
+  }
+
+  const removeNode = () => {
+    if (graph.nodes.length == 0) {
+      console.log("No nodes");
+      return;
+    }
+    if (ctx) {
+      const index = Math.floor(Math.random() * graph.nodes.length);
+      graph.removeNode(graph.nodes[index]);
+      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+      graph.draw(ctx);
+    }
+  }
+
+  const clearCanvas = () => {
+    if (ctx) {
+      graph.clearGraph();
+      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+      graph.draw(ctx);
+    }
+  }
 </script>
