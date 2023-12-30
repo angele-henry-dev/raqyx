@@ -15,8 +15,7 @@
         </ion-row>
         <ion-row class="ion-justify-content-between">
           <ion-col size="5" class="ion-text-start">
-            <!-- Level 1 -->
-            <ion-button @click="clearCanvas()">Clear</ion-button>
+            Level 1
           </ion-col>
           <ion-col size="5" class="ion-text-end">
             Ennemies: <!-- {{ numberCurrentEnnemies }} -->
@@ -25,6 +24,7 @@
       </ion-grid>
     </ion-content>
   </ion-page>
+  <!-- <ion-button @click="clearCanvas()">Clear</ion-button> -->
 </template>
 
 <script setup lang="ts">
@@ -51,78 +51,20 @@
       ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
       if (ctx) {
         ctx.scale(dpr, dpr);
-        const p1 = new Node(100, 100);
-        const p2 = new Node(150, 100);
-        const p3 = new Node(150, 200);
-        const p4 = new Node(10, 35);
+        // const p1 = new Node(100, 100);
+        // const p2 = new Node(150, 100);
+        // const p3 = new Node(150, 200);
+        // const p4 = new Node(10, 35);
 
-        const s1 = new Link(p1, p2);
-        const s2 = new Link(p1, p3);
-        const s3 = new Link(p1, p4);
-        const s4 = new Link(p2, p3);
+        // const s1 = new Link(p1, p2);
+        // const s2 = new Link(p1, p3);
+        // const s3 = new Link(p1, p4);
+        // const s4 = new Link(p2, p3);
 
-        graph = new Graph([p1, p2, p3, p4], [s1, s2, s3, s4]);
+        // graph = new Graph([p1, p2, p3, p4], [s1, s2, s3, s4]);
+        graph = new Graph();
         graph.draw(ctx);
       }
     }
   });
-
-  const addNode = () => {
-    if (ctx) {
-      graph.addNode(
-        new Node(
-          Math.random() * CONTAINER_WIDTH,
-          Math.random() * CONTAINER_HEIGHT
-        )
-      );
-      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-      graph.draw(ctx);
-    }
-  };
-
-  const addLink = () => {
-    if (ctx) {
-      const index1 = Math.floor(Math.random() * graph.nodes.length);
-      const index2 = Math.floor(Math.random() * graph.nodes.length);
-      graph.addLink(
-        new Link(graph.nodes[index1], graph.nodes[index2])
-      );
-      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-      graph.draw(ctx);
-    }
-  };
-
-  const removeLink = () => {
-    if (graph.links.length == 0) {
-      console.log("No links");
-      return;
-    }
-    if (ctx) {
-      const index = Math.floor(Math.random() * graph.links.length);
-      graph.removeLink(graph.links[index]);
-      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-      graph.draw(ctx);
-    }
-  }
-
-  const removeNode = () => {
-    if (graph.nodes.length == 0) {
-      console.log("No nodes");
-      return;
-    }
-    if (ctx) {
-      const index = Math.floor(Math.random() * graph.nodes.length);
-      graph.removeNode(graph.nodes[index]);
-      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-      graph.draw(ctx);
-    }
-  }
-
-  const clearCanvas = () => {
-    if (ctx) {
-      graph.clearGraph();
-      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-      graph.draw(ctx);
-    }
-  }
 </script>
