@@ -14,41 +14,61 @@ export class Player extends Node {
     this.size = size;
     this.midSize = Math.ceil(this.size/2) + 1;
     this.speed = speed;
-    this.color = "green";
+    this.color = color;
     this.x = this.midSize;
     this.y = this.midSize;
     this.direction = direction;
   }
 
+  onManualMove() {
+    console.log("Manual move");
+  }
+
   onAutomaticMove() {
     let offsetX = this.x;
     let offsetY = this.y;
-    let offsetDirection = this.direction;
+    const offsetDirection = this.onCollideBorder();
 
     // Up
-    if (this.x <= this.midSize && this.y > this.midSize) {
+    if (offsetDirection == 3) {
       offsetY = (this.y - this.speed);
-      offsetDirection = 3;
     }
     // Down
-    else if (this.x >= (CONTAINER_WIDTH - this.midSize) && this.y < (CONTAINER_HEIGHT - this.midSize)) {
+    else if (offsetDirection == 2) {
       offsetY = (this.y + this.speed);
-      offsetDirection = 2;
     }
     // Right
-    else if (this.y <= this.midSize && this.x < (CONTAINER_WIDTH - this.midSize)) {
+    else if (offsetDirection == 0) {
       offsetX = (this.x + this.speed);
-      offsetDirection = 0;
     }
     // Left
-    else if (this.y >= (CONTAINER_HEIGHT - this.midSize) && this.x > this.midSize) {
+    else if (offsetDirection == 1) {
       offsetX = (this.x - this.speed);
-      offsetDirection = 1;
     }
 
     this.x = offsetX;
     this.y = offsetY;
     this.direction = offsetDirection;
+  }
+
+  onCollideBorder() {
+    // Border right go down
+    if (this.x >= (CONTAINER_WIDTH - this.midSize) && this.y < (CONTAINER_HEIGHT - this.midSize)) {
+      return 2;
+    }
+    // Border left go up
+    if (this.x <= this.midSize && this.y > this.midSize) {
+      return 3;
+    }
+    // Border top go right
+    if (this.y <= this.midSize && this.x < (CONTAINER_WIDTH - this.midSize)) {
+      return 0;
+    }
+    // Border bottom go left
+    if (this.y >= (CONTAINER_HEIGHT - this.midSize) && this.x > this.midSize) {
+      return 1;
+    }
+    return -1;
   }
 }
 

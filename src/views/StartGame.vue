@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
   import { onMounted } from 'vue';
+  import { createGesture } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
   import { Graph } from '@/scripts/math/graph'
   // import { Node } from '@/scripts/math/node'
@@ -48,7 +49,6 @@
     canvas.style.height = `${CONTAINER_HEIGHT}px`;
     
     ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
-
     if (ctx) {
       ctx.scale(DPR, DPR);
       ctx.lineWidth = 1;
@@ -56,7 +56,20 @@
 
     gameManager = new GameManager();
     animate();
+    setupGesture();
   });
+
+  const setupGesture = () => {
+    if (canvas) {
+      const gesture = createGesture({
+        el: canvas,
+        gestureName: 'move-player',
+        disableScroll: true,
+        onEnd: gameManager?.player?.onManualMove
+      });
+      gesture.enable();
+    }
+  };
 
   const animate = () => {
       if (ctx && gameManager.player) {
