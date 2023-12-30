@@ -20,35 +20,47 @@ export class Player extends Node {
     this.direction = direction;
   }
 
-  onManualMove() {
-    console.log("Manual move");
+  onManualMove(detail: GestureDetail) {
+    // Move right
+    if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 3) {
+      this.direction = 0;
+      this.x = (this.x + this.speed);
+    }
+    // Move left
+    else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 3) {
+      this.direction = 1;
+      this.x = (this.x - this.speed);
+    }
+    // Move down
+    else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 3) {
+      this.direction = 2;
+      this.y = (this.y + this.speed);
+    }
+    // Move up
+    else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 3) {
+      this.direction = 3;
+      this.y = (this.y - this.speed);
+    }
   }
 
   onAutomaticMove() {
-    let offsetX = this.x;
-    let offsetY = this.y;
-    const offsetDirection = this.onCollideBorder();
-
-    // Up
-    if (offsetDirection == 3) {
-      offsetY = (this.y - this.speed);
-    }
-    // Down
-    else if (offsetDirection == 2) {
-      offsetY = (this.y + this.speed);
-    }
+    this.direction = this.onCollideBorder();
     // Right
-    else if (offsetDirection == 0) {
-      offsetX = (this.x + this.speed);
+    if (this.direction == 0) {
+      this.x = (this.x + this.speed);
     }
     // Left
-    else if (offsetDirection == 1) {
-      offsetX = (this.x - this.speed);
+    else if (this.direction == 1) {
+      this.x = (this.x - this.speed);
     }
-
-    this.x = offsetX;
-    this.y = offsetY;
-    this.direction = offsetDirection;
+    // Down
+    else if (this.direction == 2) {
+      this.y = (this.y + this.speed);
+    }
+    // Up
+    else if (this.direction == 3) {
+      this.y = (this.y - this.speed);
+    }
   }
 
   onCollideBorder() {
@@ -68,7 +80,7 @@ export class Player extends Node {
     if (this.y >= (CONTAINER_HEIGHT - this.midSize) && this.x > this.midSize) {
       return 1;
     }
-    return -1;
+    return this.direction;
   }
 }
 

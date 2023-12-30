@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
   import { onMounted } from 'vue';
-  import { createGesture } from '@ionic/vue';
+  import { createGesture, GestureDetail } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
   import { Graph } from '@/scripts/math/graph'
   // import { Node } from '@/scripts/math/node'
@@ -65,10 +65,15 @@
         el: canvas,
         gestureName: 'move-player',
         disableScroll: true,
-        onEnd: gameManager?.player?.onManualMove
+        onEnd: onGesture
       });
       gesture.enable();
     }
+  };
+
+  const onGesture = (detail: GestureDetail) => {
+    gameManager.player.onManualMove(detail);
+    // gameManager.player.onAutomaticMove();
   };
 
   const animate = () => {

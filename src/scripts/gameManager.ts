@@ -10,12 +10,13 @@ export const CONTAINER_HEIGHT = 493;
 export class GameManager {
     TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
 
-    gameWalls: Link[] = [];
-    player: Player | null = null;
-    ennemies: Ennemy[] = [];
+    gameWalls: Link[];
+    player: Player;
+    ennemies: Ennemy[];
 
     constructor() {
         this.player = new Player();
+        this.ennemies = [];
         const left = (this.player.midSize * 2);
         const top = (this.player.midSize * 2);
         const right = (CONTAINER_WIDTH - (this.player.midSize * 2));
@@ -41,7 +42,7 @@ export class GameManager {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        this.player?.draw(ctx, { color: this.player.color });
+        this.player.draw(ctx, { color: this.player.color });
         for (const wall of this.gameWalls) {
             wall.draw(ctx);
         }
