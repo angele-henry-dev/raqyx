@@ -42,9 +42,9 @@ export class GameManager {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        this.player.draw(ctx, { color: this.player.color });
         for (const wall of this.gameWalls) {
             wall.draw(ctx);
         }
+        this.player.draw(ctx, { color: this.player.color });
     }
 }
