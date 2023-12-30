@@ -4,7 +4,7 @@ export class Link {
     p1: Node;
     p2: Node;
 
-    constructor(p1: Node, p2: Node){
+    constructor(p1: Node, p2: Node) {
         this.p1 = p1;
         this.p2 = p2;
     }
