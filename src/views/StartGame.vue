@@ -17,7 +17,7 @@
           <ion-col size="5" class="ion-text-start">
             <!-- Level 1 -->
             <ion-button @click="addNode()">Add node</ion-button>
-            <ion-button onclick="addLink()">Add link</ion-button>
+            <ion-button @click="addLink()">Add link</ion-button>
             <ion-button onclick="removeNode()">Remove node</ion-button>
             <ion-button onclick="removeLink()">Remove link</ion-button>
             <ion-button onclick="removeAll()">Clear</ion-button>
@@ -72,8 +72,8 @@
   });
 
   const addNode = () => {
-    if (canvas && ctx) {
-      const success = graph.tryAddNode(
+    if (ctx) {
+      graph.addNode(
         new Node(
           Math.random() * CONTAINER_WIDTH,
           Math.random() * CONTAINER_HEIGHT
@@ -84,5 +84,15 @@
     }
   };
 
-  // const addLink = () => {};
+  const addLink = () => {
+    if (ctx) {
+      const index1 = Math.floor(Math.random() * graph.nodes.length);
+      const index2 = Math.floor(Math.random() * graph.nodes.length);
+      graph.addLink(
+        new Link(graph.nodes[index1], graph.nodes[index2])
+      );
+      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+      graph.draw(ctx);
+    }
+  };
 </script>

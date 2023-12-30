@@ -10,16 +10,24 @@ export class Graph {
         this.links = links;
     }
 
-    addNode(node: Node) {
-        this.nodes.push(node);
-    }
-
-    tryAddNode(node: Node) {
-        if (!this.containsNode(node)) {
-            this.addNode(node);
+    addLink(link: Link) {
+        if (!this.containsLink(link)) {
+            this.links.push(link);
             return true;
         }
         return false;
+    }
+
+    addNode(node: Node) {
+        if (!this.containsNode(node)) {
+            this.nodes.push(node);
+            return true;
+        }
+        return false;
+    }
+
+    containsLink(link: Link) {
+        return this.links.find((l) => l.equals(link));
     }
 
     containsNode(node: Node) {

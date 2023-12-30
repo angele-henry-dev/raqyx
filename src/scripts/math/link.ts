@@ -9,6 +9,14 @@ export class Link {
         this.p2 = p2;
     }
 
+    equals(link: Link) {
+        return this.includes(link.p1) && this.includes(link.p2);
+    }
+
+    includes(node: Node) {
+        return this.p1.equals(node) || this.p2.equals(node);
+    }
+
     draw(ctx: CanvasRenderingContext2D, width = 2, color = "white") {
         ctx.beginPath();
         ctx.lineWidth = width;
