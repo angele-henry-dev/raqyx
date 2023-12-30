@@ -7,7 +7,11 @@ export class Node {
         this.y = y;
     }
 
-    draw(ctx: CanvasRenderingContext2D, size = 5, color = "white") {
+    equals(node: Node) {
+        return node.x == this.x && node.y == this.y;
+    }
+
+    draw(ctx: CanvasRenderingContext2D, size = 8, color = "white") {
         const radius = size / 2;
         ctx.beginPath();
         ctx.fillStyle = color;

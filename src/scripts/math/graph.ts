@@ -10,6 +10,22 @@ export class Graph {
         this.links = links;
     }
 
+    addNode(node: Node) {
+        this.nodes.push(node);
+    }
+
+    tryAddNode(node: Node) {
+        if (!this.containsNode(node)) {
+            this.addNode(node);
+            return true;
+        }
+        return false;
+    }
+
+    containsNode(node: Node) {
+        return this.nodes.find((n) => n.equals(node));
+    }
+
     draw(ctx: CanvasRenderingContext2D) {
         for (const link of this.links) {
             link.draw(ctx);
