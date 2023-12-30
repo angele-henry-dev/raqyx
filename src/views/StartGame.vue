@@ -1,29 +1,22 @@
 <template>
-  <ion-page>
-    <ion-content>
-      <ion-grid class="game-content">
-        <ion-row class="ion-justify-content-between">
-          <ion-col size="5" class="ion-text-start">
-            Score: 650798
-          </ion-col>
-          <ion-col size="5" class="ion-text-end">
-            <!-- {{ calculateTerritoryCaptured() }} -->% / 75%
-          </ion-col>
-        </ion-row>
-        <ion-row class="game-area">
-          <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
-        </ion-row>
-        <ion-row class="ion-justify-content-between">
-          <ion-col size="5" class="ion-text-start">
-            Level 1
-          </ion-col>
-          <ion-col size="5" class="ion-text-end">
-            Ennemies: <!-- {{ numberCurrentEnnemies }} -->
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-content>
-  </ion-page>
+  <ion-header>
+    <ion-toolbar>
+      <ion-row class="ion-justify-content-between">
+        <ion-col size="4" class="ion-text-start">
+          Score: 650798
+        </ion-col>
+        <ion-col size="4" class="ion-text-end">
+          Level 1
+        </ion-col>
+        <ion-col size="4" class="ion-text-end">
+          <!-- {{ calculateTerritoryCaptured() }} -->% / 75%
+        </ion-col>
+      </ion-row>
+    </ion-toolbar>
+  </ion-header>
+  <!-- <ion-content class="ion-padding"> -->
+    <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
+  <!-- </ion-content> -->
   <!-- <ion-button @click="clearCanvas()">Clear</ion-button> -->
 </template>
 
@@ -61,19 +54,18 @@
 
   const setupGesture = () => {
     if (canvas) {
-      const gesture = createGesture({
+      createGesture({
         el: canvas,
         gestureName: 'move-player',
         disableScroll: true,
+        direction: undefined,
         onEnd: onGesture
-      });
-      gesture.enable();
+      }).enable();
     }
   };
 
   const onGesture = (detail: GestureDetail) => {
     gameManager.player.onManualMove(detail);
-    // gameManager.player.onAutomaticMove();
   };
 
   const animate = () => {
