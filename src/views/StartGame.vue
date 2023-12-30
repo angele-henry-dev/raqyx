@@ -67,4 +67,12 @@
       }
     }
   });
+
+  const animate = () => {
+    if (ctx) {
+      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+      graph.draw(ctx);
+      requestAnimationFrame(animate);
+    }
+  }
 </script>
