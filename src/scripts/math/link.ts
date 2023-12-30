@@ -17,7 +17,7 @@ export class Link {
         return this.p1.equals(node) || this.p2.equals(node);
     }
 
-    draw(ctx: CanvasRenderingContext2D, width = 2, color = "white") {
+    draw(ctx: CanvasRenderingContext2D, { width = 2, color = "white" } = {}) {
         ctx.beginPath();
         ctx.lineWidth = width;
         ctx.strokeStyle = color;
