@@ -5,12 +5,18 @@ import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
 export class Player extends Node {
   direction: number;
   size: number;
+  midSize: number;
+  speed: number;
+  color: string;
 
-  constructor(direction = 0, size = 8) {
+  constructor(direction = 0, size = 8, speed = 1.5, color = "green") {
     super(0, 0);
     this.size = size;
-    this.x = this.size;
-    this.y = this.size;
+    this.midSize = Math.ceil(this.size/2) + 1;
+    this.speed = speed;
+    this.color = "green";
+    this.x = this.midSize;
+    this.y = this.midSize;
     this.direction = direction;
   }
 
@@ -20,23 +26,23 @@ export class Player extends Node {
     let offsetDirection = this.direction;
 
     // Up
-    if (this.x === this.size && this.y > this.size) {
-      offsetY = (this.y - 1);
+    if (this.x <= this.midSize && this.y > this.midSize) {
+      offsetY = (this.y - this.speed);
       offsetDirection = 3;
     }
     // Down
-    else if (this.x === (CONTAINER_WIDTH - (this.size)) && this.y < (CONTAINER_HEIGHT - this.size)) {
-      offsetY = (this.y + 1);
+    else if (this.x >= (CONTAINER_WIDTH - this.midSize) && this.y < (CONTAINER_HEIGHT - this.midSize)) {
+      offsetY = (this.y + this.speed);
       offsetDirection = 2;
     }
     // Right
-    else if (this.y === this.size && this.x < (CONTAINER_WIDTH - (this.size))) {
-      offsetX = (this.x + 1);
+    else if (this.y <= this.midSize && this.x < (CONTAINER_WIDTH - this.midSize)) {
+      offsetX = (this.x + this.speed);
       offsetDirection = 0;
     }
     // Left
-    else if (this.y === (CONTAINER_HEIGHT - this.size) && this.x > this.size) {
-      offsetX = (this.x - 1);
+    else if (this.y >= (CONTAINER_HEIGHT - this.midSize) && this.x > this.midSize) {
+      offsetX = (this.x - this.speed);
       offsetDirection = 1;
     }
 

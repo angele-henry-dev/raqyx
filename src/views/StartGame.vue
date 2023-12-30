@@ -54,14 +54,13 @@
       ctx.lineWidth = 1;
     }
 
-    gameManager = new GameManager(canvas);
+    gameManager = new GameManager();
     animate();
   });
 
   const animate = () => {
       if (ctx && gameManager.player) {
         ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-        // graph = new Graph();
         graph.draw(ctx);
         gameManager.draw(ctx);
         gameManager.player.onAutomaticMove();
