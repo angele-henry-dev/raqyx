@@ -30,15 +30,42 @@
 <script setup lang="ts">
   import { onMounted } from 'vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
-  // import { Graph } from '@/scripts/math/graph'
+  import { Graph } from '@/scripts/math/graph'
   // import { Node } from '@/scripts/math/node'
   // import { Link } from '@/scripts/math/link'
 
-  let gameManager = null;
+  const DPR = window.devicePixelRatio || 1;
+  let ctx: CanvasRenderingContext2D | null = null;
+  let canvas: HTMLCanvasElement | null = null;
+  const graph = new Graph();
+  let gameManager: GameManager;
 
   onMounted(() => {
-    const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
+    canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
+    canvas.width = CONTAINER_WIDTH * DPR;
+    canvas.height = CONTAINER_HEIGHT * DPR;
+    canvas.style.width = `${CONTAINER_WIDTH}px`;
+    canvas.style.height = `${CONTAINER_HEIGHT}px`;
+    
+    ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
+
+    if (ctx) {
+      ctx.scale(DPR, DPR);
+      ctx.lineWidth = 1;
+    }
+
     gameManager = new GameManager(canvas);
-    gameManager.draw();
+    animate();
   });
+
+  const animate = () => {
+      if (ctx && gameManager.player) {
+        ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+        // graph = new Graph();
+        graph.draw(ctx);
+        gameManager.draw(ctx);
+        gameManager.player.onAutomaticMove();
+        requestAnimationFrame(animate);
+      }
+  }
 </script>

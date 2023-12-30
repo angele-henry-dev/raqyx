@@ -1,5 +1,6 @@
 import { GestureDetail } from '@ionic/vue';
-import { Node } from '@/scripts/math/node'
+import { Node } from '@/scripts/math/node';
+import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
 
 export class Player extends Node {
   direction: number;
@@ -11,6 +12,37 @@ export class Player extends Node {
     this.x = this.size;
     this.y = this.size;
     this.direction = direction;
+  }
+
+  onAutomaticMove() {
+    let offsetX = this.x;
+    let offsetY = this.y;
+    let offsetDirection = this.direction;
+
+    // Up
+    if (this.x === this.size && this.y > this.size) {
+      offsetY = (this.y - 1);
+      offsetDirection = 3;
+    }
+    // Down
+    else if (this.x === (CONTAINER_WIDTH - (this.size)) && this.y < (CONTAINER_HEIGHT - this.size)) {
+      offsetY = (this.y + 1);
+      offsetDirection = 2;
+    }
+    // Right
+    else if (this.y === this.size && this.x < (CONTAINER_WIDTH - (this.size))) {
+      offsetX = (this.x + 1);
+      offsetDirection = 0;
+    }
+    // Left
+    else if (this.y === (CONTAINER_HEIGHT - this.size) && this.x > this.size) {
+      offsetX = (this.x - 1);
+      offsetDirection = 1;
+    }
+
+    this.x = offsetX;
+    this.y = offsetY;
+    this.direction = offsetDirection;
   }
 }
 
