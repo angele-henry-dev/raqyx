@@ -3,11 +3,15 @@
   margin: auto;
 }
 
-.game-area {
-  border: 1px solid black;
+#gameCanvas {
+  background-color: #000000;
 }
 
-.player {
+/* .game-area {
+  border: 1px solid black;
+} */
+
+/* .player {
   width: 6px;
   height: 6px;
   border-radius: 100%;
@@ -21,5 +25,5 @@
   border-radius: 100%;
   background-color: red;
   position: absolute;
-}
+} */
   
