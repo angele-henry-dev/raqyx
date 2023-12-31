@@ -21,25 +21,34 @@ export class Player extends Node {
   }
 
   onManualMove(detail: GestureDetail) {
-    // Move right
-    if (detail.startX < detail.currentX && (detail.currentX - detail.startX) > 3) {
-      this.direction = 0;
-      this.x = (this.x + this.speed);
+    console.log(detail);
+    // X
+    if (Math.abs(detail.deltaX) > Math.abs(detail.deltaY)) {
+      if (detail.deltaX > 0) {
+        // Move right
+        console.log("Move right");
+        this.direction = 0;
+        this.x = (this.x + this.speed);
+      } else {
+        // Move left
+        console.log("Move left");
+        this.direction = 1;
+        this.x = (this.x - this.speed);
+      }
     }
-    // Move left
-    else if (detail.startX > detail.currentX && (detail.startX - detail.currentX) > 3) {
-      this.direction = 1;
-      this.x = (this.x - this.speed);
-    }
-    // Move down
-    else if (detail.startY < detail.currentY && (detail.currentY - detail.startY) > 3) {
-      this.direction = 2;
-      this.y = (this.y + this.speed);
-    }
-    // Move up
-    else if (detail.startY > detail.currentY && (detail.startY - detail.currentY) > 3) {
-      this.direction = 3;
-      this.y = (this.y - this.speed);
+    // Y
+    else {
+      if (detail.deltaY > 0) {
+        // Move down
+        console.log("Move down");
+        this.direction = 2;
+        this.y = (this.y + this.speed);
+      } else {
+        // Move up
+        console.log("Move up");
+        this.direction = 3;
+        this.y = (this.y - this.speed);
+      }
     }
   }
 
