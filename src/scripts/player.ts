@@ -1,4 +1,5 @@
 import { GestureDetail } from '@ionic/vue';
+import { Graph } from "@/scripts/math/graph";
 import { Node } from '@/scripts/math/node';
 import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
 
@@ -8,10 +9,12 @@ export class Player extends Node {
   midSize;
   speed;
   color;
-  isInArea = false;
+  territory;
+  isInArea;
 
   constructor({direction = 0, size = 8, speed = 1.5, color = "green"} = {}) {
     super(0, 0);
+    this.territory = new Graph();
     this.size = size;
     this.midSize = Math.ceil(this.size/2) + 1;
     this.speed = speed;
@@ -19,10 +22,12 @@ export class Player extends Node {
     this.x = this.midSize;
     this.y = this.midSize;
     this.direction = direction;
+    this.isInArea = false;
   }
 
   onManualMove(detail: GestureDetail) {
     this.isInArea = true;
+    this.territory.addNode(new Node(this.x, this.y));
     if (Math.abs(detail.deltaX) > Math.abs(detail.deltaY)) {
       if (detail.deltaX > 0) {
         // Move right

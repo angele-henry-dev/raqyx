@@ -73,11 +73,12 @@ export class GameManager {
         return [topWall, bottomWall, leftWall, rightWall];
     }
 
-    generateTerritories() {
+    generateTerritories(ctx: CanvasRenderingContext2D) {
         // For each change of direction create a node
         // Create a link between the nodes to create a polygon
         // End the polygon and fill it
         // Save the nodes and links in the graph class
+        this.player.territory.draw(ctx);
     }
 
     draw(ctx: CanvasRenderingContext2D) {
@@ -97,7 +98,7 @@ export class GameManager {
         }
         if (this.player.isInArea) {
             this.playerCollidesEnnemy();
-            this.generateTerritories();
+            this.generateTerritories(ctx);
         }
     }
 }
