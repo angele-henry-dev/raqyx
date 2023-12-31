@@ -22,6 +22,21 @@ export class GameManager {
         this.ennemies = this.generateEnnemies();
     }
 
+    gameOver() {
+        alert("Game Over");
+    }
+
+    playerCollidesEnnemy() {
+        for (const ennemy of this.ennemies) {
+            if (
+                (this.player.x <= (ennemy.x + this.player.midSize) && this.player.x >= (ennemy.x - this.player.midSize)) &&
+                (this.player.y <= (ennemy.y + this.player.midSize) && this.player.y >= (ennemy.y - this.player.midSize))
+            ) {
+                this.gameOver();
+            }
+        }
+    }
+
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
         for (let i=0; i<this.numberOfEnnemies; i++) {
@@ -57,6 +72,7 @@ export class GameManager {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        // Draw
         for (const wall of this.gameWalls) {
             wall.draw(ctx);
         }
@@ -64,10 +80,12 @@ export class GameManager {
             ennemy.draw(ctx, { color: ennemy.color });
         }
         this.player.draw(ctx, { color: this.player.color });
-
+    
+        // Moves
         this.player.onAutomaticMove();
         for (const ennemy of this.ennemies) {
           ennemy.onAutomaticMove();
         }
+        this.playerCollidesEnnemy();
     }
 }
