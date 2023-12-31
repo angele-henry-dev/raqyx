@@ -11,17 +11,32 @@ export class GameManager {
     TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
 
     gameWalls: Link[];
-    player: Player;
-    ennemies: Ennemy[];
+    player;
+    ennemies;
+    numberOfEnnemies;
 
-    constructor() {
+    constructor(numberOfEnnemies = 1) {
+        this.numberOfEnnemies = numberOfEnnemies;
         this.player = new Player();
-        this.ennemies = [];
-        const left = (this.player.midSize * 2);
-        const top = (this.player.midSize * 2);
-        const right = (CONTAINER_WIDTH - (this.player.midSize * 2));
-        const bottom = (CONTAINER_HEIGHT - this.player.midSize * 2);
+        this.gameWalls = this.generateWalls();
+        this.ennemies = this.generateEnnemies();
+    }
 
+    generateEnnemies() {
+        const ennemies: Ennemy[] = [];
+        for (let i=0; i<this.numberOfEnnemies; i++) {
+            ennemies.push(
+                new Ennemy(this.gameWalls)
+            );
+        }
+        return ennemies;
+    }
+
+    generateWalls() {
+        const left = this.player.size + 2;
+        const top = this.player.size + 2;
+        const right = CONTAINER_WIDTH - this.player.size - 2;
+        const bottom = CONTAINER_HEIGHT - this.player.size - 2;
         const topWall = new Link(
             new Node(left, top),
             new Node(right, top)
@@ -38,13 +53,21 @@ export class GameManager {
             new Node(right, top),
             new Node(right, bottom)
         );
-        this.gameWalls = [topWall, bottomWall, leftWall, rightWall];
+        return [topWall, bottomWall, leftWall, rightWall];
     }
 
     draw(ctx: CanvasRenderingContext2D) {
         for (const wall of this.gameWalls) {
             wall.draw(ctx);
         }
+        for (const ennemy of this.ennemies) {
+            ennemy.draw(ctx, { color: ennemy.color });
+        }
         this.player.draw(ctx, { color: this.player.color });
+
+        this.player.onAutomaticMove();
+        for (const ennemy of this.ennemies) {
+          ennemy.onAutomaticMove();
+        }
     }
 }

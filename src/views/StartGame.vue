@@ -14,9 +14,9 @@
       </ion-row>
     </ion-toolbar>
   </ion-header>
-  <!-- <ion-content class="ion-padding"> -->
+  <ion-content class="ion-padding">
     <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
-  <!-- </ion-content> -->
+  </ion-content>
   <!-- <ion-button @click="clearCanvas()">Clear</ion-button> -->
 </template>
 
@@ -47,7 +47,7 @@
       ctx.lineWidth = 1;
     }
 
-    gameManager = new GameManager();
+    gameManager = new GameManager(1);
     animate();
     setupGesture();
   });
@@ -73,7 +73,6 @@
         ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
         graph.draw(ctx);
         gameManager.draw(ctx);
-        gameManager.player.onAutomaticMove();
         requestAnimationFrame(animate);
       }
   }
