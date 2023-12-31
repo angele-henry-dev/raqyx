@@ -10,12 +10,14 @@ export const CONTAINER_HEIGHT = 493;
 export class GameManager {
     TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
 
+    graph;
     gameWalls: Link[];
     player;
     ennemies;
     numberOfEnnemies;
 
-    constructor(numberOfEnnemies = 1) {
+    constructor(graph: Graph, numberOfEnnemies = 1) {
+        this.graph = graph;
         this.numberOfEnnemies = numberOfEnnemies;
         this.player = new Player();
         this.gameWalls = this.generateWalls();
@@ -71,6 +73,13 @@ export class GameManager {
         return [topWall, bottomWall, leftWall, rightWall];
     }
 
+    generateTerritories() {
+        // For each change of direction create a node
+        // Create a link between the nodes to create a polygon
+        // End the polygon and fill it
+        // Save the nodes and links in the graph class
+    }
+
     draw(ctx: CanvasRenderingContext2D) {
         // Draw
         for (const wall of this.gameWalls) {
@@ -86,6 +95,9 @@ export class GameManager {
         for (const ennemy of this.ennemies) {
           ennemy.onAutomaticMove();
         }
-        this.playerCollidesEnnemy();
+        if (this.player.isInArea) {
+            this.playerCollidesEnnemy();
+            this.generateTerritories();
+        }
     }
 }

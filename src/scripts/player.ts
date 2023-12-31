@@ -8,6 +8,7 @@ export class Player extends Node {
   midSize;
   speed;
   color;
+  isInArea = false;
 
   constructor({direction = 0, size = 8, speed = 1.5, color = "green"} = {}) {
     super(0, 0);
@@ -21,6 +22,7 @@ export class Player extends Node {
   }
 
   onManualMove(detail: GestureDetail) {
+    this.isInArea = true;
     if (Math.abs(detail.deltaX) > Math.abs(detail.deltaY)) {
       if (detail.deltaX > 0) {
         // Move right
@@ -68,18 +70,22 @@ export class Player extends Node {
   onCollideBorder() {
     // Border right go down
     if (this.x >= (CONTAINER_WIDTH - this.midSize) && this.y < (CONTAINER_HEIGHT - this.midSize)) {
+      this.isInArea = false;
       return 2;
     }
     // Border left go up
     if (this.x <= this.midSize && this.y > this.midSize) {
+      this.isInArea = false;
       return 3;
     }
     // Border top go right
     if (this.y <= this.midSize && this.x < (CONTAINER_WIDTH - this.midSize)) {
+      this.isInArea = false;
       return 0;
     }
     // Border bottom go left
     if (this.y >= (CONTAINER_HEIGHT - this.midSize) && this.x > this.midSize) {
+      this.isInArea = false;
       return 1;
     }
     return this.direction;
