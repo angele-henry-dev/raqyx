@@ -1,6 +1,8 @@
+import { GestureDetail } from '@ionic/vue';
 import { Node } from '@/scripts/math/node'
 import { Link } from '@/scripts/math/link'
-import { Player } from "@/scripts/player";
+import { Territory } from "@/scripts/math/territory";
+import { Player, DIRECTIONS } from "@/scripts/player";
 import { Ennemy } from "@/scripts/ennemy";
 
 export const CONTAINER_WIDTH = 301;
@@ -8,15 +10,63 @@ export const CONTAINER_HEIGHT = 493;
 
 export class GameManager {
     gameWalls;
+    territoryInProgress: Territory | null;
     player;
     ennemies;
     numberOfEnnemies;
 
     constructor(numberOfEnnemies = 1) {
+        this.territoryInProgress = null;
         this.numberOfEnnemies = numberOfEnnemies;
         this.player = new Player();
         this.gameWalls = this.generateWalls();
         this.ennemies = this.generateEnnemies();
+    }
+
+    onManualMove(detail: GestureDetail) {
+      this.player.isInArea = true;
+      const borderSide = this.player.isOnBorder();
+    
+      if (!this.territoryInProgress && borderSide >= 0) {
+        this.createTerritory(borderSide);
+      } else if (this.territoryInProgress) {
+        this.drawTerritory();
+      }
+    
+      const isHorizontalMove = Math.abs(detail.deltaX) > Math.abs(detail.deltaY);
+    
+      if (isHorizontalMove) {
+        this.player.x += detail.deltaX > 0 ? this.player.speed : - this.player.speed;
+        this.player.direction = detail.deltaX > 0 ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT;
+      } else {
+        this.player.y += detail.deltaY > 0 ? this.player.speed : - this.player.speed;
+        this.player.direction = detail.deltaY > 0 ? DIRECTIONS.DOWN : DIRECTIONS.UP;
+      }
+    }
+
+    createTerritory(borderSide: number) {
+        this.territoryInProgress = new Territory();
+        this.territoryInProgress.addNode(this.player.x, this.player.y);
+    }
+  
+    drawTerritory() {
+        if (this.territoryInProgress) {
+            this.territoryInProgress.addNode(this.player.x, this.player.y);
+            for (let i = 1; i < this.territoryInProgress.nodes.length; i++) {
+                this.territoryInProgress.addLink(this.territoryInProgress.nodes[i - 1], this.territoryInProgress.nodes[i]);
+            }
+        }
+    }
+
+    endTerritory() {
+        if (this.territoryInProgress) {
+            this.drawTerritory();
+            console.log(this.territoryInProgress);
+            for (const link of this.territoryInProgress.links) {
+                this.gameWalls.push(link);
+            }
+            this.territoryInProgress = null;
+        }
     }
 
     gameOver() {
@@ -87,12 +137,6 @@ export class GameManager {
         return [topWall, bottomWall, leftWall, rightWall];
     }
 
-    drawTerritories(ctx: CanvasRenderingContext2D) {
-        for (const territory of this.player.territories) {
-            territory.draw(ctx);
-        }
-    }
-
     drawEnnemies(ctx: CanvasRenderingContext2D) {
         for (const ennemy of this.ennemies) {
             ennemy.draw(ctx);
@@ -117,7 +161,9 @@ export class GameManager {
 
     draw(ctx: CanvasRenderingContext2D) {
         this.drawWalls(ctx);
-        this.drawTerritories(ctx);
+        if (this.territoryInProgress) {
+            this.territoryInProgress.draw(ctx);
+        }
         this.drawEnnemies(ctx);
         this.drawPlayer(ctx);
     }

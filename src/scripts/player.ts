@@ -1,9 +1,7 @@
-import { GestureDetail } from '@ionic/vue';
-import { Territory } from "@/scripts/math/territory";
 import { Node } from '@/scripts/math/node';
 import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
 
-const DIRECTIONS = {
+export const DIRECTIONS = {
   RIGHT: 0,
   LEFT: 1,
   DOWN: 2,
@@ -14,48 +12,16 @@ export class Player extends Node {
   direction;
   midSize;
   speed;
-  territories: Territory[];
   isInArea;
-  territoryInProgress;
 
   constructor({direction = DIRECTIONS.RIGHT, size = 8, speed = 1.5, color = "green"} = {}) {
     super(0, 0, {size: size, color: color});
-    this.territories = [];
     this.midSize = Math.ceil(this.size/2) + 1;
     this.speed = speed;
     this.x = this.midSize;
     this.y = this.midSize;
     this.direction = direction;
     this.isInArea = false;
-    this.territoryInProgress = false;
-  }
-
-  createTerritory(borderSide: number) {
-    this.territoryInProgress = true;
-    const territoryID = this.territories.push(new Territory()) - 1;
-    this.territories[territoryID].addNode(this.x, this.y);
-    return territoryID;
-  }
-
-  drawTerritory() {
-    const territoryID = this.territories.length - 1;
-    const territory = this.territories[territoryID];
-    territory.addNode(this.x, this.y);
-  
-    for (let i = 1; i < territory.nodes.length; i++) {
-      territory.addLink(territory.nodes[i - 1], territory.nodes[i]);
-    }
-  
-    return territoryID;
-  }
-
-  endTerritory() {
-    const territoryID = this.drawTerritory();
-    const territory = this.territories[territoryID];
-    territory.addNode(this.x, this.y);
-  
-    this.territoryInProgress = false;
-    console.log(this.territories);
   }
 
   isOnBorder() {
@@ -92,37 +58,12 @@ export class Player extends Node {
       default:
         return this.direction;
     }
-  }  
-
-  onManualMove(detail: GestureDetail) {
-    this.isInArea = true;
-    const borderSide = this.isOnBorder();
-  
-    if (!this.territoryInProgress && borderSide >= 0) {
-      this.createTerritory(borderSide);
-    } else if (this.territoryInProgress) {
-      this.drawTerritory();
-    }
-  
-    const isHorizontalMove = Math.abs(detail.deltaX) > Math.abs(detail.deltaY);
-  
-    if (isHorizontalMove) {
-      this.x += detail.deltaX > 0 ? this.speed : -this.speed;
-      this.direction = detail.deltaX > 0 ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT;
-    } else {
-      this.y += detail.deltaY > 0 ? this.speed : -this.speed;
-      this.direction = detail.deltaY > 0 ? DIRECTIONS.DOWN : DIRECTIONS.UP;
-    }
   }
 
   onAutomaticMove() {
     const borderSide = this.isOnBorder();
   
     if (borderSide >= 0) {
-      if (this.territoryInProgress) {
-        this.endTerritory();
-      }
-      
       this.direction = this.onCollideBorder(borderSide);
     }
   

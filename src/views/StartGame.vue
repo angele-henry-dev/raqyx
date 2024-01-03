@@ -64,7 +64,7 @@
   };
 
   const onGesture = (detail: GestureDetail) => {
-    gameManager.player.onManualMove(detail);
+    gameManager.onManualMove(detail);
   };
 
   const animate = () => {
