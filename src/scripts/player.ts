@@ -24,49 +24,29 @@ export class Player extends Node {
     this.isInArea = false;
   }
 
-  isOnBorder() {
+  onCollideBorder() {
     const { x, y, midSize } = this;
+    // Border top
     if (y <= midSize && x < CONTAINER_WIDTH - midSize) {
-      return 0; // Border top
+      return DIRECTIONS.RIGHT;
     }
+    // Border bottom
     if (y >= CONTAINER_HEIGHT - midSize && x > midSize) {
-      return 1; // Border bottom
+      return DIRECTIONS.LEFT;
     }
+    // Border left
     if (x <= midSize && y > midSize) {
-      return 2; // Border left
+      return DIRECTIONS.UP;
     }
+    // Border right
     if (x >= CONTAINER_WIDTH - midSize && y < CONTAINER_HEIGHT - midSize) {
-      return 3; // Border right
+      return DIRECTIONS.DOWN;
     }
-    return -1;
-  }
-
-  onCollideBorder(borderSide: number) {
-    switch (borderSide) {
-      case 3: // Border right go down
-        this.isInArea = false;
-        return DIRECTIONS.DOWN;
-      case 1: // Border bottom go left
-        this.isInArea = false;
-        return DIRECTIONS.LEFT;
-      case 2: // Border left go up
-        this.isInArea = false;
-        return DIRECTIONS.UP;
-      case 0: // Border top go right
-        this.isInArea = false;
-        return DIRECTIONS.RIGHT;
-      default:
-        return this.direction;
-    }
+    return this.direction;
   }
 
   onAutomaticMove() {
-    const borderSide = this.isOnBorder();
-  
-    if (borderSide >= 0) {
-      this.direction = this.onCollideBorder(borderSide);
-    }
-  
+    this.direction = this.onCollideBorder();
     switch (this.direction) {
       case DIRECTIONS.RIGHT:
         this.x += this.speed;
