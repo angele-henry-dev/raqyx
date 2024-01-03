@@ -87,28 +87,38 @@ export class GameManager {
         return [topWall, bottomWall, leftWall, rightWall];
     }
 
-    generateTerritories(ctx: CanvasRenderingContext2D) {
+    drawTerritories(ctx: CanvasRenderingContext2D) {
         for (const territory of this.player.territories) {
             territory.draw(ctx);
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D) {
-        for (const wall of this.gameWalls) {
-            wall.draw(ctx);
-        }
-
-        this.player.draw(ctx);
-        this.player.onAutomaticMove();
-        this.generateTerritories(ctx);
-
+    drawEnnemies(ctx: CanvasRenderingContext2D) {
         for (const ennemy of this.ennemies) {
             ennemy.draw(ctx);
             ennemy.onAutomaticMove();
             this.ennemyCollidesWall(ennemy);
         }
+    }
+
+    drawWalls(ctx: CanvasRenderingContext2D) {
+        for (const wall of this.gameWalls) {
+            wall.draw(ctx);
+        }
+    }
+
+    drawPlayer(ctx: CanvasRenderingContext2D) {
+        this.player.draw(ctx);
+        this.player.onAutomaticMove();
         if (this.player.isInArea) {
             this.playerCollidesEnnemy();
         }
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        this.drawWalls(ctx);
+        this.drawTerritories(ctx);
+        this.drawEnnemies(ctx);
+        this.drawPlayer(ctx);
     }
 }
