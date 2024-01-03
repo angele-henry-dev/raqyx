@@ -31,16 +31,17 @@ export class Player extends Node {
   createTerritory(borderSide: number) {
     this.territoryInProgress = true;
     const territoryID = this.territories.push(new Territory()) - 1;
-    this.territories[territoryID].addNode(new Node(this.x, this.y, {size: 2}));
+    this.territories[territoryID].addNode(this.x, this.y);
     return territoryID;
   }
 
   drawTerritory() {
     const territoryID = this.territories.length - 1;
-    this.territories[territoryID].addNode(new Node(this.x, this.y, {size: 2}));
+    this.territories[territoryID].addNode(this.x, this.y);
     for (let i=1; i<this.territories[territoryID].nodes.length; i++) {
       this.territories[territoryID].addLink(
-        new Link(this.territories[territoryID].nodes[i-1], this.territories[territoryID].nodes[i])
+        this.territories[territoryID].nodes[i-1],
+        this.territories[territoryID].nodes[i]
       );
     }
     return territoryID;
@@ -48,7 +49,7 @@ export class Player extends Node {
 
   endTerritory(borderSide: number) {
     const territoryID = this.drawTerritory();
-    this.territories[territoryID].addNode(new Node(this.x, this.y, {size: 2}));
+    this.territories[territoryID].addNode(this.x, this.y);
 
     this.territoryInProgress = false;
     console.log(this.territories);

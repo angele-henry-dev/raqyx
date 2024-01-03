@@ -69,10 +69,6 @@ export class GameManager {
     }
 
     generateTerritories(ctx: CanvasRenderingContext2D) {
-        // For each change of direction create a node
-        // Create a link between the nodes to create a polygon
-        // End the polygon and fill it
-        // Save the nodes and links in the graph class
         for (const territory of this.player.territories) {
             territory.draw(ctx);
         }

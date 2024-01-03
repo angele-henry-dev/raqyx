@@ -29,16 +29,16 @@ export class Ennemy extends Node {
 
     onCollideBorder() {
         // [topWall, bottomWall, leftWall, rightWall]
-        if (this.y <= (this.gameWalls[0].p1.y + this.midSize)) {
+        if (this.y <= (this.gameWalls[0].n1.y + this.midSize)) {
             this.speedY *= -1;
         }
-        if (this.y >= (this.gameWalls[1].p1.y - this.midSize)) {
+        if (this.y >= (this.gameWalls[1].n1.y - this.midSize)) {
             this.speedY *= -1;
         }
-        if (this.x <= (this.gameWalls[2].p1.x + this.midSize)) {
+        if (this.x <= (this.gameWalls[2].n1.x + this.midSize)) {
             this.speedX *= -1;
         }
-        if (this.x >= (this.gameWalls[3].p1.x) - this.midSize) {
+        if (this.x >= (this.gameWalls[3].n1.x) - this.midSize) {
             this.speedX *= -1;
         }
     }

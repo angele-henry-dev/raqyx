@@ -41,15 +41,17 @@ export class Territory {
         this.nodes.splice(this.nodes.indexOf(node), 1);
     }
 
-    addLink(link: Link) {
-        if (!this.containsLink(link) && !link.p1.equals(link.p2)) {
+    addLink(n1: Node, n2: Node) {
+        const link = new Link(n1, n2, {width: 2, color: this.color});
+        if (!this.containsLink(link) && !link.n1.equals(link.n2)) {
             this.links.push(link);
             return true;
         }
         return false;
     }
 
-    addNode(node: Node) {
+    addNode(x: number, y: number) {
+        const node = new Node(x, y, {size: 2, color: this.color});
         if (!this.containsNode(node)) {
             this.nodes.push(node);
             return true;
