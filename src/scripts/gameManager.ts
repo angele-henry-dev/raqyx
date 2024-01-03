@@ -25,11 +25,9 @@ export class GameManager {
 
     onManualMove(detail: GestureDetail) {
       this.player.isInArea = true;
-      const borderSide = this.player.isOnBorder();
-    
-      if (!this.territoryInProgress && borderSide >= 0) {
-        this.createTerritory(borderSide);
-      } else if (this.territoryInProgress) {
+      if (!this.territoryInProgress) {
+        this.createTerritory();
+      } else {
         this.drawTerritory();
       }
     
@@ -44,7 +42,7 @@ export class GameManager {
       }
     }
 
-    createTerritory(borderSide: number) {
+    createTerritory() {
         this.territoryInProgress = new Territory();
         this.territoryInProgress.addNode(this.player.x, this.player.y);
     }
