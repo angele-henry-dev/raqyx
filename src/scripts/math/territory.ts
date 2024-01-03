@@ -5,14 +5,14 @@ import { randomIntFromInterval } from '@/scripts/utils'
 const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
 
 export class Territory {
-    nodes;
-    links;
+    nodes: Node[];
+    links: Link[];
     color;
 
-    constructor(nodes: Node[] = [], links: Link[] = []) {
+    constructor() {
         this.color = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length)];
-        this.nodes = nodes;
-        this.links = links;
+        this.nodes = [];
+        this.links = [];
     }
 
     clearGraph() {
@@ -43,7 +43,7 @@ export class Territory {
     }
 
     addLink(n1: Node, n2: Node) {
-        const link = new Link(n1, n2, {width: 2, color: this.color});
+        const link = new Link(n1, n2, {color: this.color});
         if (!this.containsLink(link) && !link.n1.equals(link.n2)) {
             this.links.push(link);
             return true;

@@ -4,7 +4,7 @@ export class Node {
     size;
     color;
 
-    constructor(x: number, y: number, { size = 8, color = "white" } = {}) {
+    constructor(x: number, y: number, { size = 2, color = "white" } = {}) {
         this.x = x;
         this.y = y;
         this.size = size;
