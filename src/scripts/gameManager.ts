@@ -34,11 +34,27 @@ export class GameManager {
         }
     }
 
+    ennemyCollidesWall(ennemy: Ennemy) {
+        // [topWall, bottomWall, leftWall, rightWall]
+        if (ennemy.y <= (this.gameWalls[0].n1.y + ennemy.midSize)) {
+            ennemy.speedY *= -1;
+        }
+        if (ennemy.y >= (this.gameWalls[1].n1.y - ennemy.midSize)) {
+            ennemy.speedY *= -1;
+        }
+        if (ennemy.x <= (this.gameWalls[2].n1.x + ennemy.midSize)) {
+            ennemy.speedX *= -1;
+        }
+        if (ennemy.x >= (this.gameWalls[3].n1.x) - ennemy.midSize) {
+            ennemy.speedX *= -1;
+        }
+    }
+
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
         for (let i=0; i<this.numberOfEnnemies; i++) {
             ennemies.push(
-                new Ennemy(this.gameWalls)
+                new Ennemy()
             );
         }
         return ennemies;
@@ -75,23 +91,21 @@ export class GameManager {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        // Draw
         for (const wall of this.gameWalls) {
             wall.draw(ctx);
         }
+
         for (const ennemy of this.ennemies) {
             ennemy.draw(ctx);
+            ennemy.onAutomaticMove();
+            this.ennemyCollidesWall(ennemy);
         }
+
         this.player.draw(ctx);
-    
-        // Moves
         this.player.onAutomaticMove();
-        this.generateTerritories(ctx);
-        for (const ennemy of this.ennemies) {
-          ennemy.onAutomaticMove();
-        }
         if (this.player.isInArea) {
             this.playerCollidesEnnemy();
         }
+        this.generateTerritories(ctx);
     }
 }
