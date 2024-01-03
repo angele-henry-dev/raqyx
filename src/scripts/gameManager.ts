@@ -89,16 +89,11 @@ export class GameManager {
 
     ennemyCollidesWall(ennemy: Ennemy) {
         for (const wall of this.gameWalls) {
-            if (
-              (wall.direction === 'horizontal' && Math.abs(ennemy.y - wall.n1.y) <= ennemy.midSize) ||
-              (wall.direction === 'vertical' && Math.abs(ennemy.x - wall.n1.x) <= ennemy.midSize)
-            ) {
-              if (wall.direction === 'horizontal') {
+            if (wall.direction === 'horizontal' && Math.abs(ennemy.y - wall.n1.y) <= ennemy.midSize) {
                 ennemy.speedY *= -1;
-              } else {
+            }
+            if (wall.direction === 'vertical' && Math.abs(ennemy.x - wall.n1.x) <= ennemy.midSize) {
                 ennemy.speedX *= -1;
-              }
-              break;
             }
           }
     }
