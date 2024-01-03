@@ -24,29 +24,7 @@ export class Player extends Node {
     this.isInArea = false;
   }
 
-  onCollideBorder() {
-    const { x, y, midSize } = this;
-    // Border top
-    if (y <= midSize && x < CONTAINER_WIDTH - midSize) {
-      return DIRECTIONS.RIGHT;
-    }
-    // Border bottom
-    if (y >= CONTAINER_HEIGHT - midSize && x > midSize) {
-      return DIRECTIONS.LEFT;
-    }
-    // Border left
-    if (x <= midSize && y > midSize) {
-      return DIRECTIONS.UP;
-    }
-    // Border right
-    if (x >= CONTAINER_WIDTH - midSize && y < CONTAINER_HEIGHT - midSize) {
-      return DIRECTIONS.DOWN;
-    }
-    return this.direction;
-  }
-
   onAutomaticMove() {
-    this.direction = this.onCollideBorder();
     switch (this.direction) {
       case DIRECTIONS.RIGHT:
         this.x += this.speed;

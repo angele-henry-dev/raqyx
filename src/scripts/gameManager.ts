@@ -79,6 +79,25 @@ export class GameManager {
         alert("Game Over");
     }
 
+    playerCollidesWall() {
+      // Border top
+      if (this.player.y <= this.player.midSize && this.player.x < CONTAINER_WIDTH - this.player.midSize) {
+        this.player.direction = DIRECTIONS.RIGHT;
+      }
+      // Border bottom
+      if (this.player.y >= CONTAINER_HEIGHT - this.player.midSize && this.player.x > this.player.midSize) {
+        this.player.direction = DIRECTIONS.LEFT;
+      }
+      // Border left
+      if (this.player.x <= this.player.midSize && this.player.y > this.player.midSize) {
+        this.player.direction = DIRECTIONS.UP;
+      }
+      // Border right
+      if (this.player.x >= CONTAINER_WIDTH - this.player.midSize && this.player.y < CONTAINER_HEIGHT - this.player.midSize) {
+        this.player.direction = DIRECTIONS.DOWN;
+      }
+    }
+
     playerCollidesEnnemy() {
         for (const ennemy of this.ennemies) {
           const playerCollidesX = this.player.x + this.player.midSize >= ennemy.x &&
@@ -155,6 +174,7 @@ export class GameManager {
     drawPlayer(ctx: CanvasRenderingContext2D) {
         this.player.draw(ctx);
         this.player.onAutomaticMove();
+        this.playerCollidesWall();
         if (this.player.isInArea) {
             this.playerCollidesEnnemy();
         }
