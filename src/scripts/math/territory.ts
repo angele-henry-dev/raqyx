@@ -2,14 +2,15 @@ import { Node } from '@/scripts/math/node'
 import { Link } from '@/scripts/math/link'
 import { randomIntFromInterval } from '@/scripts/utils'
 
+const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
+
 export class Territory {
-    TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
     nodes;
     links;
     color;
 
     constructor(nodes: Node[] = [], links: Link[] = []) {
-        this.color = this.TERRITORIES_COLORS[randomIntFromInterval(0, this.TERRITORIES_COLORS.length)];
+        this.color = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length)];
         this.nodes = nodes;
         this.links = links;
     }
