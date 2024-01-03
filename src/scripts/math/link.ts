@@ -5,12 +5,14 @@ export class Link {
     n2;
     width;
     color;
+    direction;
 
     constructor(n1: Node, n2: Node, { width = 2, color = "white" } = {}) {
         this.n1 = n1;
         this.n2 = n2;
         this.width = width;
         this.color = color;
+        this.direction = this.n1.x == this.n2.x ? "vertical" : "horizontal";
     }
 
     equals(link: Link) {

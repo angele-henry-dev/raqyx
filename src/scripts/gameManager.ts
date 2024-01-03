@@ -25,37 +25,40 @@ export class GameManager {
 
     playerCollidesEnnemy() {
         for (const ennemy of this.ennemies) {
-            if (
-                (this.player.x <= (ennemy.x + this.player.midSize) && this.player.x >= (ennemy.x - this.player.midSize)) &&
-                (this.player.y <= (ennemy.y + this.player.midSize) && this.player.y >= (ennemy.y - this.player.midSize))
-            ) {
-                this.gameOver();
-            }
+          const playerCollidesX = this.player.x + this.player.midSize >= ennemy.x &&
+                                   this.player.x - this.player.midSize <= ennemy.x;
+      
+          const playerCollidesY = this.player.y + this.player.midSize >= ennemy.y &&
+                                   this.player.y - this.player.midSize <= ennemy.y;
+      
+          if (playerCollidesX && playerCollidesY) {
+            this.gameOver();
+            break;
+          }
         }
-    }
+      }
+      
 
     ennemyCollidesWall(ennemy: Ennemy) {
-        // [topWall, bottomWall, leftWall, rightWall]
-        if (ennemy.y <= (this.gameWalls[0].n1.y + ennemy.midSize)) {
-            ennemy.speedY *= -1;
-        }
-        if (ennemy.y >= (this.gameWalls[1].n1.y - ennemy.midSize)) {
-            ennemy.speedY *= -1;
-        }
-        if (ennemy.x <= (this.gameWalls[2].n1.x + ennemy.midSize)) {
-            ennemy.speedX *= -1;
-        }
-        if (ennemy.x >= (this.gameWalls[3].n1.x) - ennemy.midSize) {
-            ennemy.speedX *= -1;
-        }
+        for (const wall of this.gameWalls) {
+            if (
+              (wall.direction === 'horizontal' && Math.abs(ennemy.y - wall.n1.y) <= ennemy.midSize) ||
+              (wall.direction === 'vertical' && Math.abs(ennemy.x - wall.n1.x) <= ennemy.midSize)
+            ) {
+              if (wall.direction === 'horizontal') {
+                ennemy.speedY *= -1;
+              } else {
+                ennemy.speedX *= -1;
+              }
+              break;
+            }
+          }
     }
 
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
         for (let i=0; i<this.numberOfEnnemies; i++) {
-            ennemies.push(
-                new Ennemy()
-            );
+            ennemies.push(new Ennemy());
         }
         return ennemies;
     }
@@ -95,17 +98,17 @@ export class GameManager {
             wall.draw(ctx);
         }
 
+        this.player.draw(ctx);
+        this.player.onAutomaticMove();
+        this.generateTerritories(ctx);
+
         for (const ennemy of this.ennemies) {
             ennemy.draw(ctx);
             ennemy.onAutomaticMove();
             this.ennemyCollidesWall(ennemy);
         }
-
-        this.player.draw(ctx);
-        this.player.onAutomaticMove();
         if (this.player.isInArea) {
             this.playerCollidesEnnemy();
         }
-        this.generateTerritories(ctx);
     }
 }

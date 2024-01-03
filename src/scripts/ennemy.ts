@@ -3,18 +3,14 @@ import { Node } from '@/scripts/math/node';
 import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
 
 export class Ennemy extends Node {
-    size;
     speedX;
     speedY;
-    color;
     midSize;
 
     constructor({size = 8, speed = 1.5, color = "red"} = {}) {
-        super(0, 0);
-        this.size = size;
+        super(0, 0, {size: size, color: color});
         this.speedX = speed;
         this.speedY = speed;
-        this.color = color;
         this.midSize = Math.ceil(this.size/2) + 1;
 
         const min = (this.size * 2);
