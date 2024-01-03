@@ -44,7 +44,15 @@ export class GameManager {
 
     createTerritory() {
         this.territoryInProgress = new Territory();
-        this.territoryInProgress.addNode(this.player.x, this.player.y);
+        let x = this.player.x;
+        let y = this.player.y;
+        switch (this.player.direction) {
+            case DIRECTIONS.DOWN: x -= this.player.midSize; break;
+            case DIRECTIONS.UP: x += this.player.midSize; break;
+            case DIRECTIONS.LEFT: y -= this.player.midSize; break;
+            case DIRECTIONS.RIGHT: y += this.player.midSize; break;
+        }
+        this.territoryInProgress.addNode(x, y);
     }
   
     drawTerritory() {
