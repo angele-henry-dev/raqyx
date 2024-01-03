@@ -1,18 +1,16 @@
 import { GestureDetail } from '@ionic/vue';
-import { Graph } from "@/scripts/math/graph";
+import { Territory } from "@/scripts/math/territory";
 import { Link } from '@/scripts/math/link';
 import { Node } from '@/scripts/math/node';
 import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
-import { randomIntFromInterval } from '@/scripts/utils'
 
 export class Player extends Node {
-  TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
   direction;
   size;
   midSize;
   speed;
   color;
-  territories: Graph[];
+  territories: Territory[];
   isInArea;
   territoryInProgress;
 
@@ -32,10 +30,9 @@ export class Player extends Node {
 
   createTerritory(borderSide: number) {
     this.territoryInProgress = true;
-    borderSide
-    // const randomColor = this.TERRITORIES_COLORS[randomIntFromInterval(0, this.TERRITORIES_COLORS.length)];
-    const territoryID = this.territories.push(new Graph()) - 1;
+    const territoryID = this.territories.push(new Territory()) - 1;
     this.territories[territoryID].addNode(new Node(this.x, this.y, {size: 2}));
+    return territoryID;
   }
 
   drawTerritory() {
@@ -46,39 +43,38 @@ export class Player extends Node {
         new Link(this.territories[territoryID].nodes[i-1], this.territories[territoryID].nodes[i])
       );
     }
+    return territoryID;
   }
 
   endTerritory(borderSide: number) {
+    const territoryID = this.drawTerritory();
+    this.territories[territoryID].addNode(new Node(this.x, this.y, {size: 2}));
+
     this.territoryInProgress = false;
+    console.log(this.territories);
   }
 
   isOnBorder() {
-    // [topWall, bottomWall, leftWall, rightWall]
     // Border top
     if (this.y <= this.midSize && this.x < (CONTAINER_WIDTH - this.midSize)) {
-      this.isInArea = false;
       return 0;
     }
     // Border bottom
     if (this.y >= (CONTAINER_HEIGHT - this.midSize) && this.x > this.midSize) {
-      this.isInArea = false;
       return 1;
     }
     // Border left
     if (this.x <= this.midSize && this.y > this.midSize) {
-      this.isInArea = false;
       return 2;
     }
     // Border right
     if (this.x >= (CONTAINER_WIDTH - this.midSize) && this.y < (CONTAINER_HEIGHT - this.midSize)) {
-      this.isInArea = false;
       return 3;
     }
     return -1;
   }
 
   onCollideBorder(borderSide: number) {
-    // [topWall, bottomWall, leftWall, rightWall]
     // Border right go down
     if (borderSide == 3) {
       this.isInArea = false;
@@ -106,12 +102,8 @@ export class Player extends Node {
     this.isInArea = true;
     const borderSide = this.isOnBorder();
 
-    if (borderSide >= 0) {
-      if (!this.territoryInProgress) {
-        this.createTerritory(borderSide);
-      } else {
-        this.endTerritory(borderSide);
-      }
+    if (!this.territoryInProgress && borderSide >= 0) {
+      this.createTerritory(borderSide);
     } else if (this.territoryInProgress) {
       this.drawTerritory();
     }
@@ -143,6 +135,9 @@ export class Player extends Node {
   onAutomaticMove() {
     const borderSide = this.isOnBorder();
     if (borderSide >= 0) {
+      if (this.territoryInProgress && borderSide >= 0) {
+        this.endTerritory(borderSide);
+      }
       this.direction = this.onCollideBorder(borderSide);
     }
     // Right

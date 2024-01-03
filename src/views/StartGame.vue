@@ -24,14 +24,13 @@
   import { onMounted } from 'vue';
   import { createGesture, GestureDetail } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
-  import { Graph } from '@/scripts/math/graph'
+  import { Territory } from '@/scripts/math/territory'
   // import { Node } from '@/scripts/math/node'
   // import { Link } from '@/scripts/math/link'
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
-  const graph = new Graph();
   let gameManager: GameManager;
 
   onMounted(() => {
@@ -47,7 +46,7 @@
       ctx.lineWidth = 1;
     }
 
-    gameManager = new GameManager(graph, 1);
+    gameManager = new GameManager(1);
     animate();
     setupGesture();
   });
@@ -71,7 +70,6 @@
   const animate = () => {
       if (ctx && gameManager.player) {
         ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-        graph.draw(ctx);
         gameManager.draw(ctx);
         requestAnimationFrame(animate);
       }

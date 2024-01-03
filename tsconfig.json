@@ -33,7 +33,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-, "src/scripts/math/graph.ts"  ],
+, "src/scripts/math/territory.ts"  ],
   "exclude": [
     "node_modules"
   ]

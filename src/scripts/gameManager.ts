@@ -1,4 +1,3 @@
-import { Graph } from "@/scripts/math/graph";
 import { Node } from '@/scripts/math/node'
 import { Link } from '@/scripts/math/link'
 import { Player } from "@/scripts/player";
@@ -8,14 +7,12 @@ export const CONTAINER_WIDTH = 301;
 export const CONTAINER_HEIGHT = 493;
 
 export class GameManager {
-    graph;
     gameWalls;
     player;
     ennemies;
     numberOfEnnemies;
 
-    constructor(graph: Graph, numberOfEnnemies = 1) {
-        this.graph = graph;
+    constructor(numberOfEnnemies = 1) {
         this.numberOfEnnemies = numberOfEnnemies;
         this.player = new Player();
         this.gameWalls = this.generateWalls();
