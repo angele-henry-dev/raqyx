@@ -39,20 +39,21 @@ export class Player extends Node {
 
   drawTerritory() {
     const territoryID = this.territories.length - 1;
-    this.territories[territoryID].addNode(this.x, this.y);
-    for (let i=1; i<this.territories[territoryID].nodes.length; i++) {
-      this.territories[territoryID].addLink(
-        this.territories[territoryID].nodes[i-1],
-        this.territories[territoryID].nodes[i]
-      );
+    const territory = this.territories[territoryID];
+    territory.addNode(this.x, this.y);
+  
+    for (let i = 1; i < territory.nodes.length; i++) {
+      territory.addLink(territory.nodes[i - 1], territory.nodes[i]);
     }
+  
     return territoryID;
   }
 
-  endTerritory(borderSide: number) {
+  endTerritory() {
     const territoryID = this.drawTerritory();
-    this.territories[territoryID].addNode(this.x, this.y);
-
+    const territory = this.territories[territoryID];
+    territory.addNode(this.x, this.y);
+  
     this.territoryInProgress = false;
     console.log(this.territories);
   }
@@ -119,7 +120,7 @@ export class Player extends Node {
   
     if (borderSide >= 0) {
       if (this.territoryInProgress) {
-        this.endTerritory(borderSide);
+        this.endTerritory();
       }
       
       this.direction = this.onCollideBorder(borderSide);
