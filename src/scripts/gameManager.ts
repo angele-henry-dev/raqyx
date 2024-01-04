@@ -23,23 +23,41 @@ export class GameManager {
         this.ennemies = this.generateEnnemies();
     }
 
+    isGestureAuthorized(isHorizontalMove: boolean, directionX: number, directionY: number) {
+        return (
+          (isHorizontalMove
+            && (this.player.direction !== DIRECTIONS.LEFT && this.player.direction !== DIRECTIONS.RIGHT)
+            && ((directionX === DIRECTIONS.LEFT && this.player.x - this.player.speed > this.player.midSize)
+              || (directionX === DIRECTIONS.RIGHT && this.player.x + this.player.speed < (CONTAINER_WIDTH - this.player.midSize))))
+          || (!isHorizontalMove
+            && (this.player.direction !== DIRECTIONS.UP && this.player.direction !== DIRECTIONS.DOWN)
+            && ((directionY === DIRECTIONS.UP && this.player.y - this.player.speed > this.player.midSize)
+              || (directionY === DIRECTIONS.DOWN && this.player.y + this.player.speed < (CONTAINER_HEIGHT - this.player.midSize))))
+        );
+      }
+      
+
     onManualMove(detail: GestureDetail) {
-      this.player.isInArea = true;
-      if (!this.territoryInProgress) {
-        this.createTerritory();
-      } else {
-        this.drawTerritory();
-      }
+        const isHorizontalMove = Math.abs(detail.deltaX) > Math.abs(detail.deltaY);
+        const directionX = detail.deltaX > 0 ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT;
+        const directionY = detail.deltaY > 0 ? DIRECTIONS.DOWN : DIRECTIONS.UP;
+
+        if (this.isGestureAuthorized(isHorizontalMove, directionX, directionY)) {
+            this.player.isInArea = true;
+            if (!this.territoryInProgress) {
+                this.createTerritory();
+            } else {
+                this.drawTerritory();
+            }
     
-      const isHorizontalMove = Math.abs(detail.deltaX) > Math.abs(detail.deltaY);
-    
-      if (isHorizontalMove) {
-        this.player.x += detail.deltaX > 0 ? this.player.speed : - this.player.speed;
-        this.player.direction = detail.deltaX > 0 ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT;
-      } else {
-        this.player.y += detail.deltaY > 0 ? this.player.speed : - this.player.speed;
-        this.player.direction = detail.deltaY > 0 ? DIRECTIONS.DOWN : DIRECTIONS.UP;
-      }
+            if (isHorizontalMove) {
+                this.player.x += detail.deltaX > 0 ? this.player.speed : - this.player.speed;
+                this.player.direction = directionX;
+            } else {
+                this.player.y += detail.deltaY > 0 ? this.player.speed : - this.player.speed;
+                this.player.direction = directionY;
+            }
+        }
     }
 
     createTerritory() {
