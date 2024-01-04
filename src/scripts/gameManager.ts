@@ -107,8 +107,6 @@ export class GameManager {
             this.endTerritory();
         }
     }
-  
-      
 
     playerCollidesEnnemy() {
         for (const ennemy of this.ennemies) {
@@ -124,15 +122,24 @@ export class GameManager {
           }
         }
       }
-      
 
-      ennemyCollidesWall(ennemy: Ennemy) {
-        for (const wall of this.gameWalls) {
-          if (wall.direction === 'horizontal' && this.collidesWithHorizontalWall(ennemy, wall)) {
+      ennemyCollidesWalls(ennemy: Ennemy) {
+        for (const link of this.gameWalls) {
+          if (link.direction === 'horizontal' && this.collidesWithHorizontalWall(ennemy, link)) {
             ennemy.speedY *= -1;
-          } else if (wall.direction === 'vertical' && this.collidesWithVerticalWall(ennemy, wall)) {
+          } else if (link.direction === 'vertical' && this.collidesWithVerticalWall(ennemy, link)) {
             ennemy.speedX *= -1;
           }
+        }
+      }
+
+      ennemyCollidesTerritoryInProgess(ennemy: Ennemy) {
+        if (this.territoryInProgress) {
+            for (const link of this.territoryInProgress.links) {
+                if (this.collidesWithHorizontalWall(ennemy, link) || this.collidesWithVerticalWall(ennemy, link)) {
+                    this.gameOver();
+                }
+            }
         }
       }
       
@@ -151,7 +158,6 @@ export class GameManager {
           ennemy.y > Math.min(wall.n1.y, wall.n2.y)
         );
       }
-      
 
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
@@ -189,7 +195,8 @@ export class GameManager {
         for (const ennemy of this.ennemies) {
             ennemy.draw(ctx);
             ennemy.onAutomaticMove();
-            this.ennemyCollidesWall(ennemy);
+            this.ennemyCollidesWalls(ennemy);
+            this.ennemyCollidesTerritoryInProgess(ennemy);
         }
     }
 
