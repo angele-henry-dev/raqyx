@@ -1,4 +1,8 @@
 import { Node } from '@/scripts/math/node';
+import { randomIntFromInterval } from "./utils";
+
+const TERRITORIES_COLORS = ["blue", "green", "orange", "pink", "purple"];
+const SELECTED_COLOR = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length - 1)];
 
 export const DIRECTIONS = {
   RIGHT: 0,
@@ -13,7 +17,7 @@ export class Player extends Node {
   speed;
   isInArea;
 
-  constructor({direction = DIRECTIONS.RIGHT, size = 8, speed = 1.5, color = "green"} = {}) {
+  constructor({direction = DIRECTIONS.RIGHT, size = 8, speed = 1.5, color = SELECTED_COLOR} = {}) {
     super(0, 0, {size: size, color: color});
     this.midSize = Math.ceil(this.size/2) + 1;
     this.speed = speed;

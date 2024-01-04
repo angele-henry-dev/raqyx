@@ -62,7 +62,7 @@ export class GameManager {
     }
 
     createTerritory() {
-        this.territoryInProgress = new Territory();
+        this.territoryInProgress = new Territory(this.player.color);
         let x = this.player.x;
         let y = this.player.y;
         switch (this.player.direction) {
