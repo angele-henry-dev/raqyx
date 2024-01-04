@@ -1,4 +1,5 @@
 import { randomIntFromInterval } from "./utils";
+import { Link } from '@/scripts/math/link'
 import { Node } from '@/scripts/math/node';
 import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
 
@@ -25,5 +26,21 @@ export class Ennemy extends Node {
     onAutomaticMove() {
         this.x += this.speedX;
         this.y += this.speedY;
+    }
+      
+    collidesWithHorizontalWall(wall: Link): boolean {
+      return (
+        Math.abs(this.y - wall.n1.y) <= this.midSize &&
+        this.x < Math.max(wall.n1.x, wall.n2.x) &&
+        this.x > Math.min(wall.n1.x, wall.n2.x)
+      );
+    }
+    
+    collidesWithVerticalWall(wall: Link): boolean {
+      return (
+        Math.abs(this.x - wall.n1.x) <= this.midSize &&
+        this.y < Math.max(wall.n1.y, wall.n2.y) &&
+        this.y > Math.min(wall.n1.y, wall.n2.y)
+      );
     }
 }

@@ -178,44 +178,28 @@ export class GameManager {
         }
     }
 
-      ennemyCollidesWalls(ennemy: Ennemy) {
+    ennemyCollidesWalls(ennemy: Ennemy) {
         for (const link of this.gameWalls) {
-          if (link.direction === 'horizontal' && this.collidesWithHorizontalWall(ennemy, link, ennemy.midSize)) {
+            if (link.direction === 'horizontal' && ennemy.collidesWithHorizontalWall(link)) {
             ennemy.speedY *= -1;
-          } else if (link.direction === 'vertical' && this.collidesWithVerticalWall(ennemy, link, ennemy.midSize)) {
+            } else if (link.direction === 'vertical' && ennemy.collidesWithVerticalWall(link)) {
             ennemy.speedX *= -1;
-          }
+            }
         }
-      }
+    }
 
-      ennemyCollidesTerritoryInProgess(ennemy: Ennemy) {
+    ennemyCollidesTerritoryInProgess(ennemy: Ennemy) {
         if (this.territoryInProgress) {
             for (const link of this.territoryInProgress.links) {
                 if (
-                    this.collidesWithHorizontalWall(ennemy, link, ennemy.midSize)
-                    || this.collidesWithVerticalWall(ennemy, link, ennemy.midSize)
+                    ennemy.collidesWithHorizontalWall(link)
+                    || ennemy.collidesWithVerticalWall(link)
                 ) {
                     this.gameOver();
                 }
             }
         }
-      }
-      
-      collidesWithHorizontalWall(node: Node, wall: Link, nodeSize: number): boolean {
-        return (
-          Math.abs(node.y - wall.n1.y) <= nodeSize &&
-          node.x < Math.max(wall.n1.x, wall.n2.x) &&
-          node.x > Math.min(wall.n1.x, wall.n2.x)
-        );
-      }
-      
-      collidesWithVerticalWall(node: Node, wall: Link, nodeSize: number): boolean {
-        return (
-          Math.abs(node.x - wall.n1.x) <= nodeSize &&
-          node.y < Math.max(wall.n1.y, wall.n2.y) &&
-          node.y > Math.min(wall.n1.y, wall.n2.y)
-        );
-      }
+    }
 
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
