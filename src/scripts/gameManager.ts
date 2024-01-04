@@ -4,6 +4,7 @@ import { Link } from '@/scripts/math/link'
 import { Territory } from "@/scripts/math/territory";
 import { Player, DIRECTIONS } from "@/scripts/player";
 import { Ennemy } from "@/scripts/ennemy";
+import { randomIntFromInterval } from "./utils";
 
 export const CONTAINER_WIDTH = 301;
 export const CONTAINER_HEIGHT = 493;
@@ -203,8 +204,11 @@ export class GameManager {
 
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
+        const min = (8 * 2);
+        const xMax = (CONTAINER_WIDTH - min);
+        const yMax = (CONTAINER_HEIGHT - min);
         for (let i=0; i<this.numberOfEnnemies; i++) {
-            ennemies.push(new Ennemy());
+            ennemies.push(new Ennemy(randomIntFromInterval(min, xMax), randomIntFromInterval(min, yMax)));
         }
         return ennemies;
     }
