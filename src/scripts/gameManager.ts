@@ -161,7 +161,6 @@ export class GameManager {
     
     playerCollidesWall() {
         const didCollide = this.detectWallCollision();
-    
         if (didCollide && this.territoryInProgress) {
             this.endTerritory();
         }
@@ -173,7 +172,6 @@ export class GameManager {
     
         const playerCollidesY = this.player.y + this.player.midSize >= ennemy.y &&
                                 this.player.y - this.player.midSize <= ennemy.y;
-    
         if (playerCollidesX && playerCollidesY) {
             this.gameOver();
         }
@@ -218,22 +216,10 @@ export class GameManager {
         const top = this.player.size + 2;
         const right = CONTAINER_WIDTH - this.player.size - 2;
         const bottom = CONTAINER_HEIGHT - this.player.size - 2;
-        const topWall = new Link(
-            new Node(left, top),
-            new Node(right, top)
-        );
-        const bottomWall = new Link(
-            new Node(left, bottom),
-            new Node(right, bottom)
-        );
-        const leftWall = new Link(
-            new Node(left, top),
-            new Node(left, bottom)
-        );
-        const rightWall = new Link(
-            new Node(right, top),
-            new Node(right, bottom)
-        );
+        const topWall = new Link(new Node(left, top), new Node(right, top));
+        const bottomWall = new Link(new Node(left, bottom), new Node(right, bottom));
+        const leftWall = new Link(new Node(left, top), new Node(left, bottom));
+        const rightWall = new Link(new Node(right, top), new Node(right, bottom));
         return [topWall, bottomWall, leftWall, rightWall];
     }
 
@@ -258,6 +244,11 @@ export class GameManager {
     drawPlayer(ctx: CanvasRenderingContext2D) {
         this.player.draw(ctx);
         this.player.onAutomaticMove();
+        if (this.territoryInProgress) {
+            const lastNode = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
+            const inProgressLink = new Link(lastNode, this.player, {color: this.territoryInProgress.color});
+            inProgressLink.draw(ctx);
+        }
         this.playerCollidesWall();
     }
 
