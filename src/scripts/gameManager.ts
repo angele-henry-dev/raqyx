@@ -126,16 +126,32 @@ export class GameManager {
       }
       
 
-    ennemyCollidesWall(ennemy: Ennemy) {
+      ennemyCollidesWall(ennemy: Ennemy) {
         for (const wall of this.gameWalls) {
-            if (wall.direction === 'horizontal' && Math.abs(ennemy.y - wall.n1.y) <= ennemy.midSize) {
-                ennemy.speedY *= -1;
-            }
-            if (wall.direction === 'vertical' && Math.abs(ennemy.x - wall.n1.x) <= ennemy.midSize) {
-                ennemy.speedX *= -1;
-            }
+          if (wall.direction === 'horizontal' && this.collidesWithHorizontalWall(ennemy, wall)) {
+            ennemy.speedY *= -1;
+          } else if (wall.direction === 'vertical' && this.collidesWithVerticalWall(ennemy, wall)) {
+            ennemy.speedX *= -1;
           }
-    }
+        }
+      }
+      
+      collidesWithHorizontalWall(ennemy: Ennemy, wall: Link): boolean {
+        return (
+          Math.abs(ennemy.y - wall.n1.y) <= ennemy.midSize &&
+          ennemy.x < Math.max(wall.n1.x, wall.n2.x) &&
+          ennemy.x > Math.min(wall.n1.x, wall.n2.x)
+        );
+      }
+      
+      collidesWithVerticalWall(ennemy: Ennemy, wall: Link): boolean {
+        return (
+          Math.abs(ennemy.x - wall.n1.x) <= ennemy.midSize &&
+          ennemy.y < Math.max(wall.n1.y, wall.n2.y) &&
+          ennemy.y > Math.min(wall.n1.y, wall.n2.y)
+        );
+      }
+      
 
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
