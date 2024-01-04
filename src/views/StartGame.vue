@@ -3,7 +3,7 @@
     <ion-toolbar>
       <ion-row class="ion-justify-content-between">
         <ion-col size="4" class="ion-text-start">
-          Score: 650798
+          Score: 0
         </ion-col>
         <ion-col size="4" class="ion-text-end">
           Level 1
