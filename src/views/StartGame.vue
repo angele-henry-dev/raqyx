@@ -46,7 +46,7 @@
       ctx.lineWidth = 1;
     }
 
-    gameManager = new GameManager(0);
+    gameManager = new GameManager(1);
     animate();
     setupGesture();
   });

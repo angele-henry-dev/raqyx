@@ -95,35 +95,58 @@ export class GameManager {
     gameOver() {
         alert("Game Over");
     }
+
+    detectWallCollision() {
+        // for (const link of this.gameWalls) {
+        //   if (link.direction === 'horizontal' && this.collidesWithHorizontalWall(ennemy, link)) {
+        //     ennemy.speedY *= -1;
+        //   } else if (link.direction === 'vertical' && this.collidesWithVerticalWall(ennemy, link)) {
+        //     ennemy.speedX *= -1;
+        //   }
+        // }
+        switch (true) {
+        case this.player.y <= this.player.midSize && this.player.x < CONTAINER_WIDTH - this.player.midSize:
+            this.player.direction = DIRECTIONS.RIGHT;
+            return true;
+        case this.player.y >= CONTAINER_HEIGHT - this.player.midSize && this.player.x > this.player.midSize:
+            this.player.direction = DIRECTIONS.LEFT;
+            return true;
+        case this.player.x <= this.player.midSize && this.player.y > this.player.midSize:
+            this.player.direction = DIRECTIONS.UP;
+            return true;
+        case this.player.x >= CONTAINER_WIDTH - this.player.midSize && this.player.y < CONTAINER_HEIGHT - this.player.midSize:
+            this.player.direction = DIRECTIONS.DOWN;
+            return true;
+        default:
+            return false;
+        }
+    }
     
     playerCollidesWall() {
-        const didCollide = this.player.detectWallCollision();
+        const didCollide = this.detectWallCollision();
     
         if (didCollide && this.territoryInProgress) {
             this.endTerritory();
         }
     }
 
-    playerCollidesEnnemy() {
-        for (const ennemy of this.ennemies) {
-          const playerCollidesX = this.player.x + this.player.midSize >= ennemy.x &&
-                                   this.player.x - this.player.midSize <= ennemy.x;
-      
-          const playerCollidesY = this.player.y + this.player.midSize >= ennemy.y &&
-                                   this.player.y - this.player.midSize <= ennemy.y;
-      
-          if (playerCollidesX && playerCollidesY) {
+    playerCollidesEnnemy(ennemy: Ennemy) {
+        const playerCollidesX = this.player.x + this.player.midSize >= ennemy.x &&
+                                this.player.x - this.player.midSize <= ennemy.x;
+    
+        const playerCollidesY = this.player.y + this.player.midSize >= ennemy.y &&
+                                this.player.y - this.player.midSize <= ennemy.y;
+    
+        if (playerCollidesX && playerCollidesY) {
             this.gameOver();
-            break;
-          }
         }
-      }
+    }
 
       ennemyCollidesWalls(ennemy: Ennemy) {
         for (const link of this.gameWalls) {
-          if (link.direction === 'horizontal' && this.collidesWithHorizontalWall(ennemy, link)) {
+          if (link.direction === 'horizontal' && this.collidesWithHorizontalWall(ennemy, link, ennemy.midSize)) {
             ennemy.speedY *= -1;
-          } else if (link.direction === 'vertical' && this.collidesWithVerticalWall(ennemy, link)) {
+          } else if (link.direction === 'vertical' && this.collidesWithVerticalWall(ennemy, link, ennemy.midSize)) {
             ennemy.speedX *= -1;
           }
         }
@@ -132,26 +155,29 @@ export class GameManager {
       ennemyCollidesTerritoryInProgess(ennemy: Ennemy) {
         if (this.territoryInProgress) {
             for (const link of this.territoryInProgress.links) {
-                if (this.collidesWithHorizontalWall(ennemy, link) || this.collidesWithVerticalWall(ennemy, link)) {
+                if (
+                    this.collidesWithHorizontalWall(ennemy, link, ennemy.midSize)
+                    || this.collidesWithVerticalWall(ennemy, link, ennemy.midSize)
+                ) {
                     this.gameOver();
                 }
             }
         }
       }
       
-      collidesWithHorizontalWall(ennemy: Ennemy, wall: Link): boolean {
+      collidesWithHorizontalWall(node: Node, wall: Link, nodeSize: number): boolean {
         return (
-          Math.abs(ennemy.y - wall.n1.y) <= ennemy.midSize &&
-          ennemy.x < Math.max(wall.n1.x, wall.n2.x) &&
-          ennemy.x > Math.min(wall.n1.x, wall.n2.x)
+          Math.abs(node.y - wall.n1.y) <= nodeSize &&
+          node.x < Math.max(wall.n1.x, wall.n2.x) &&
+          node.x > Math.min(wall.n1.x, wall.n2.x)
         );
       }
       
-      collidesWithVerticalWall(ennemy: Ennemy, wall: Link): boolean {
+      collidesWithVerticalWall(node: Node, wall: Link, nodeSize: number): boolean {
         return (
-          Math.abs(ennemy.x - wall.n1.x) <= ennemy.midSize &&
-          ennemy.y < Math.max(wall.n1.y, wall.n2.y) &&
-          ennemy.y > Math.min(wall.n1.y, wall.n2.y)
+          Math.abs(node.x - wall.n1.x) <= nodeSize &&
+          node.y < Math.max(wall.n1.y, wall.n2.y) &&
+          node.y > Math.min(wall.n1.y, wall.n2.y)
         );
       }
 
@@ -191,6 +217,9 @@ export class GameManager {
         for (const ennemy of this.ennemies) {
             ennemy.draw(ctx);
             ennemy.onAutomaticMove();
+            if (this.player.isInArea) {
+                this.playerCollidesEnnemy(ennemy);
+            }
             this.ennemyCollidesWalls(ennemy);
             this.ennemyCollidesTerritoryInProgess(ennemy);
         }
@@ -206,9 +235,6 @@ export class GameManager {
         this.player.draw(ctx);
         this.player.onAutomaticMove();
         this.playerCollidesWall();
-        if (this.player.isInArea) {
-            this.playerCollidesEnnemy();
-        }
     }
 
     draw(ctx: CanvasRenderingContext2D) {

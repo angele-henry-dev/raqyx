@@ -40,24 +40,5 @@ export class Player extends Node {
         break;
     }
   }
-
-  detectWallCollision() {  
-      switch (true) {
-      case this.y <= this.midSize && this.x < CONTAINER_WIDTH - this.midSize:
-        this.direction = DIRECTIONS.RIGHT;
-          return true;
-      case this.y >= CONTAINER_HEIGHT - this.midSize && this.x > this.midSize:
-        this.direction = DIRECTIONS.LEFT;
-          return true;
-      case this.x <= this.midSize && this.y > this.midSize:
-        this.direction = DIRECTIONS.UP;
-          return true;
-      case this.x >= CONTAINER_WIDTH - this.midSize && this.y < CONTAINER_HEIGHT - this.midSize:
-        this.direction = DIRECTIONS.DOWN;
-          return true;
-      default:
-          return false;
-      }
-  }
   
 }
