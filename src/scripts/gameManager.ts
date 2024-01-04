@@ -79,24 +79,36 @@ export class GameManager {
         alert("Game Over");
     }
 
-    playerCollidesWall() {
-      // Border top
-      if (this.player.y <= this.player.midSize && this.player.x < CONTAINER_WIDTH - this.player.midSize) {
-        this.player.direction = DIRECTIONS.RIGHT;
-      }
-      // Border bottom
-      if (this.player.y >= CONTAINER_HEIGHT - this.player.midSize && this.player.x > this.player.midSize) {
-        this.player.direction = DIRECTIONS.LEFT;
-      }
-      // Border left
-      if (this.player.x <= this.player.midSize && this.player.y > this.player.midSize) {
-        this.player.direction = DIRECTIONS.UP;
-      }
-      // Border right
-      if (this.player.x >= CONTAINER_WIDTH - this.player.midSize && this.player.y < CONTAINER_HEIGHT - this.player.midSize) {
-        this.player.direction = DIRECTIONS.DOWN;
-      }
+    detectWallCollision() {
+        const { player } = this;
+    
+        switch (true) {
+        case player.y <= player.midSize && player.x < CONTAINER_WIDTH - player.midSize:
+            player.direction = DIRECTIONS.RIGHT;
+            return true;
+        case player.y >= CONTAINER_HEIGHT - player.midSize && player.x > player.midSize:
+            player.direction = DIRECTIONS.LEFT;
+            return true;
+        case player.x <= player.midSize && player.y > player.midSize:
+            player.direction = DIRECTIONS.UP;
+            return true;
+        case player.x >= CONTAINER_WIDTH - player.midSize && player.y < CONTAINER_HEIGHT - player.midSize:
+            player.direction = DIRECTIONS.DOWN;
+            return true;
+        default:
+            return false;
+        }
     }
+    
+    playerCollidesWall() {
+        const didCollide = this.detectWallCollision();
+    
+        if (didCollide && this.territoryInProgress) {
+            this.endTerritory();
+        }
+    }
+  
+      
 
     playerCollidesEnnemy() {
         for (const ennemy of this.ennemies) {
