@@ -97,13 +97,6 @@ export class GameManager {
     }
 
     detectWallCollision() {
-        // for (const link of this.gameWalls) {
-        //   if (link.direction === 'horizontal' && this.collidesWithHorizontalWall(ennemy, link)) {
-        //     ennemy.speedY *= -1;
-        //   } else if (link.direction === 'vertical' && this.collidesWithVerticalWall(ennemy, link)) {
-        //     ennemy.speedX *= -1;
-        //   }
-        // }
         switch (true) {
         case this.player.y <= this.player.midSize && this.player.x < CONTAINER_WIDTH - this.player.midSize:
             this.player.direction = DIRECTIONS.RIGHT;
@@ -120,6 +113,49 @@ export class GameManager {
         default:
             return false;
         }
+    }
+
+    // detectWallCollision() {
+    //     const { player } = this;
+    //     const currentWall = this.getCurrentWall();
+    
+    //     if (currentWall) {
+    //         switch (currentWall.direction) {
+    //             case 'horizontal':
+    //                 player.direction = player.x < (currentWall.n1.x + player.size + 2) ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT;
+    //                 return true;
+    //             case 'vertical':
+    //                 player.direction = player.y < (currentWall.n1.y+ player.size + 2) ? DIRECTIONS.DOWN : DIRECTIONS.UP;
+    //                 return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+    
+    getCurrentWall() {
+        const { player, gameWalls } = this;
+        for (const wall of gameWalls) {
+            if (wall.direction === 'horizontal') {
+                if (
+                    player.y <= wall.n1.y + player.midSize &&
+                    player.y >= wall.n1.y - player.midSize &&
+                    player.x >= wall.n1.x &&
+                    player.x <= wall.n2.x
+                ) {
+                    return wall;
+                }
+            } else if (wall.direction === 'vertical') {
+                if (
+                    player.x <= wall.n1.x + player.midSize &&
+                    player.x >= wall.n1.x - player.midSize &&
+                    player.y >= wall.n1.y &&
+                    player.y <= wall.n2.y
+                ) {
+                    return wall;
+                }
+            }
+        }
+        return null;
     }
     
     playerCollidesWall() {

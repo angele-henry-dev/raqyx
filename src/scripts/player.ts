@@ -1,5 +1,4 @@
 import { Node } from '@/scripts/math/node';
-import { CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
 
 export const DIRECTIONS = {
   RIGHT: 0,
