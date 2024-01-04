@@ -10,7 +10,7 @@ export class Territory {
     color;
 
     constructor() {
-        this.color = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length)];
+        this.color = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length - 1)];
         this.nodes = [];
         this.links = [];
     }
