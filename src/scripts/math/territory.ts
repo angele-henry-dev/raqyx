@@ -2,8 +2,7 @@ import { Node } from '@/scripts/math/node'
 import { Link } from '@/scripts/math/link'
 import { randomIntFromInterval } from '@/scripts/utils'
 
-// const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
-const TERRITORIES_COLORS = ["red"];
+const TERRITORIES_COLORS = ["blue", "green", "orange", "red", "pink", "purple"];
 
 export class Territory {
     nodes: Node[];
