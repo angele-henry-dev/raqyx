@@ -47,7 +47,7 @@ export class GameManager {
             if (!this.territoryInProgress) {
                 this.createTerritory();
             } else {
-                this.drawTerritory(this.player.x, this.player.y);
+                this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
             }
     
             if (isHorizontalMove) {
@@ -83,105 +83,21 @@ export class GameManager {
                 case DIRECTIONS.LEFT: y -= this.player.midSize; break;
                 case DIRECTIONS.RIGHT: y += this.player.midSize; break;
             }
-            this.drawTerritory(x, y);
-            this.completePolygon();
+            this.territoryInProgress.drawTerritory(x, y);
+            this.territoryInProgress.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.player.size);
             for (const link of this.territoryInProgress.links) {
                 this.gameWalls.push(link);
             }
             this.territoryInProgress = null;
         }
     }
-  
-    drawTerritory(x: number, y: number) {
-        if (this.territoryInProgress) {
-            this.territoryInProgress.addNode(x, y);
-            this.territoryInProgress.addLink(
-                this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 2],
-                this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1]
-            );
-        }
-    }
-
-    completePolygon() {
-        if (this.territoryInProgress) {
-            const firstPos = this.territoryInProgress.nodes[0];
-            const lastPos = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
-            const firstDirection = this.territoryInProgress.links[0].direction;
-            const lastDirection = this.territoryInProgress.links[this.territoryInProgress.links.length - 1].direction;
-
-            if (firstDirection != lastDirection) {
-                this.drawTerritory(
-                    lastDirection === "horizontal" ? lastPos.x : firstPos.x,
-                    lastDirection === "horizontal" ? firstPos.y : lastPos.y
-                );
-                this.addLinkToTerritory();
-            }
-            else if (firstDirection == lastDirection) {
-                if (this.areCoordinatesEqual(firstPos, lastPos) && this.territoryInProgress.links.length > 1) {
-                    this.addLinkToTerritory();
-                } else {
-                    this.handleSameDirectionCase(lastPos, lastDirection);
-                }
-            } else {
-                this.addLinkToTerritory();
-            }
-
-            if (this.territoryInProgress.nodes.length != this.territoryInProgress.links.length) {
-                this.completePolygon();
-            }
-        }
-    }
-
-    handleSameDirectionCase(lastPos: Node, lastDirection: string) {
-        if (lastDirection === "horizontal") {
-            const y = lastPos.y > Math.ceil(CONTAINER_HEIGHT / 2) ?
-                (CONTAINER_HEIGHT - this.player.size - 2) : this.player.size + 2;
-            this.drawTerritory(lastPos.x, y);
-        } else {
-            const x = lastPos.x > Math.ceil(CONTAINER_WIDTH / 2) ?
-                (CONTAINER_WIDTH - this.player.size - 2) : this.player.size + 2;
-            this.drawTerritory(x, lastPos.y);
-        }
-    }
-
-    areCoordinatesEqual(n1: Node, n2: Node) {
-        return n1.x === n2.x || n1.y === n2.y;
-    }
-
-    addLinkToTerritory() {
-        this.territoryInProgress?.addLink(
-            this.territoryInProgress.nodes[0],
-            this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1]
-        );
-    }
 
     gameOver() {
         alert("Game Over");
     }
-
-    detectWallCollision() {
-        const { player } = this;
-    
-        switch (true) {
-        case player.y <= player.midSize && player.x < CONTAINER_WIDTH - player.midSize:
-            player.direction = DIRECTIONS.RIGHT;
-            return true;
-        case player.y >= CONTAINER_HEIGHT - player.midSize && player.x > player.midSize:
-            player.direction = DIRECTIONS.LEFT;
-            return true;
-        case player.x <= player.midSize && player.y > player.midSize:
-            player.direction = DIRECTIONS.UP;
-            return true;
-        case player.x >= CONTAINER_WIDTH - player.midSize && player.y < CONTAINER_HEIGHT - player.midSize:
-            player.direction = DIRECTIONS.DOWN;
-            return true;
-        default:
-            return false;
-        }
-    }
     
     playerCollidesWall() {
-        const didCollide = this.detectWallCollision();
+        const didCollide = this.player.detectWallCollision();
     
         if (didCollide && this.territoryInProgress) {
             this.endTerritory();

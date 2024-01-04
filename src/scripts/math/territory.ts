@@ -68,6 +68,65 @@ export class Territory {
     containsNode(node: Node) {
         return this.nodes.find((n) => n.equals(node));
     }
+  
+    drawTerritory(x: number, y: number) {
+        this.addNode(x, y);
+        this.addLink(
+            this.nodes[this.nodes.length - 2],
+            this.nodes[this.nodes.length - 1]
+        );
+    }
+
+    completePolygon(CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, playerSize: number) {
+        const firstPos = this.nodes[0];
+        const lastPos = this.nodes[this.nodes.length - 1];
+        const firstDirection = this.links[0].direction;
+        const lastDirection = this.links[this.links.length - 1].direction;
+
+        if (firstDirection != lastDirection) {
+            this.drawTerritory(
+                lastDirection === "horizontal" ? lastPos.x : firstPos.x,
+                lastDirection === "horizontal" ? firstPos.y : lastPos.y
+            );
+            this.addLinkToTerritory();
+        }
+        else if (firstDirection == lastDirection) {
+            if (this.areCoordinatesEqual(firstPos, lastPos) && this.links.length > 1) {
+                this.addLinkToTerritory();
+            } else {
+                this.handleSameDirectionCase(lastPos, lastDirection, CONTAINER_HEIGHT, CONTAINER_WIDTH, playerSize);
+            }
+        } else {
+            this.addLinkToTerritory();
+        }
+
+        if (this.nodes.length != this.links.length) {
+            this.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, playerSize);
+        }
+    }
+
+    handleSameDirectionCase(lastPos: Node, lastDirection: string, CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, playerSize: number) {
+        if (lastDirection === "horizontal") {
+            const y = lastPos.y > Math.ceil(CONTAINER_HEIGHT / 2) ?
+                (CONTAINER_HEIGHT - playerSize - 2) : playerSize + 2;
+            this.drawTerritory(lastPos.x, y);
+        } else {
+            const x = lastPos.x > Math.ceil(CONTAINER_WIDTH / 2) ?
+                (CONTAINER_WIDTH - playerSize - 2) : playerSize + 2;
+            this.drawTerritory(x, lastPos.y);
+        }
+    }
+
+    areCoordinatesEqual(n1: Node, n2: Node) {
+        return n1.x === n2.x || n1.y === n2.y;
+    }
+
+    addLinkToTerritory() {
+        this.addLink(
+            this.nodes[0],
+            this.nodes[this.nodes.length - 1]
+        );
+    }
 
     draw(ctx: CanvasRenderingContext2D) {
         for (const link of this.links) {
