@@ -84,11 +84,14 @@ export class GameManager {
     }
 
     isWallOnTrajectory(player: Player, wall: Link) {
+        const includesX = wall.includesX(player);
+        const includesY = wall.includesY(player);
+    
         if (
-            (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && (player.y > wall.n1.y && player.y > wall.n2.y) && wall.includesX(player)) ||
-            (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && (player.y < wall.n1.y && player.y < wall.n2.y) && wall.includesX(player)) ||
-            (player.direction === DIRECTIONS.LEFT && wall.direction === 'vertical' && (player.x > wall.n1.x && player.x > wall.n2.x) && wall.includesY(player)) ||
-            (player.direction === DIRECTIONS.RIGHT && wall.direction === 'vertical' && (player.x < wall.n1.x && player.x < wall.n2.x) && wall.includesY(player))
+            (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && player.y > wall.n1.y && player.y > wall.n2.y && includesX) ||
+            (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && player.y < wall.n1.y && player.y < wall.n2.y && includesX) ||
+            (player.direction === DIRECTIONS.LEFT && wall.direction === 'vertical' && player.x > wall.n1.x && player.x > wall.n2.x && includesY) ||
+            (player.direction === DIRECTIONS.RIGHT && wall.direction === 'vertical' && player.x < wall.n1.x && player.x < wall.n2.x && includesY)
         ) {
             return true;
         }
