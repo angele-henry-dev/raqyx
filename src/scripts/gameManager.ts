@@ -117,44 +117,90 @@ export class GameManager {
             return false;
         }
     }
-
-    detectNextWall() {
-        for (const link of this.gameWalls) {
-            //
-        }
-    }
     
-    getCurrentWall() {
-        const { player, gameWalls } = this;
-        for (const wall of gameWalls) {
-            wall.color = "white";
-            if (wall.direction === 'horizontal') {
-                if (
-                    player.y <= wall.n1.y + this.wallWidth &&
-                    player.y >= wall.n1.y - this.wallWidth &&
-                    player.x >= wall.n1.x + this.wallWidth &&
-                    player.x <= wall.n2.x - this.wallWidth
-                ) {
-                    return wall;
-                }
-            } else if (wall.direction === 'vertical') {
-                if (
-                    player.x <= wall.n1.x + this.wallWidth &&
-                    player.x >= wall.n1.x - this.wallWidth &&
-                    player.y >= wall.n1.y + this.wallWidth &&
-                    player.y <= wall.n2.y - this.wallWidth
-                ) {
-                    return wall;
+    getNextWall() {
+        const { player, gameWalls, wallWidth } = this;
+        const currentWall = this.getCurrentWall();
+    
+        if (currentWall) {
+            const currentIndex = gameWalls.indexOf(currentWall);
+            let closestWall = null;
+            let minDistance = Infinity;
+
+            for (let i = 0; i < gameWalls.length; i++) {
+                if (i !== currentIndex) {
+                    const wall = gameWalls[i];
+                    const playerPosition = wall.direction === 'horizontal' ? player.y : player.x;
+
+                    const isOnTrajectory =
+                        (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && (playerPosition > wall.n1.y && playerPosition > wall.n2.y)) ||
+                        (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && (playerPosition < wall.n1.y && playerPosition < wall.n2.y)) ||
+                        (player.direction === DIRECTIONS.LEFT && wall.direction === 'vertical' && (playerPosition > wall.n1.x && playerPosition > wall.n2.x)) ||
+                        (player.direction === DIRECTIONS.RIGHT && wall.direction === 'vertical' && (playerPosition < wall.n1.x && playerPosition < wall.n2.x));
+    
+                    if (isOnTrajectory) {
+                        let distance;
+                        if (wall.direction === 'horizontal') {
+                            distance = Math.abs(player.y - wall.n1.y);
+                        } else {
+                            distance = Math.abs(player.x - wall.n1.x);
+                        }
+        
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestWall = wall;
+                        }
+                    }
                 }
             }
+            return closestWall;
         }
         return null;
     }
 
+    getCurrentWall() {
+        const { player, gameWalls, wallWidth } = this;
+    
+        for (const wall of gameWalls) {
+            wall.color = "white";
+    
+            if (wall.direction === 'horizontal') {
+                const isColliding = (
+                    player.y <= wall.n1.y + wallWidth &&
+                    player.y >= wall.n1.y - wallWidth &&
+                    player.x >= wall.n1.x + wallWidth &&
+                    player.x <= wall.n2.x - wallWidth
+                );
+    
+                if (isColliding) {
+                    return wall;
+                }
+            } else if (wall.direction === 'vertical') {
+                const isColliding = (
+                    player.x <= wall.n1.x + wallWidth &&
+                    player.x >= wall.n1.x - wallWidth &&
+                    player.y >= wall.n1.y + wallWidth &&
+                    player.y <= wall.n2.y - wallWidth
+                );
+    
+                if (isColliding) {
+                    return wall;
+                }
+            }
+        }
+    
+        return null;
+    }
+    
+
     playerChangesDirection() {
         const currentWall = this.getCurrentWall();
+        const nextWall = this.getNextWall();
         if (currentWall) {
             currentWall.color = "green";
+        }
+        if (nextWall) {
+            nextWall.color = "red";
         }
     }
     
