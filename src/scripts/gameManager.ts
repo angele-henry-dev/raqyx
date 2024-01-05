@@ -54,10 +54,10 @@ export class GameManager {
             }
     
             if (isHorizontalMove) {
-                this.player.x += detail.deltaX > 0 ? this.player.speed : - this.player.speed;
+                //this.player.x += detail.deltaX > 0 ? this.player.speed : - this.player.speed;
                 this.player.direction = directionX;
             } else {
-                this.player.y += detail.deltaY > 0 ? this.player.speed : - this.player.speed;
+                //this.player.y += detail.deltaY > 0 ? this.player.speed : - this.player.speed;
                 this.player.direction = directionY;
             }
         }
@@ -84,32 +84,20 @@ export class GameManager {
     gameOver() {
         alert("Game Over");
     }
-
-    detectWallCollision() {
-        switch (true) {
-        case this.player.y <= this.borderWidth && this.player.x < (CONTAINER_WIDTH - this.borderWidth):
-            this.player.direction = DIRECTIONS.RIGHT;
-            return true;
-        case this.player.y >= (CONTAINER_HEIGHT - this.borderWidth) && this.player.x > this.borderWidth:
-            this.player.direction = DIRECTIONS.LEFT;
-            return true;
-        case this.player.x <= this.borderWidth && this.player.y > this.borderWidth:
-            this.player.direction = DIRECTIONS.UP;
-            return true;
-        case this.player.x >= (CONTAINER_WIDTH - this.borderWidth) && this.player.y < (CONTAINER_HEIGHT - this.borderWidth):
-            this.player.direction = DIRECTIONS.DOWN;
-            return true;
-        default:
-            return false;
-        }
-    }
     
+    // if (
+    //     (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && (player.y > wall.n1.y && player.y > wall.n2.y && (player.x == wall.n1.x || player.x == wall.n2.x))) ||
+    //     (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && (player.y < wall.n1.y && player.y < wall.n2.y && (player.x == wall.n1.x || player.x == wall.n2.x))) ||
+    //     (player.direction === DIRECTIONS.LEFT && wall.direction === 'vertical' && (player.x > wall.n1.x && player.x > wall.n2.x && (player.y == wall.n1.y || player.y == wall.n2.y))) ||
+    //     (player.direction === DIRECTIONS.RIGHT && wall.direction === 'vertical' && (player.x < wall.n1.x && player.x < wall.n2.x && (player.y == wall.n1.y || player.y == wall.n2.y)))
+    // )
+
     isWallOnTrajectory(player: Player, wall: Link) {
         if (
-            (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && (player.y > wall.n1.y && player.y > wall.n2.y && (player.x == wall.n1.x || player.x == wall.n2.x))) ||
-            (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && (player.y < wall.n1.y && player.y < wall.n2.y && (player.x == wall.n1.x || player.x == wall.n2.x))) ||
-            (player.direction === DIRECTIONS.LEFT && wall.direction === 'vertical' && (player.x > wall.n1.x && player.x > wall.n2.x && (player.y == wall.n1.y || player.y == wall.n2.y))) ||
-            (player.direction === DIRECTIONS.RIGHT && wall.direction === 'vertical' && (player.x < wall.n1.x && player.x < wall.n2.x && (player.y == wall.n1.y || player.y == wall.n2.y)))
+            (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && (player.y >= wall.n1.y && player.y >= wall.n2.y)) ||
+            (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && (player.y <= wall.n1.y && player.y <= wall.n2.y)) ||
+            (player.direction === DIRECTIONS.LEFT && wall.direction === 'vertical' && (player.x >= wall.n1.x && player.x >= wall.n2.x)) ||
+            (player.direction === DIRECTIONS.RIGHT && wall.direction === 'vertical' && (player.x <= wall.n1.x && player.x <= wall.n2.x))
         ) {
             return true;
         }
@@ -120,32 +108,28 @@ export class GameManager {
         const { player, gameWalls } = this;
         const currentWall = this.getCurrentWall();
     
-        if (currentWall) {
-            const currentIndex = gameWalls.indexOf(currentWall);
-            let closestWall = null;
-            let minDistance = Infinity;
-    
-            for (let i = 0; i < gameWalls.length; i++) {
-                if (i !== currentIndex) {
-                    const wall = gameWalls[i];
-    
-                    if (this.isWallOnTrajectory(player, wall)) {
-                        const distance = wall.direction === 'horizontal' ? Math.abs(player.y - wall.n1.y) : Math.abs(player.x - wall.n1.x);
-    
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            closestWall = wall;
-                        }
+        const currentIndex = currentWall ? gameWalls.indexOf(currentWall) : -1;
+        let closestWall = null;
+        let minDistance = Number.MAX_SAFE_INTEGER;
+
+        for (let i = 0; i < gameWalls.length; i++) {
+            if (i !== currentIndex) {
+                const wall = gameWalls[i];
+                if (this.isWallOnTrajectory(player, wall)) {
+                    const distance = wall.direction === 'horizontal' ? Math.abs(player.y - wall.n1.y) : Math.abs(player.x - wall.n1.x);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestWall = wall;
                     }
                 }
             }
-    
-            return closestWall;
         }
-    
-        return null;
+        if (!closestWall) {
+            //
+        }
+        return closestWall;
     }
-    
 
     getCurrentWall() {
         const { player, gameWalls, wallWidth } = this;
@@ -180,17 +164,37 @@ export class GameManager {
     
         return null;
     }
-    
 
-    playerChangesDirection() {
-        const currentWall = this.getCurrentWall();
+    detectWallCollision() {
         const nextWall = this.getNextWall();
-        if (currentWall) {
-            currentWall.color = "green";
-        }
         if (nextWall) {
             nextWall.color = "red";
+            if ((this.player.x + this.player.speed) == nextWall.n1.x || (this.player.x + this.player.speed) == nextWall.n2.x) {
+                console.log("Go down");
+                this.player.x += this.player.speed;
+                this.player.direction = DIRECTIONS.DOWN;
+                return true;
+            }
+            else if ((this.player.y + this.player.speed) == nextWall.n1.y || (this.player.y + this.player.speed) == nextWall.n2.y) {
+                this.player.y += this.player.speed;
+                this.player.direction = DIRECTIONS.LEFT;
+                return true;
+            }
+            else if ((this.player.x - this.player.speed) == nextWall.n1.x || (this.player.x - this.player.speed) == nextWall.n2.x) {
+                this.player.x -= this.player.speed;
+                this.player.direction = DIRECTIONS.UP;
+                return true;
+            }
+            else if ((this.player.y - this.player.speed) == nextWall.n1.y || (this.player.y - this.player.speed) == nextWall.n2.y) {
+                this.player.y -= this.player.speed;
+                this.player.direction = DIRECTIONS.RIGHT;
+                return true;
+            }
+        } else {
+            console.log("No next wall");
+            this.gameOver();
         }
+        return false;
     }
     
     playerCollidesWall() {
@@ -278,13 +282,12 @@ export class GameManager {
     drawPlayer(ctx: CanvasRenderingContext2D) {
         this.player.draw(ctx);
         this.player.onAutomaticMove();
+        this.playerCollidesWall();
         if (this.territoryInProgress) {
             const lastNode = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
             const inProgressLink = new Link(lastNode, this.player, {color: this.territoryInProgress.color});
             inProgressLink.draw(ctx);
         }
-        this.playerCollidesWall();
-        this.playerChangesDirection();
     }
 
     draw(ctx: CanvasRenderingContext2D) {
@@ -292,7 +295,7 @@ export class GameManager {
         if (this.territoryInProgress) {
             this.territoryInProgress.draw(ctx);
         }
-        this.drawEnnemies(ctx);
         this.drawPlayer(ctx);
+        this.drawEnnemies(ctx);
     }
 }
