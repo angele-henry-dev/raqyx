@@ -120,24 +120,65 @@ export class GameManager {
     detectWallCollision() {
         const nextWall = this.getNextWall();
         if (nextWall) {
-            if ((this.player.x + (this.player.speed * 2)) == nextWall.n1.x || (this.player.x + (this.player.speed * 2)) == nextWall.n2.x) {
-                this.player.x += (this.player.speed * 2);
-                this.player.direction = DIRECTIONS.DOWN;
-                return true;
-            }
-            else if ((this.player.y + (this.player.speed * 2)) == nextWall.n1.y || (this.player.y + (this.player.speed * 2)) == nextWall.n2.y) {
-                this.player.y += (this.player.speed * 2);
-                this.player.direction = DIRECTIONS.LEFT;
-                return true;
-            }
-            else if ((this.player.x - (this.player.speed * 2)) == nextWall.n1.x || (this.player.x - (this.player.speed * 2)) == nextWall.n2.x) {
-                this.player.x -= (this.player.speed * 2);
-                this.player.direction = DIRECTIONS.UP;
-                return true;
-            }
-            else if ((this.player.y - (this.player.speed * 2)) == nextWall.n1.y || (this.player.y - (this.player.speed * 2)) == nextWall.n2.y) {
-                this.player.y -= (this.player.speed * 2);
-                this.player.direction = DIRECTIONS.RIGHT;
+            const futurePlusX = this.player.x + (this.player.speed * 2);
+            const futurePlusY = this.player.y + (this.player.speed * 2);
+            const futureMinusX = this.player.x - (this.player.speed * 2);
+            const futureMinusY = this.player.y - (this.player.speed * 2);
+
+            if (
+                (futurePlusX == nextWall.n1.x || futurePlusX == nextWall.n2.x)
+                || (futurePlusY == nextWall.n1.y || futurePlusY == nextWall.n2.y)
+                || (futureMinusX == nextWall.n1.x || futureMinusX == nextWall.n2.x)
+                || (futureMinusY == nextWall.n1.y || futureMinusY == nextWall.n2.y)
+            ) {
+                switch (this.player.direction) {
+                    case DIRECTIONS.RIGHT:
+                        this.player.x += (this.player.speed * 2);
+                        if (futurePlusY > nextWall.n1.y && futurePlusY > nextWall.n2.y) {
+                            this.player.direction = DIRECTIONS.UP;
+                        } else {
+                            this.player.direction = DIRECTIONS.DOWN;
+                        }
+                        break;
+                    case DIRECTIONS.LEFT:
+                        this.player.x -= (this.player.speed * 2);
+                        if (futurePlusY > nextWall.n1.y && futurePlusY > nextWall.n2.y) {
+                            this.player.direction = DIRECTIONS.UP;
+                        } else {
+                            this.player.direction = DIRECTIONS.DOWN;
+                        }
+                        break;
+                    case DIRECTIONS.DOWN:
+                        this.player.y += (this.player.speed * 2);
+                        if (futurePlusX > nextWall.n1.x && futurePlusX > nextWall.n2.x) {
+                            this.player.direction = DIRECTIONS.LEFT;
+                        } else {
+                            this.player.direction = DIRECTIONS.RIGHT;
+                        }
+                        break;
+                    case DIRECTIONS.UP:
+                        this.player.y -= (this.player.speed * 2);
+                        if (futurePlusX > nextWall.n1.x && futurePlusX > nextWall.n2.x) {
+                            this.player.direction = DIRECTIONS.LEFT;
+                        } else {
+                            this.player.direction = DIRECTIONS.RIGHT;
+                        }
+                        break;
+                }
+
+                // if (nextWall.direction == "horizontal") {
+                //     if ((this.player.direction == DIRECTIONS.UP) && this.player.x <= nextWall.n1.x && this.player.x <= nextWall.n2.x) {
+                //         this.player.direction = DIRECTIONS.RIGHT;
+                //     } else {
+                //         this.player.direction = DIRECTIONS.LEFT;
+                //     }
+                // } else {
+                //     if ((this.player.direction == DIRECTIONS.RIGHT) && this.player.y <= nextWall.n1.y && this.player.y <= nextWall.n2.y) {
+                //         this.player.direction = DIRECTIONS.DOWN;
+                //     } else {
+                //         this.player.direction = DIRECTIONS.UP;
+                //     }
+                // }
                 return true;
             }
         }
