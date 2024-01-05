@@ -73,7 +73,7 @@ export class Territory {
         );
     }
 
-    completePolygon(CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, playerSize: number) {
+    completePolygon(CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, borderWidth: number) {
         const firstPos = this.nodes[0];
         const lastPos = this.nodes[this.nodes.length - 1];
         const firstDirection = this.links[0].direction;
@@ -90,25 +90,25 @@ export class Territory {
             if (this.areCoordinatesEqual(firstPos, lastPos) && this.links.length > 1) {
                 this.addLinkToTerritory();
             } else {
-                this.handleSameDirectionCase(lastPos, lastDirection, CONTAINER_HEIGHT, CONTAINER_WIDTH, playerSize);
+                this.handleSameDirectionCase(lastPos, lastDirection, CONTAINER_HEIGHT, CONTAINER_WIDTH, borderWidth);
             }
         } else {
             this.addLinkToTerritory();
         }
 
         if (this.nodes.length != this.links.length) {
-            this.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, playerSize);
+            this.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, borderWidth);
         }
     }
 
-    handleSameDirectionCase(lastPos: Node, lastDirection: string, CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, playerSize: number) {
+    handleSameDirectionCase(lastPos: Node, lastDirection: string, CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, borderWidth: number) {
         if (lastDirection === "horizontal") {
             const y = lastPos.y > Math.ceil(CONTAINER_HEIGHT / 2) ?
-                (CONTAINER_HEIGHT - playerSize - 2) : playerSize + 2;
+                (CONTAINER_HEIGHT - borderWidth) : borderWidth;
             this.drawTerritory(lastPos.x, y);
         } else {
             const x = lastPos.x > Math.ceil(CONTAINER_WIDTH / 2) ?
-                (CONTAINER_WIDTH - playerSize - 2) : playerSize + 2;
+                (CONTAINER_WIDTH - borderWidth) : borderWidth;
             this.drawTerritory(x, lastPos.y);
         }
     }

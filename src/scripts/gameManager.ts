@@ -65,29 +65,15 @@ export class GameManager {
 
     createTerritory() {
         this.territoryInProgress = new Territory(this.player.color);
-        let x = this.player.x;
-        let y = this.player.y;
-        switch (this.player.direction) {
-            case DIRECTIONS.DOWN: x -= this.player.midSize; break;
-            case DIRECTIONS.UP: x += this.player.midSize; break;
-            case DIRECTIONS.LEFT: y -= this.player.midSize; break;
-            case DIRECTIONS.RIGHT: y += this.player.midSize; break;
-        }
-        this.territoryInProgress.addNode(x, y);
+        const x = this.player.x;
+        const y = this.player.y;
+        this.territoryInProgress.addNode(this.player.x, this.player.y);
     }
 
     endTerritory() {
         if (this.territoryInProgress) {
-            let x = this.player.x;
-            let y = this.player.y;
-            switch (this.player.direction) {
-                case DIRECTIONS.DOWN: x -= this.player.midSize; break;
-                case DIRECTIONS.UP: x += this.player.midSize; break;
-                case DIRECTIONS.LEFT: y -= this.player.midSize; break;
-                case DIRECTIONS.RIGHT: y += this.player.midSize; break;
-            }
-            this.territoryInProgress.drawTerritory(x, y);
-            this.territoryInProgress.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.player.size);
+            this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
+            this.territoryInProgress.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
             for (const link of this.territoryInProgress.links) {
                 this.gameWalls.push(link);
             }
