@@ -17,7 +17,7 @@ export class Player extends Node {
   speed;
   isInArea;
 
-  constructor(x: number, y: number, {direction = DIRECTIONS.RIGHT, size = 8, speed = 1.5, color = SELECTED_COLOR} = {}) {
+  constructor(x: number, y: number, {direction = DIRECTIONS.RIGHT, size = 8, speed = 2, color = SELECTED_COLOR} = {}) {
     super(x, y, {size: size, color: color});
     this.midSize = Math.ceil(this.size/2) + 1;
     this.speed = speed;

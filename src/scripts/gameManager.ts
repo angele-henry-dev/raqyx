@@ -104,34 +104,34 @@ export class GameManager {
         }
     }
     
+    isWallOnTrajectory(player: Player, wall: Link) {
+        if (
+            (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && (player.y > wall.n1.y && player.y > wall.n2.y && (player.x == wall.n1.x || player.x == wall.n2.x))) ||
+            (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && (player.y < wall.n1.y && player.y < wall.n2.y && (player.x == wall.n1.x || player.x == wall.n2.x))) ||
+            (player.direction === DIRECTIONS.LEFT && wall.direction === 'vertical' && (player.x > wall.n1.x && player.x > wall.n2.x && (player.y == wall.n1.y || player.y == wall.n2.y))) ||
+            (player.direction === DIRECTIONS.RIGHT && wall.direction === 'vertical' && (player.x < wall.n1.x && player.x < wall.n2.x && (player.y == wall.n1.y || player.y == wall.n2.y)))
+        ) {
+            return true;
+        }
+        return false;
+    }
+    
     getNextWall() {
-        const { player, gameWalls, wallWidth } = this;
+        const { player, gameWalls } = this;
         const currentWall = this.getCurrentWall();
     
         if (currentWall) {
             const currentIndex = gameWalls.indexOf(currentWall);
             let closestWall = null;
             let minDistance = Infinity;
-
+    
             for (let i = 0; i < gameWalls.length; i++) {
                 if (i !== currentIndex) {
                     const wall = gameWalls[i];
-                    const playerPosition = wall.direction === 'horizontal' ? player.y : player.x;
-
-                    const isOnTrajectory =
-                        (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && (playerPosition > wall.n1.y && playerPosition > wall.n2.y)) ||
-                        (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && (playerPosition < wall.n1.y && playerPosition < wall.n2.y)) ||
-                        (player.direction === DIRECTIONS.LEFT && wall.direction === 'vertical' && (playerPosition > wall.n1.x && playerPosition > wall.n2.x)) ||
-                        (player.direction === DIRECTIONS.RIGHT && wall.direction === 'vertical' && (playerPosition < wall.n1.x && playerPosition < wall.n2.x));
     
-                    if (isOnTrajectory) {
-                        let distance;
-                        if (wall.direction === 'horizontal') {
-                            distance = Math.abs(player.y - wall.n1.y);
-                        } else {
-                            distance = Math.abs(player.x - wall.n1.x);
-                        }
-        
+                    if (this.isWallOnTrajectory(player, wall)) {
+                        const distance = wall.direction === 'horizontal' ? Math.abs(player.y - wall.n1.y) : Math.abs(player.x - wall.n1.x);
+    
                         if (distance < minDistance) {
                             minDistance = distance;
                             closestWall = wall;
@@ -139,10 +139,13 @@ export class GameManager {
                     }
                 }
             }
+    
             return closestWall;
         }
+    
         return null;
     }
+    
 
     getCurrentWall() {
         const { player, gameWalls, wallWidth } = this;
