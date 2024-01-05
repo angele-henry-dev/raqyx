@@ -6,10 +6,12 @@ import { Player, DIRECTIONS } from "@/scripts/player";
 import { Ennemy } from "@/scripts/ennemy";
 import { randomIntFromInterval } from "./utils";
 
-export const CONTAINER_WIDTH = 301;
-export const CONTAINER_HEIGHT = 493;
+export const CONTAINER_WIDTH = 300;
+export const CONTAINER_HEIGHT = 492;
 
 export class GameManager {
+    borderWidth = 10;
+    wallWidth = 2;
     gameWalls;
     territoryInProgress: Territory | null;
     player;
@@ -19,8 +21,8 @@ export class GameManager {
     constructor(numberOfEnnemies = 1) {
         this.territoryInProgress = null;
         this.numberOfEnnemies = numberOfEnnemies;
-        this.player = new Player();
         this.gameWalls = this.generateWalls();
+        this.player = new Player(this.borderWidth, this.borderWidth);
         this.ennemies = this.generateEnnemies();
     }
 
@@ -99,16 +101,16 @@ export class GameManager {
 
     detectWallCollision() {
         switch (true) {
-        case this.player.y <= this.player.midSize && this.player.x < CONTAINER_WIDTH - this.player.midSize:
+        case this.player.y <= this.borderWidth && this.player.x < (CONTAINER_WIDTH - this.borderWidth):
             this.player.direction = DIRECTIONS.RIGHT;
             return true;
-        case this.player.y >= CONTAINER_HEIGHT - this.player.midSize && this.player.x > this.player.midSize:
+        case this.player.y >= (CONTAINER_HEIGHT - this.borderWidth) && this.player.x > this.borderWidth:
             this.player.direction = DIRECTIONS.LEFT;
             return true;
-        case this.player.x <= this.player.midSize && this.player.y > this.player.midSize:
+        case this.player.x <= this.borderWidth && this.player.y > this.borderWidth:
             this.player.direction = DIRECTIONS.UP;
             return true;
-        case this.player.x >= CONTAINER_WIDTH - this.player.midSize && this.player.y < CONTAINER_HEIGHT - this.player.midSize:
+        case this.player.x >= (CONTAINER_WIDTH - this.borderWidth) && this.player.y < (CONTAINER_HEIGHT - this.borderWidth):
             this.player.direction = DIRECTIONS.DOWN;
             return true;
         default:
@@ -116,47 +118,44 @@ export class GameManager {
         }
     }
 
-    // detectWallCollision() {
-    //     const { player } = this;
-    //     const currentWall = this.getCurrentWall();
-    
-    //     if (currentWall) {
-    //         switch (currentWall.direction) {
-    //             case 'horizontal':
-    //                 player.direction = player.x < (currentWall.n1.x + player.size + 2) ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT;
-    //                 return true;
-    //             case 'vertical':
-    //                 player.direction = player.y < (currentWall.n1.y+ player.size + 2) ? DIRECTIONS.DOWN : DIRECTIONS.UP;
-    //                 return true;
-    //         }
-    //     }
-    //     return false;
-    // }
+    detectNextWall() {
+        for (const link of this.gameWalls) {
+            //
+        }
+    }
     
     getCurrentWall() {
         const { player, gameWalls } = this;
         for (const wall of gameWalls) {
+            wall.color = "white";
             if (wall.direction === 'horizontal') {
                 if (
-                    player.y <= wall.n1.y + player.midSize &&
-                    player.y >= wall.n1.y - player.midSize &&
-                    player.x >= wall.n1.x &&
-                    player.x <= wall.n2.x
+                    player.y <= wall.n1.y + this.wallWidth &&
+                    player.y >= wall.n1.y - this.wallWidth &&
+                    player.x >= wall.n1.x + this.wallWidth &&
+                    player.x <= wall.n2.x - this.wallWidth
                 ) {
                     return wall;
                 }
             } else if (wall.direction === 'vertical') {
                 if (
-                    player.x <= wall.n1.x + player.midSize &&
-                    player.x >= wall.n1.x - player.midSize &&
-                    player.y >= wall.n1.y &&
-                    player.y <= wall.n2.y
+                    player.x <= wall.n1.x + this.wallWidth &&
+                    player.x >= wall.n1.x - this.wallWidth &&
+                    player.y >= wall.n1.y + this.wallWidth &&
+                    player.y <= wall.n2.y - this.wallWidth
                 ) {
                     return wall;
                 }
             }
         }
         return null;
+    }
+
+    playerChangesDirection() {
+        const currentWall = this.getCurrentWall();
+        if (currentWall) {
+            currentWall.color = "green";
+        }
     }
     
     playerCollidesWall() {
@@ -202,7 +201,7 @@ export class GameManager {
 
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
-        const min = (8 * 2);
+        const min = (this.borderWidth + (this.wallWidth * 2));
         const xMax = (CONTAINER_WIDTH - min);
         const yMax = (CONTAINER_HEIGHT - min);
         for (let i=0; i<this.numberOfEnnemies; i++) {
@@ -212,14 +211,14 @@ export class GameManager {
     }
 
     generateWalls() {
-        const left = this.player.size + 2;
-        const top = this.player.size + 2;
-        const right = CONTAINER_WIDTH - this.player.size - 2;
-        const bottom = CONTAINER_HEIGHT - this.player.size - 2;
-        const topWall = new Link(new Node(left, top), new Node(right, top));
-        const bottomWall = new Link(new Node(left, bottom), new Node(right, bottom));
-        const leftWall = new Link(new Node(left, top), new Node(left, bottom));
-        const rightWall = new Link(new Node(right, top), new Node(right, bottom));
+        const left = this.borderWidth;
+        const top = this.borderWidth;
+        const right = CONTAINER_WIDTH - this.borderWidth;
+        const bottom = CONTAINER_HEIGHT - this.borderWidth;
+        const topWall = new Link(new Node(left, top), new Node(right, top), {width: this.wallWidth});
+        const bottomWall = new Link(new Node(left, bottom), new Node(right, bottom), {width: this.wallWidth});
+        const leftWall = new Link(new Node(left, top), new Node(left, bottom), {width: this.wallWidth});
+        const rightWall = new Link(new Node(right, top), new Node(right, bottom), {width: this.wallWidth});
         return [topWall, bottomWall, leftWall, rightWall];
     }
 
@@ -250,6 +249,7 @@ export class GameManager {
             inProgressLink.draw(ctx);
         }
         this.playerCollidesWall();
+        this.playerChangesDirection();
     }
 
     draw(ctx: CanvasRenderingContext2D) {
