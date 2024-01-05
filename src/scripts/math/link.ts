@@ -23,6 +23,14 @@ export class Link {
         return this.n1.equals(node) || this.n2.equals(node);
     }
 
+    includesX(node: Node) {
+        return (node.x >= this.n1.x && node.x <= this.n2.x) || (node.x >= this.n2.x && node.x <= this.n1.x);
+    }
+
+    includesY(node: Node) {
+        return (node.y >= this.n1.y && node.y <= this.n2.y) || (node.y >= this.n2.y && node.y <= this.n1.y);
+    }
+
     draw(ctx: CanvasRenderingContext2D) {
         ctx.beginPath();
         ctx.lineWidth = this.width;
