@@ -17,7 +17,7 @@ export class Player extends Node {
   midSize;
   speed;
 
-  constructor(x: number, y: number, {direction = DIRECTIONS.RIGHT, size = 8, speed = 2, color = SELECTED_COLOR} = {}) {
+  constructor(x: number, y: number, {direction = DIRECTIONS.RIGHT, size = 8, speed = 1.5, color = SELECTED_COLOR} = {}) {
     super(x, y, {size: size, color: color});
     this.midSize = Math.ceil(this.size/2) + 1;
     this.speed = speed;
@@ -42,57 +42,48 @@ export class Player extends Node {
   }
 
   detectWallCollision(nextWall: Link) {
-    // TODO Improve this method to allow speed 1.5
-      if (nextWall) {
-          const futurePlusX = this.x + (this.speed * 2);
-          const futurePlusY = this.y + (this.speed * 2);
-          const futureMinusX = this.x - (this.speed * 2);
-          const futureMinusY = this.y - (this.speed * 2);
+    if (nextWall) {
+        const { x, y, speed, direction } = this;
+        const futureX = (direction === DIRECTIONS.RIGHT || direction === DIRECTIONS.UP) ? x + speed : x - speed;
+        const futureY = (direction === DIRECTIONS.DOWN || direction === DIRECTIONS.RIGHT) ? y + speed : y - speed;
 
-          if (
-              (futurePlusX == nextWall.n1.x || futurePlusX == nextWall.n2.x)
-              || (futurePlusY == nextWall.n1.y || futurePlusY == nextWall.n2.y)
-              || (futureMinusX == nextWall.n1.x || futureMinusX == nextWall.n2.x)
-              || (futureMinusY == nextWall.n1.y || futureMinusY == nextWall.n2.y)
-          ) {
-              switch (this.direction) {
-                  case DIRECTIONS.RIGHT:
-                      this.x = futurePlusX;
-                      if (nextWall.includesY(futurePlusY)) {
-                          this.direction = DIRECTIONS.DOWN;
-                      } else {
-                          this.direction = DIRECTIONS.UP;
-                      }
-                      break;
-                  case DIRECTIONS.LEFT:
-                      this.x = futureMinusX;
-                      if (nextWall.includesY(futureMinusY)) {
-                          this.direction = DIRECTIONS.UP;
-                      } else {
-                          this.direction = DIRECTIONS.DOWN;
-                      }
-                      break;
-                  case DIRECTIONS.DOWN:
-                      this.y = futurePlusY;
-                      if (nextWall.includesX(futureMinusX)) {
-                          this.direction = DIRECTIONS.LEFT;
-                      } else {
-                          this.direction = DIRECTIONS.RIGHT;
-                      }
-                      break;
-                  case DIRECTIONS.UP:
-                      this.y = futureMinusY;
-                      if (nextWall.includesX(futurePlusX)) {
-                          this.direction = DIRECTIONS.RIGHT;
-                      } else {
-                          this.direction = DIRECTIONS.LEFT;
-                      }
-                      break;
-              }
-              return true;
-          }
-      }
-      return false;
+        const isCollision =
+            (direction === DIRECTIONS.RIGHT && futureX >= nextWall.n1.x && futureX >= nextWall.n2.x) ||
+            (direction === DIRECTIONS.LEFT && futureX <= nextWall.n1.x && futureX <= nextWall.n2.x) ||
+            (direction === DIRECTIONS.DOWN && futureY >= nextWall.n1.y && futureY >= nextWall.n2.y) ||
+            (direction === DIRECTIONS.UP && futureY <= nextWall.n1.y && futureY <= nextWall.n2.y);
+
+        if (isCollision) {
+            switch (direction) {
+                case DIRECTIONS.RIGHT: {
+                  const tooMuch = futureX >= nextWall.n1.x ? futureX - nextWall.n1.x : futureX - nextWall.n2.x;
+                  this.x = this.x + speed - tooMuch;
+                  this.direction = nextWall.includesY(futureY) ? DIRECTIONS.DOWN : DIRECTIONS.UP;
+                  break;
+                }
+                case DIRECTIONS.LEFT: {
+                  const notEnough = futureX <= nextWall.n1.x ? nextWall.n1.x - futureX : nextWall.n2.x - futureX;
+                  this.x = this.x - speed + notEnough;
+                  this.direction = nextWall.includesY(futureY) ? DIRECTIONS.UP : DIRECTIONS.DOWN;
+                  break;
+                }
+                case DIRECTIONS.DOWN: {
+                  const tooMuch = futureY >= nextWall.n1.y ? futureY - nextWall.n1.y : futureY - nextWall.n2.y;
+                  this.y = this.y + speed - tooMuch;
+                  this.direction = nextWall.includesX(futureX) ? DIRECTIONS.LEFT : DIRECTIONS.RIGHT;
+                  break;
+                }
+                case DIRECTIONS.UP: {
+                  const notEnough = futureY <= nextWall.n1.y ? nextWall.n1.y - futureY : nextWall.n2.y - futureY;
+                  this.y = this.y - speed + notEnough;
+                  this.direction = nextWall.includesX(futureX) ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT;
+                  break;
+                }
+            }
+            return true;
+        }
+    }
+    return false;
   }
   
 }

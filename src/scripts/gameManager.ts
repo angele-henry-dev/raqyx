@@ -93,6 +93,8 @@ export class GameManager {
             this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
             this.territoryInProgress.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
             // TODO modify the polygon gameWalls instead of just adding new walls
+            // Sélectionner les nodes qui ont 3 links liés ou plus => ça signifie qu'il faut jeter un (ou deux si 4) link(s)
+            // Then jeter les nodes qui n'ont pas de links liés
             for (const link of this.territoryInProgress.links) {
                 this.gameWalls.links.push(link);
             }
@@ -148,6 +150,9 @@ export class GameManager {
 
     playerCollidesWall() {
         const nextWall = this.getNextWall();
+        // if (nextWall) {
+        //     nextWall.color = "red";
+        // }
         const didCollide = nextWall ? this.player.detectWallCollision(nextWall) : false;
         if (didCollide && this.territoryInProgress) {
             this.endTerritory();
