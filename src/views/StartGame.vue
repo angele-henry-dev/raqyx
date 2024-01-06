@@ -3,13 +3,13 @@
     <ion-toolbar>
       <ion-row class="ion-justify-content-between">
         <ion-col size="4" class="ion-text-start">
-          Score: {{ gameManager?.score || 0 }}
+          Score: {{ gameManager?.gameSettings.score || 0 }}
         </ion-col>
         <ion-col size="4" class="ion-text-end">
-          Level {{ gameManager?.level || 0 }}
+          Level {{ gameManager?.gameSettings.level || 0 }}
         </ion-col>
         <ion-col size="4" class="ion-text-end">
-          {{ gameManager?.takenPercentage || 0 }}% / 75%
+          {{ gameManager?.gameSettings.percentage || 0 }}% / 75%
         </ion-col>
       </ion-row>
     </ion-toolbar>
@@ -29,7 +29,7 @@ import { reactive } from 'vue';
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
-  const gameManager = reactive(new GameManager(1));
+  const gameManager = reactive(new GameManager(1, 1));
 
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;

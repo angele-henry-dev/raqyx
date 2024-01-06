@@ -42,6 +42,7 @@ export class Player extends Node {
   }
 
   detectWallCollision(nextWall: Link) {
+    // TODO Improve this method to allow speed 1.5
       if (nextWall) {
           const futurePlusX = this.x + (this.speed * 2);
           const futurePlusY = this.y + (this.speed * 2);

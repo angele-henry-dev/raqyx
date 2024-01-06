@@ -10,28 +10,25 @@ export const CONTAINER_WIDTH = 300;
 export const CONTAINER_HEIGHT = 492;
 
 export class GameManager {
-    takenPercentage;
-    score;
-    level;
-    fullArea;
+    gameSettings;
     borderWidth = 10;
     wallWidth = 2;
     gameWalls: Territory;
-    territoryInProgress: Territory | null;
+    territoryInProgress: Territory | null = null;
     player;
     ennemies;
-    numberOfEnnemies;
 
-    constructor(numberOfEnnemies = 1) {
-        this.score = 0;
-        this.level = 1;
-        this.takenPercentage = 0;
-        this.territoryInProgress = null;
-        this.numberOfEnnemies = numberOfEnnemies;
+    constructor(numberOfEnnemies = 1, level = 1) {
         this.gameWalls = this.generateWalls();
         this.player = new Player(this.borderWidth, this.borderWidth);
+        this.gameSettings = {
+            percentage: 0,
+            score: 0,
+            level: level,
+            numberOfEnnemies: numberOfEnnemies,
+            fullArea: this.getPolygonArea(this.gameWalls.nodes)
+        };
         this.ennemies = this.generateEnnemies();
-        this.fullArea = this.getPolygonArea(this.gameWalls.nodes);
     }
 
     getPolygonArea(nodes: Node[]) {
@@ -101,8 +98,8 @@ export class GameManager {
             for (const node of this.territoryInProgress.nodes) {
                 this.gameWalls.nodes.push(node);
             }
-            this.takenPercentage += Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.fullArea);
-            if (this.takenPercentage >= 75) {
+            this.gameSettings.percentage += Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.gameSettings.fullArea);
+            if (this.gameSettings.percentage >= 75) {
                 this.victory();
             }
             this.territoryInProgress = null;
@@ -201,7 +198,7 @@ export class GameManager {
         const min = (this.borderWidth * 2);
         const xMax = (CONTAINER_WIDTH - min);
         const yMax = (CONTAINER_HEIGHT - min);
-        for (let i=0; i<this.numberOfEnnemies; i++) {
+        for (let i=0; i<this.gameSettings.numberOfEnnemies; i++) {
             ennemies.push(new Ennemy(randomIntFromInterval(min, xMax), randomIntFromInterval(min, yMax)));
         }
         return ennemies;
