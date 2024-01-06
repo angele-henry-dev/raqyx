@@ -86,7 +86,7 @@ export class Territory {
             );
             this.addFinalLinkToTerritory();
         }
-        else if (firstDirection == lastDirection) {
+        else if (firstDirection === lastDirection) {
             if (this.areCoordinatesEqual(firstPos, lastPos) && this.links.length > 1) {
                 this.addFinalLinkToTerritory();
             } else {

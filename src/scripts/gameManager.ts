@@ -14,13 +14,13 @@ export class GameManager {
     wallWidth = 2;
     fullArea;
     gameSettings;
-    gameWalls: Territory;
+    gameArea: Territory;
     territoryInProgress: Territory | null = null;
     player;
     ennemies;
 
     constructor(numberOfEnnemies = 1, level = 1) {
-        this.gameWalls = this.generateWalls();
+        this.gameArea = this.generateWalls();
         this.player = new Player(this.borderWidth, this.borderWidth);
         this.gameSettings = {
             percentage: 0,
@@ -28,7 +28,7 @@ export class GameManager {
             level: level,
             numberOfEnnemies: numberOfEnnemies
         };
-        this.fullArea = this.getPolygonArea(this.gameWalls.nodes);
+        this.fullArea = this.getPolygonArea(this.gameArea.nodes);
         this.ennemies = this.generateEnnemies();
     }
 
@@ -37,8 +37,8 @@ export class GameManager {
     
         for (let i = 0, l = nodes.length; i < l; i++) {
           const addX = nodes[i].x;
-          const addY = nodes[i == nodes.length - 1 ? 0 : i + 1].y;
-          const subX = nodes[i == nodes.length - 1 ? 0 : i + 1].x;
+          const addY = nodes[i === nodes.length - 1 ? 0 : i + 1].y;
+          const subX = nodes[i === nodes.length - 1 ? 0 : i + 1].x;
           const subY = nodes[i].y;
     
           total += (addX * addY * 0.5);
@@ -92,20 +92,96 @@ export class GameManager {
         if (this.territoryInProgress) {
             this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
             this.territoryInProgress.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
-            // TODO modify the polygon gameWalls instead of just adding new walls
-            // Sélectionner les nodes qui ont 3 links liés ou plus => ça signifie qu'il faut jeter un (ou deux si 4) link(s)
-            // Then jeter les nodes qui n'ont pas de links liés
-            for (const link of this.territoryInProgress.links) {
-                this.gameWalls.links.push(link);
-            }
-            for (const node of this.territoryInProgress.nodes) {
-                this.gameWalls.nodes.push(node);
-            }
+            this.recreateGameArea();
             this.gameSettings.percentage += Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.fullArea);
             if (this.gameSettings.percentage >= 75) {
                 this.victory();
             }
             this.territoryInProgress = null;
+        }
+    }
+
+    isNodeInsidePolygon(node: Node) {
+        if (this.territoryInProgress) {
+            for (const link of this.territoryInProgress.links) {
+                // if (link.containsX(node.x) && link.containsY(node.y)) {
+                if (link.includesX(node.x) && link.includesY(node.y)) {
+                    console.log("--------------");
+                    console.log(link.n1);
+                    console.log(link.n2);
+                    console.log(node);
+                    this.gameArea.removeNode(node);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    isLinkInsidePolygon(link: Link) {
+        return false;
+    }
+
+    recreateGameArea() {
+        // TODO modify the polygon gameArea instead of just adding new walls
+        // Sélectionner les nodes qui ont 3 links liés ou plus => ça signifie qu'il faut jeter un (ou deux si 4) link(s)
+        // Then jeter les nodes qui n'ont pas de links liés
+        if (this.territoryInProgress) {
+            this.gameArea.nodes = this.gameArea.nodes.filter(node => !this.isNodeInsidePolygon(node))
+            // this.gameArea.links = this.gameArea.links.filter(link => !this.isLinkInsidePolygon(link));
+
+            this.gameArea.nodes = this.gameArea.nodes
+                .concat(this.territoryInProgress.nodes)
+                .filter((n, index, self) => 
+                    index === self.findIndex((t) => t.x === n.x && t.y === n.y)
+                );
+            // for (const node of this.gameArea.nodes) {
+            //     node.color = "red";
+            // }
+            // for (const link of this.gameArea.links) {
+            //     link.color = "green";
+            // }
+
+            // const nodes = this.gameArea.nodes.concat(this.territoryInProgress.nodes);
+            // const top = nodes
+            //     .filter((n, index, self) => 
+            //         index === self.findIndex((t) => t.x === n.x && t.y === n.y)
+            //     )
+            //     .filter((n) => n.y === this.borderWidth)
+            //     .sort((a, b) => a.x - b.x);
+            // const right = nodes
+            //     .filter((n, index, self) => 
+            //         index === self.findIndex((t) => t.x === n.x && t.y === n.y)
+            //     )
+            //     .filter((n) => n.x === CONTAINER_WIDTH - this.borderWidth)
+            //     .sort((a, b) => a.y - b.y);
+            // const bottom = nodes
+            //     .filter((n, index, self) => 
+            //         index === self.findIndex((t) => t.x === n.x && t.y === n.y)
+            //     )
+            //     .filter((n) => n.y === CONTAINER_HEIGHT - this.borderWidth)
+            //     .sort((a, b) => a.x - b.x);
+            // const left = nodes
+            //     .filter((n, index, self) => 
+            //         index === self.findIndex((t) => t.x === n.x && t.y === n.y)
+            //     )
+            //     .filter((n) => n.x === this.borderWidth)
+            //     .sort((a, b) => a.y - b.y);
+
+            // const newNodes = [top[0], top[1], right[0], right[1], bottom[0], bottom[1], left[0], left[1]];
+            // const newLinks = [];
+            // newLinks.push(new Link(top[0], top[1]));
+            // newLinks.push(new Link(right[0], right[1]));
+            // newLinks.push(new Link(bottom[0], bottom[1]));
+            // newLinks.push(new Link(left[0], left[1]));
+            // this.gameArea = new Territory("white");
+            // this.gameArea.links = newLinks;
+            // this.gameArea.nodes = newNodes;
+
+            // console.log(top);
+            // console.log(right);
+            // console.log(bottom);
+            // console.log(left);
         }
     }
 
@@ -132,11 +208,11 @@ export class GameManager {
     }
     
     getNextWall() {
-        const { player, gameWalls } = this;
+        const { player, gameArea } = this;
         let closestWall = null;
         let minDistance = Number.MAX_SAFE_INTEGER;
 
-        for (const wall of gameWalls.links) {
+        for (const wall of gameArea.links) {
             if (this.isWallOnTrajectory(player, wall)) {
                 const distance = wall.direction === 'horizontal' ? Math.abs(player.y - wall.n1.y) : Math.abs(player.x - wall.n1.x);
                 if (distance < minDistance) {
@@ -150,9 +226,6 @@ export class GameManager {
 
     playerCollidesWall() {
         const nextWall = this.getNextWall();
-        // if (nextWall) {
-        //     nextWall.color = "red";
-        // }
         const didCollide = nextWall ? this.player.detectWallCollision(nextWall) : false;
         if (didCollide && this.territoryInProgress) {
             this.endTerritory();
@@ -171,7 +244,7 @@ export class GameManager {
     }
 
     ennemyCollidesWalls(ennemy: Ennemy) {
-        for (const link of this.gameWalls.links) {
+        for (const link of this.gameArea.links) {
             if (link.direction === 'horizontal' && ennemy.collidesWithHorizontalWall(link)) {
             ennemy.speedY *= -1;
             } else if (link.direction === 'vertical' && ennemy.collidesWithVerticalWall(link)) {
@@ -237,7 +310,7 @@ export class GameManager {
     }
 
     drawWalls(ctx: CanvasRenderingContext2D) {
-        this.gameWalls.draw(ctx);
+        this.gameArea.draw(ctx);
     }
 
     drawPlayer(ctx: CanvasRenderingContext2D) {

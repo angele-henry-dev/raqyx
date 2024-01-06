@@ -12,7 +12,7 @@ export class Node {
     }
 
     equals(node: Node) {
-        return node.x == this.x && node.y == this.y;
+        return node.x === this.x && node.y === this.y;
     }
 
     draw(ctx: CanvasRenderingContext2D) {
