@@ -214,7 +214,7 @@ export class GameManager {
 
     generateEnnemies() {
         const ennemies: Ennemy[] = [];
-        const min = (this.borderWidth + (this.wallWidth * 2));
+        const min = (this.borderWidth * 2);
         const xMax = (CONTAINER_WIDTH - min);
         const yMax = (CONTAINER_HEIGHT - min);
         for (let i=0; i<this.numberOfEnnemies; i++) {

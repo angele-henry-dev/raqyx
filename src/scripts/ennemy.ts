@@ -7,14 +7,12 @@ export class Ennemy extends Node {
     midSize;
 
     constructor(x: number, y: number, {size = 8, speed = 1, color = "red"} = {}) {
-        super(0, 0, {size: size, color: color});
+        super(x, y, {size: size, color: color});
         const plusOrMinusX = Math.random() < 0.5 ? -1 : 1;
         const plusOrMinusY = Math.random() < 0.5 ? -1 : 1;
         this.speedX = speed * plusOrMinusX;
         this.speedY = speed * plusOrMinusY;
         this.midSize = Math.ceil(this.size/2) + 1;
-        this.x = x;
-        this.y = y;
     }
 
     onAutomaticMove() {
