@@ -3,13 +3,13 @@
     <ion-toolbar>
       <ion-row class="ion-justify-content-between">
         <ion-col size="4" class="ion-text-start">
-          Score: 0
+          Score: <!-- {{ gameManager?.score || 0 }} -->
         </ion-col>
         <ion-col size="4" class="ion-text-end">
-          Level 1
+          Level <!-- {{ gameManager?.level || 0 }} -->
         </ion-col>
         <ion-col size="4" class="ion-text-end">
-          <!-- {{ calculateTerritoryCaptured() }} -->% / 75%
+          {{ getPercentage() }}% / 75%
         </ion-col>
       </ion-row>
     </ion-toolbar>
@@ -21,17 +21,15 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { createGesture, GestureDetail } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
-  import { Territory } from '@/scripts/math/territory'
-  // import { Node } from '@/scripts/math/node'
-  // import { Link } from '@/scripts/math/link'
+import { reactive } from 'vue';
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
-  let gameManager: GameManager;
+  const gameManager = reactive(new GameManager(1));
 
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
@@ -45,11 +43,13 @@
       ctx.scale(DPR, DPR);
       ctx.lineWidth = 1;
     }
-
-    gameManager = new GameManager(1);
     animate();
     setupGesture();
   });
+
+  const getPercentage = () => {
+    return gameManager?.takenPercentage || 0;
+  };
 
   const setupGesture = () => {
     if (canvas) {

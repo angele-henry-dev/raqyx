@@ -10,20 +10,39 @@ export const CONTAINER_WIDTH = 300;
 export const CONTAINER_HEIGHT = 492;
 
 export class GameManager {
+    takenPercentage;
+    fullArea;
     borderWidth = 10;
     wallWidth = 2;
-    gameWalls;
+    gameWalls: Territory;
     territoryInProgress: Territory | null;
     player;
     ennemies;
     numberOfEnnemies;
 
     constructor(numberOfEnnemies = 1) {
+        this.takenPercentage = 0;
         this.territoryInProgress = null;
         this.numberOfEnnemies = numberOfEnnemies;
         this.gameWalls = this.generateWalls();
         this.player = new Player(this.borderWidth, this.borderWidth);
         this.ennemies = this.generateEnnemies();
+        this.fullArea = this.getPolygonArea(this.gameWalls.nodes);
+    }
+
+    getPolygonArea(nodes: Node[]) {
+        let total = 0;
+    
+        for (let i = 0, l = nodes.length; i < l; i++) {
+          const addX = nodes[i].x;
+          const addY = nodes[i == nodes.length - 1 ? 0 : i + 1].y;
+          const subX = nodes[i == nodes.length - 1 ? 0 : i + 1].x;
+          const subY = nodes[i].y;
+    
+          total += (addX * addY * 0.5);
+          total -= (subX * subY * 0.5);
+        }
+        return Math.abs(total);
     }
 
     isGestureAuthorized(isHorizontalMove: boolean, directionX: number, directionY: number) {
@@ -37,7 +56,7 @@ export class GameManager {
             && ((directionY === DIRECTIONS.UP && this.player.y - this.player.speed > this.player.midSize)
               || (directionY === DIRECTIONS.DOWN && this.player.y + this.player.speed < (CONTAINER_HEIGHT - this.player.midSize))))
         );
-      }
+    }
       
 
     onManualMove(detail: GestureDetail) {
@@ -71,9 +90,14 @@ export class GameManager {
         if (this.territoryInProgress) {
             this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
             this.territoryInProgress.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
+            // TODO modify the polygon gameWalls instead of just adding new walls
             for (const link of this.territoryInProgress.links) {
-                this.gameWalls.push(link);
+                this.gameWalls.links.push(link);
             }
+            for (const node of this.territoryInProgress.nodes) {
+                this.gameWalls.nodes.push(node);
+            }
+            this.takenPercentage = Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.fullArea);
             this.territoryInProgress = null;
         }
     }
@@ -102,8 +126,7 @@ export class GameManager {
         let closestWall = null;
         let minDistance = Number.MAX_SAFE_INTEGER;
 
-        for (let i = 0; i < gameWalls.length; i++) {
-            const wall = gameWalls[i];
+        for (const wall of gameWalls.links) {
             if (this.isWallOnTrajectory(player, wall)) {
                 const distance = wall.direction === 'horizontal' ? Math.abs(player.y - wall.n1.y) : Math.abs(player.x - wall.n1.x);
 
@@ -189,7 +212,7 @@ export class GameManager {
     }
 
     ennemyCollidesWalls(ennemy: Ennemy) {
-        for (const link of this.gameWalls) {
+        for (const link of this.gameWalls.links) {
             if (link.direction === 'horizontal' && ennemy.collidesWithHorizontalWall(link)) {
             ennemy.speedY *= -1;
             } else if (link.direction === 'vertical' && ennemy.collidesWithVerticalWall(link)) {
@@ -229,15 +252,17 @@ export class GameManager {
     }
 
     generateWalls() {
+        const walls = new Territory("white");
         const left = this.borderWidth;
         const top = this.borderWidth;
         const right = CONTAINER_WIDTH - this.borderWidth;
         const bottom = CONTAINER_HEIGHT - this.borderWidth;
-        const topWall = new Link(new Node(left, top), new Node(right, top), {width: this.wallWidth});
-        const bottomWall = new Link(new Node(left, bottom), new Node(right, bottom), {width: this.wallWidth});
-        const leftWall = new Link(new Node(left, top), new Node(left, bottom), {width: this.wallWidth});
-        const rightWall = new Link(new Node(right, top), new Node(right, bottom), {width: this.wallWidth});
-        return [topWall, bottomWall, leftWall, rightWall];
+        walls.addNode(left, top);
+        walls.drawTerritory(right, top); // top wall
+        walls.drawTerritory(right, bottom); // right wall
+        walls.drawTerritory(left, bottom); // bottom wall
+        walls.addFinalLinkToTerritory(); // left wall
+        return walls;
     }
 
     drawEnnemies(ctx: CanvasRenderingContext2D) {
@@ -253,9 +278,7 @@ export class GameManager {
     }
 
     drawWalls(ctx: CanvasRenderingContext2D) {
-        for (const wall of this.gameWalls) {
-            wall.draw(ctx);
-        }
+        this.gameWalls.draw(ctx);
     }
 
     drawPlayer(ctx: CanvasRenderingContext2D) {

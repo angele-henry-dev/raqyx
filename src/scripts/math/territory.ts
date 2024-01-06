@@ -84,16 +84,16 @@ export class Territory {
                 lastDirection === "horizontal" ? lastPos.x : firstPos.x,
                 lastDirection === "horizontal" ? firstPos.y : lastPos.y
             );
-            this.addLinkToTerritory();
+            this.addFinalLinkToTerritory();
         }
         else if (firstDirection == lastDirection) {
             if (this.areCoordinatesEqual(firstPos, lastPos) && this.links.length > 1) {
-                this.addLinkToTerritory();
+                this.addFinalLinkToTerritory();
             } else {
                 this.handleSameDirectionCase(lastPos, lastDirection, CONTAINER_HEIGHT, CONTAINER_WIDTH, borderWidth);
             }
         } else {
-            this.addLinkToTerritory();
+            this.addFinalLinkToTerritory();
         }
 
         if (this.nodes.length != this.links.length) {
@@ -117,7 +117,7 @@ export class Territory {
         return n1.x === n2.x || n1.y === n2.y;
     }
 
-    addLinkToTerritory() {
+    addFinalLinkToTerritory() {
         this.addLink(
             this.nodes[0],
             this.nodes[this.nodes.length - 1]
