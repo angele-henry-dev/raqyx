@@ -84,8 +84,8 @@ export class GameManager {
     }
 
     isWallOnTrajectory(player: Player, wall: Link) {
-        const includesX = wall.includesX(player);
-        const includesY = wall.includesY(player);
+        const includesX = wall.includesX(player.x);
+        const includesY = wall.includesY(player.y);
     
         if (
             (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && player.y > wall.n1.y && player.y > wall.n2.y && includesX) ||
@@ -134,15 +134,15 @@ export class GameManager {
                 switch (this.player.direction) {
                     case DIRECTIONS.RIGHT:
                         this.player.x += (this.player.speed * 2);
-                        if (futurePlusY > nextWall.n1.y && futurePlusY > nextWall.n2.y) {
-                            this.player.direction = DIRECTIONS.UP;
-                        } else {
+                        if (nextWall.includesY(futurePlusY)) {
                             this.player.direction = DIRECTIONS.DOWN;
+                        } else {
+                            this.player.direction = DIRECTIONS.UP;
                         }
                         break;
                     case DIRECTIONS.LEFT:
                         this.player.x -= (this.player.speed * 2);
-                        if (futurePlusY > nextWall.n1.y && futurePlusY > nextWall.n2.y) {
+                        if (nextWall.includesY(futureMinusY)) {
                             this.player.direction = DIRECTIONS.UP;
                         } else {
                             this.player.direction = DIRECTIONS.DOWN;
@@ -150,7 +150,7 @@ export class GameManager {
                         break;
                     case DIRECTIONS.DOWN:
                         this.player.y += (this.player.speed * 2);
-                        if (futurePlusX > nextWall.n1.x && futurePlusX > nextWall.n2.x) {
+                        if (nextWall.includesX(futureMinusX)) {
                             this.player.direction = DIRECTIONS.LEFT;
                         } else {
                             this.player.direction = DIRECTIONS.RIGHT;
@@ -158,27 +158,13 @@ export class GameManager {
                         break;
                     case DIRECTIONS.UP:
                         this.player.y -= (this.player.speed * 2);
-                        if (futurePlusX > nextWall.n1.x && futurePlusX > nextWall.n2.x) {
-                            this.player.direction = DIRECTIONS.LEFT;
-                        } else {
+                        if (nextWall.includesX(futurePlusX)) {
                             this.player.direction = DIRECTIONS.RIGHT;
+                        } else {
+                            this.player.direction = DIRECTIONS.LEFT;
                         }
                         break;
                 }
-
-                // if (nextWall.direction == "horizontal") {
-                //     if ((this.player.direction == DIRECTIONS.UP) && this.player.x <= nextWall.n1.x && this.player.x <= nextWall.n2.x) {
-                //         this.player.direction = DIRECTIONS.RIGHT;
-                //     } else {
-                //         this.player.direction = DIRECTIONS.LEFT;
-                //     }
-                // } else {
-                //     if ((this.player.direction == DIRECTIONS.RIGHT) && this.player.y <= nextWall.n1.y && this.player.y <= nextWall.n2.y) {
-                //         this.player.direction = DIRECTIONS.DOWN;
-                //     } else {
-                //         this.player.direction = DIRECTIONS.UP;
-                //     }
-                // }
                 return true;
             }
         }
