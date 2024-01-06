@@ -3,10 +3,10 @@
     <ion-toolbar>
       <ion-row class="ion-justify-content-between">
         <ion-col size="4" class="ion-text-start">
-          Score: <!-- {{ gameManager?.score || 0 }} -->
+          Score: {{ gameManager?.score || 0 }}
         </ion-col>
         <ion-col size="4" class="ion-text-end">
-          Level <!-- {{ gameManager?.level || 0 }} -->
+          Level {{ gameManager?.level || 0 }}
         </ion-col>
         <ion-col size="4" class="ion-text-end">
           {{ gameManager?.takenPercentage || 0 }}% / 75%

@@ -11,6 +11,8 @@ export const CONTAINER_HEIGHT = 492;
 
 export class GameManager {
     takenPercentage;
+    score;
+    level;
     fullArea;
     borderWidth = 10;
     wallWidth = 2;
@@ -21,6 +23,8 @@ export class GameManager {
     numberOfEnnemies;
 
     constructor(numberOfEnnemies = 1) {
+        this.score = 0;
+        this.level = 1;
         this.takenPercentage = 0;
         this.territoryInProgress = null;
         this.numberOfEnnemies = numberOfEnnemies;
