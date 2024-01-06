@@ -76,10 +76,12 @@ export class GameManager {
                 this.gameWalls.push(link);
             }
             this.territoryInProgress = null;
+            this.player.isInArea = false;
         }
     }
 
     gameOver() {
+        console.log(this.player.isInArea);
         alert("Game Over");
     }
 
