@@ -46,7 +46,6 @@ export class GameManager {
         const directionY = detail.deltaY > 0 ? DIRECTIONS.DOWN : DIRECTIONS.UP;
 
         if (this.isGestureAuthorized(isHorizontalMove, directionX, directionY)) {
-            this.player.isInArea = true;
             if (!this.territoryInProgress) {
                 this.createTerritory();
             } else {
@@ -76,12 +75,10 @@ export class GameManager {
                 this.gameWalls.push(link);
             }
             this.territoryInProgress = null;
-            this.player.isInArea = false;
         }
     }
 
     gameOver() {
-        console.log(this.player.isInArea);
         alert("Game Over");
     }
 
@@ -247,7 +244,7 @@ export class GameManager {
         for (const ennemy of this.ennemies) {
             ennemy.draw(ctx);
             ennemy.onAutomaticMove();
-            if (this.player.isInArea) {
+            if (this.territoryInProgress) {
                 this.playerCollidesEnnemy(ennemy);
                 this.ennemyCollidesTerritoryInProgess(ennemy);
             }
