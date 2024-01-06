@@ -10,9 +10,10 @@ export const CONTAINER_WIDTH = 300;
 export const CONTAINER_HEIGHT = 492;
 
 export class GameManager {
-    gameSettings;
     borderWidth = 10;
     wallWidth = 2;
+    fullArea;
+    gameSettings;
     gameWalls: Territory;
     territoryInProgress: Territory | null = null;
     player;
@@ -25,9 +26,9 @@ export class GameManager {
             percentage: 0,
             score: 0,
             level: level,
-            numberOfEnnemies: numberOfEnnemies,
-            fullArea: this.getPolygonArea(this.gameWalls.nodes)
+            numberOfEnnemies: numberOfEnnemies
         };
+        this.fullArea = this.getPolygonArea(this.gameWalls.nodes);
         this.ennemies = this.generateEnnemies();
     }
 
@@ -98,7 +99,7 @@ export class GameManager {
             for (const node of this.territoryInProgress.nodes) {
                 this.gameWalls.nodes.push(node);
             }
-            this.gameSettings.percentage += Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.gameSettings.fullArea);
+            this.gameSettings.percentage += Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.fullArea);
             if (this.gameSettings.percentage >= 75) {
                 this.victory();
             }
