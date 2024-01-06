@@ -53,12 +53,12 @@ export class GameManager {
         return (
           (isHorizontalMove
             && (this.player.direction !== DIRECTIONS.LEFT && this.player.direction !== DIRECTIONS.RIGHT)
-            && ((directionX === DIRECTIONS.LEFT && this.player.x - this.player.speed > this.player.midSize)
-              || (directionX === DIRECTIONS.RIGHT && this.player.x + this.player.speed < (CONTAINER_WIDTH - this.player.midSize))))
+            && ((directionX === DIRECTIONS.LEFT && this.player.x - this.player.speed > this.borderWidth)
+              || (directionX === DIRECTIONS.RIGHT && this.player.x + this.player.speed < (CONTAINER_WIDTH - this.borderWidth))))
           || (!isHorizontalMove
             && (this.player.direction !== DIRECTIONS.UP && this.player.direction !== DIRECTIONS.DOWN)
-            && ((directionY === DIRECTIONS.UP && this.player.y - this.player.speed > this.player.midSize)
-              || (directionY === DIRECTIONS.DOWN && this.player.y + this.player.speed < (CONTAINER_HEIGHT - this.player.midSize))))
+            && ((directionY === DIRECTIONS.UP && this.player.y - this.player.speed > this.borderWidth)
+              || (directionY === DIRECTIONS.DOWN && this.player.y + this.player.speed < (CONTAINER_HEIGHT - this.borderWidth))))
         );
     }
       
@@ -120,7 +120,6 @@ export class GameManager {
     isWallOnTrajectory(player: Player, wall: Link) {
         const includesX = wall.includesX(player.x);
         const includesY = wall.includesY(player.y);
-    
         if (
             (player.direction === DIRECTIONS.UP && wall.direction === 'horizontal' && player.y > wall.n1.y && player.y > wall.n2.y && includesX) ||
             (player.direction === DIRECTIONS.DOWN && wall.direction === 'horizontal' && player.y < wall.n1.y && player.y < wall.n2.y && includesX) ||
@@ -140,7 +139,6 @@ export class GameManager {
         for (const wall of gameWalls.links) {
             if (this.isWallOnTrajectory(player, wall)) {
                 const distance = wall.direction === 'horizontal' ? Math.abs(player.y - wall.n1.y) : Math.abs(player.x - wall.n1.x);
-
                 if (distance < minDistance) {
                     minDistance = distance;
                     closestWall = wall;
@@ -150,62 +148,9 @@ export class GameManager {
         return closestWall;
     }
 
-    detectWallCollision() {
-        const nextWall = this.getNextWall();
-        if (nextWall) {
-            const futurePlusX = this.player.x + (this.player.speed * 2);
-            const futurePlusY = this.player.y + (this.player.speed * 2);
-            const futureMinusX = this.player.x - (this.player.speed * 2);
-            const futureMinusY = this.player.y - (this.player.speed * 2);
-
-            if (
-                (futurePlusX == nextWall.n1.x || futurePlusX == nextWall.n2.x)
-                || (futurePlusY == nextWall.n1.y || futurePlusY == nextWall.n2.y)
-                || (futureMinusX == nextWall.n1.x || futureMinusX == nextWall.n2.x)
-                || (futureMinusY == nextWall.n1.y || futureMinusY == nextWall.n2.y)
-            ) {
-                switch (this.player.direction) {
-                    case DIRECTIONS.RIGHT:
-                        this.player.x += (this.player.speed * 2);
-                        if (nextWall.includesY(futurePlusY)) {
-                            this.player.direction = DIRECTIONS.DOWN;
-                        } else {
-                            this.player.direction = DIRECTIONS.UP;
-                        }
-                        break;
-                    case DIRECTIONS.LEFT:
-                        this.player.x -= (this.player.speed * 2);
-                        if (nextWall.includesY(futureMinusY)) {
-                            this.player.direction = DIRECTIONS.UP;
-                        } else {
-                            this.player.direction = DIRECTIONS.DOWN;
-                        }
-                        break;
-                    case DIRECTIONS.DOWN:
-                        this.player.y += (this.player.speed * 2);
-                        if (nextWall.includesX(futureMinusX)) {
-                            this.player.direction = DIRECTIONS.LEFT;
-                        } else {
-                            this.player.direction = DIRECTIONS.RIGHT;
-                        }
-                        break;
-                    case DIRECTIONS.UP:
-                        this.player.y -= (this.player.speed * 2);
-                        if (nextWall.includesX(futurePlusX)) {
-                            this.player.direction = DIRECTIONS.RIGHT;
-                        } else {
-                            this.player.direction = DIRECTIONS.LEFT;
-                        }
-                        break;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-    
     playerCollidesWall() {
-        const didCollide = this.detectWallCollision();
+        const nextWall = this.getNextWall();
+        const didCollide = nextWall ? this.player.detectWallCollision(nextWall) : false;
         if (didCollide && this.territoryInProgress) {
             this.endTerritory();
         }
