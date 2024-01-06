@@ -97,9 +97,16 @@ export class GameManager {
             for (const node of this.territoryInProgress.nodes) {
                 this.gameWalls.nodes.push(node);
             }
-            this.takenPercentage = Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.fullArea);
+            this.takenPercentage += Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.fullArea);
+            if (this.takenPercentage >= 75) {
+                this.victory();
+            }
             this.territoryInProgress = null;
         }
+    }
+
+    victory() {
+        alert("Victory!");
     }
 
     gameOver() {

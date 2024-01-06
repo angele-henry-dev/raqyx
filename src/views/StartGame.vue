@@ -9,7 +9,7 @@
           Level <!-- {{ gameManager?.level || 0 }} -->
         </ion-col>
         <ion-col size="4" class="ion-text-end">
-          {{ getPercentage() }}% / 75%
+          {{ gameManager?.takenPercentage || 0 }}% / 75%
         </ion-col>
       </ion-row>
     </ion-toolbar>
