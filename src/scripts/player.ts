@@ -56,7 +56,7 @@ export class Player extends Node {
           ) {
               switch (this.direction) {
                   case DIRECTIONS.RIGHT:
-                      this.x += (this.speed * 2);
+                      this.x = futurePlusX;
                       if (nextWall.includesY(futurePlusY)) {
                           this.direction = DIRECTIONS.DOWN;
                       } else {
@@ -64,7 +64,7 @@ export class Player extends Node {
                       }
                       break;
                   case DIRECTIONS.LEFT:
-                      this.x -= (this.speed * 2);
+                      this.x = futureMinusX;
                       if (nextWall.includesY(futureMinusY)) {
                           this.direction = DIRECTIONS.UP;
                       } else {
@@ -72,7 +72,7 @@ export class Player extends Node {
                       }
                       break;
                   case DIRECTIONS.DOWN:
-                      this.y += (this.speed * 2);
+                      this.y = futurePlusY;
                       if (nextWall.includesX(futureMinusX)) {
                           this.direction = DIRECTIONS.LEFT;
                       } else {
@@ -80,7 +80,7 @@ export class Player extends Node {
                       }
                       break;
                   case DIRECTIONS.UP:
-                      this.y -= (this.speed * 2);
+                      this.y = futureMinusY;
                       if (nextWall.includesX(futurePlusX)) {
                           this.direction = DIRECTIONS.RIGHT;
                       } else {
