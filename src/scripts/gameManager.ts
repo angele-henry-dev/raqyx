@@ -201,10 +201,16 @@ export class GameManager {
 
     ennemyCollidesTerritoryInProgess(ennemy: Ennemy) {
         if (this.territoryInProgress) {
+            const lastNode = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
+            const inProgressLink = new Link(lastNode, this.player);
+            if (inProgressLink.includesX(ennemy.x) && inProgressLink.includesY(ennemy.y)) {
+                this.gameOver();
+            }
             for (const link of this.territoryInProgress.links) {
                 if (
                     ennemy.collidesWithHorizontalWall(link)
                     || ennemy.collidesWithVerticalWall(link)
+                    || (inProgressLink.includesX(ennemy.x) && inProgressLink.includesY(ennemy.y))
                 ) {
                     this.gameOver();
                 }
@@ -241,9 +247,9 @@ export class GameManager {
             ennemy.onAutomaticMove();
             if (this.player.isInArea) {
                 this.playerCollidesEnnemy(ennemy);
+                this.ennemyCollidesTerritoryInProgess(ennemy);
             }
             this.ennemyCollidesWalls(ennemy);
-            this.ennemyCollidesTerritoryInProgess(ennemy);
         }
     }
 
