@@ -47,10 +47,6 @@ import { reactive } from 'vue';
     setupGesture();
   });
 
-  const getPercentage = () => {
-    return gameManager?.takenPercentage || 0;
-  };
-
   const setupGesture = () => {
     if (canvas) {
       createGesture({
