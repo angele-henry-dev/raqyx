@@ -94,6 +94,11 @@ export class Territory {
         return false;
     }
 
+    /**
+     * Checks if a link of the territory includes any part of the given link.
+     * @param link The link to check.
+     * @returns True if the territory includes any part of the given link, otherwise false.
+     */
     includesLink(link: Link): Link | null {
         return this.links.find((l) => l.includesX(link.n1.x) && l.includesY(link.n1.y) && l.includesX(link.n2.x) && l.includesY(link.n2.y)) || null;
     }
