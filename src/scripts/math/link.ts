@@ -23,6 +23,15 @@ export class Link {
         return this.n1.equals(node) || this.n2.equals(node);
     }
 
+    includesLink(links: Link[]) {
+        for (const l of links) {
+            if ((this.includesX(l.n1.x) && this.includesY(l.n1.y)) && (this.includesX(l.n2.x) && this.includesY(l.n2.y))) {
+                return l;
+            }
+        }
+        return null;
+    }
+
     includesX(x: number) {
         return (x >= this.n1.x && x <= this.n2.x) || (x >= this.n2.x && x <= this.n1.x);
     }

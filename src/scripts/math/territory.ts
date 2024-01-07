@@ -43,6 +43,8 @@ export class Territory {
         const link = new Link(n1, n2, {color: this.color});
         if (!this.containsLink(link) && !link.n1.equals(link.n2)) {
             this.links.push(link);
+            this.addNode(n1.x, n1.y);
+            this.addNode(n2.x, n2.y);
             return true;
         }
         return false;
