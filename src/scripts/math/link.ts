@@ -27,16 +27,8 @@ export class Link {
         return (x >= this.n1.x && x <= this.n2.x) || (x >= this.n2.x && x <= this.n1.x);
     }
 
-    containsX(x: number) {
-        return (x > this.n1.x && x < this.n2.x) || (x > this.n2.x && x < this.n1.x);
-    }
-
     includesY(y: number) {
         return (y >= this.n1.y && y <= this.n2.y) || (y >= this.n2.y && y <= this.n1.y);
-    }
-
-    containsY(y: number) {
-        return (y > this.n1.y && y < this.n2.y) || (y > this.n2.y && y < this.n1.y);
     }
 
     draw(ctx: CanvasRenderingContext2D) {

@@ -49,12 +49,21 @@ export class Territory {
     }
 
     addNode(x: number, y: number) {
-        const node = new Node(x, y, {size: 2, color: this.color});
+        const node = new Node(x, y, {size: 5, color: this.color});
         if (!this.containsNode(node)) {
             this.nodes.push(node);
             return true;
         }
         return false;
+    }
+
+    includesLink(link: Link) {
+        for (const l of this.links) {
+            if ((l.includesX(link.n1.x) && l.includesY(link.n1.y)) && (l.includesX(link.n2.x) && l.includesY(link.n2.y))) {
+                return l;
+            }
+        }
+        return null;
     }
 
     containsLink(link: Link) {

@@ -29,7 +29,7 @@ import { reactive } from 'vue';
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
-  const gameManager = reactive(new GameManager(1, 1));
+  const gameManager = reactive(new GameManager(0, 1));
 
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
