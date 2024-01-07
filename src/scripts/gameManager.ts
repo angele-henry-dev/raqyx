@@ -1,6 +1,6 @@
 import { GestureDetail } from '@ionic/vue';
-import { Node } from '@/scripts/math/node'
-import { Link } from '@/scripts/math/link'
+import { Node } from '@/scripts/math/node';
+import { Link } from '@/scripts/math/link';
 import { Territory } from "@/scripts/math/territory";
 import { Player, DIRECTIONS } from "@/scripts/player";
 import { Enemy } from "@/scripts/enemy";
@@ -89,7 +89,7 @@ export class GameManager {
     endTerritory() {
         if (this.territoryInProgress) {
             this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
-            this.territoryInProgress.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
+            this.territoryInProgress.completeTerritory(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
             this.recreateGameArea();
             this.gameSettings.percentage += Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.fullArea);
             if (this.gameSettings.percentage >= 75) {

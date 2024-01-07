@@ -1,26 +1,46 @@
 import { Node } from '@/scripts/math/node';
 import { Link } from '@/scripts/math/link';
 
+/**
+ * Represents a territory in the game, which consists of nodes and links.
+ * A territory is formed as the player draws boundaries on the screen.
+ */
 export class Territory {
     nodes: Node[];
     links: Link[];
     color: string;
 
+    /**
+     * Creates an instance of the Territory class.
+     * @param color The color of the territory. Default is "green".
+     */
     constructor(color = "green") {
         this.color = color;
         this.nodes = [];
         this.links = [];
     }
 
+    /**
+     * Clears the nodes and links of the territory, resetting it.
+     */
     clearGraph(): void {
         this.nodes = [];
         this.links = [];
     }
 
+    /**
+     * Gets all links in the territory that include a specific node.
+     * @param node The node to check for links.
+     * @returns An array of links associated with the provided node.
+     */
     getLinksWithNodes(node: Node): Link[] {
         return this.links.filter((link) => link.includes(node));
     }
 
+    /**
+     * Removes a specific link from the territory.
+     * @param link The link to be removed.
+     */
     removeLink(link: Link): void {
         const index = this.links.indexOf(link);
         if (index !== -1) {
@@ -28,6 +48,10 @@ export class Territory {
         }
     }
 
+    /**
+     * Removes a specific node from the territory and its associated links.
+     * @param node The node to be removed.
+     */
     removeNode(node: Node): void {
         const links = this.getLinksWithNodes(node);
         links.forEach((link) => this.removeLink(link));
@@ -37,6 +61,13 @@ export class Territory {
         }
     }
 
+    /**
+     * Adds a new link to the territory between two nodes.
+     * Adds also the given nodes if they are not yet added.
+     * @param n1 The first node.
+     * @param n2 The second node.
+     * @returns True if the link was added successfully, otherwise false.
+     */
     addLink(n1: Node, n2: Node): boolean {
         const link = new Link(n1, n2, { color: this.color });
         if (!this.containsLink(link) && !link.n1.equals(link.n2)) {
@@ -48,6 +79,12 @@ export class Territory {
         return false;
     }
 
+    /**
+     * Adds a new node to the territory at the specified coordinates.
+     * @param x The x-coordinate of the new node.
+     * @param y The y-coordinate of the new node.
+     * @returns True if the node was added successfully, otherwise false.
+     */
     addNode(x: number, y: number): boolean {
         const node = new Node(x, y, { size: 2, color: this.color });
         if (!this.containsNode(node)) {
@@ -61,14 +98,29 @@ export class Territory {
         return this.links.find((l) => l.includesX(link.n1.x) && l.includesY(link.n1.y) && l.includesX(link.n2.x) && l.includesY(link.n2.y)) || null;
     }
 
+    /**
+     * Checks if a specific link is already in the territory.
+     * @param link The link to check.
+     * @returns True if the link is in the territory, otherwise false.
+     */
     containsLink(link: Link): boolean {
         return this.links.some((l) => l.equals(link));
     }
 
+    /**
+     * Checks if a specific node is already in the territory.
+     * @param node The node to check.
+     * @returns True if the node is in the territory, otherwise false.
+     */
     containsNode(node: Node): boolean {
         return this.nodes.some((n) => n.equals(node));
     }
 
+    /**
+     * Draws a territory by adding a node and link based on the provided coordinates.
+     * @param x The x-coordinate of the new node.
+     * @param y The y-coordinate of the new node.
+     */
     drawTerritory(x: number, y: number): void {
         this.addNode(x, y);
         this.addLink(
@@ -77,7 +129,14 @@ export class Territory {
         );
     }
 
-    completePolygon(CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, borderWidth: number): void {
+    /**
+     * Completes the territory in progress by checking the direction of the first and last links
+     * and adding the final link to close the territory.
+     * @param CONTAINER_HEIGHT The height of the container.
+     * @param CONTAINER_WIDTH The width of the container.
+     * @param borderWidth The width of the border.
+     */
+    completeTerritory(CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, borderWidth: number): void {
         const firstPos = this.nodes[0];
         const lastPos = this.nodes[this.nodes.length - 1];
         const firstDirection = this.links[0].direction;
@@ -100,10 +159,19 @@ export class Territory {
         }
 
         if (this.nodes.length !== this.links.length) {
-            this.completePolygon(CONTAINER_HEIGHT, CONTAINER_WIDTH, borderWidth);
+            this.completeTerritory(CONTAINER_HEIGHT, CONTAINER_WIDTH, borderWidth);
         }
     }
 
+    /**
+     * Handles the case where the first and last links have the same direction.
+     * Adjusts the coordinates to close the territory properly.
+     * @param lastPos The last node's position.
+     * @param lastDirection The direction of the last link.
+     * @param CONTAINER_HEIGHT The height of the container.
+     * @param CONTAINER_WIDTH The width of the container.
+     * @param borderWidth The width of the border.
+     */
     handleSameDirectionCase(lastPos: Node, lastDirection: string, CONTAINER_HEIGHT: number, CONTAINER_WIDTH: number, borderWidth: number): void {
         if (lastDirection === "horizontal") {
             const y = lastPos.y > Math.ceil(CONTAINER_HEIGHT / 2) ? (CONTAINER_HEIGHT - borderWidth) : borderWidth;
@@ -114,10 +182,19 @@ export class Territory {
         }
     }
 
+    /**
+     * Checks if the coordinates of two nodes are equal.
+     * @param n1 The first node.
+     * @param n2 The second node.
+     * @returns True if the coordinates are equal, otherwise false.
+     */
     areCoordinatesEqual(n1: Node, n2: Node): boolean {
         return n1.x === n2.x || n1.y === n2.y;
     }
 
+    /**
+     * Adds the final link to close the territory.
+     */
     addFinalLinkToTerritory(): void {
         this.addLink(
             this.nodes[0],
@@ -125,6 +202,10 @@ export class Territory {
         );
     }
 
+    /**
+     * Draws the territory by rendering its nodes and links on the canvas.
+     * @param ctx The CanvasRenderingContext2D to draw on.
+     */
     draw(ctx: CanvasRenderingContext2D): void {
         this.links.forEach((link) => link.draw(ctx));
         this.nodes.forEach((node) => node.draw(ctx));
