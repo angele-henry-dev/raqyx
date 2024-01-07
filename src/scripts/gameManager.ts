@@ -83,8 +83,6 @@ export class GameManager {
 
     createTerritory() {
         this.territoryInProgress = new Territory(this.player.color);
-        const x = this.player.x;
-        const y = this.player.y;
         this.territoryInProgress.addNode(this.player.x, this.player.y);
     }
 
