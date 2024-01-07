@@ -104,12 +104,9 @@ export class GameManager {
     isNodeInsidePolygon(node: Node) {
         if (this.territoryInProgress) {
             for (const link of this.territoryInProgress.links) {
-                // if (link.containsX(node.x) && link.containsY(node.y)) {
                 if (link.includesX(node.x) && link.includesY(node.y)) {
-                    console.log("--------------");
-                    console.log(link.n1);
-                    console.log(link.n2);
-                    console.log(node);
+                    // console.log("isNodeInsidePolygon: ");
+                    // console.log(node);
                     this.gameArea.removeNode(node);
                     return true;
                 }
@@ -123,21 +120,46 @@ export class GameManager {
     }
 
     recreateGameArea() {
+        // console.log(this.gameArea.nodes);
         // TODO modify the polygon gameArea instead of just adding new walls
         // Sélectionner les nodes qui ont 3 links liés ou plus => ça signifie qu'il faut jeter un (ou deux si 4) link(s)
         // Then jeter les nodes qui n'ont pas de links liés
         if (this.territoryInProgress) {
-            this.gameArea.nodes = this.gameArea.nodes.filter(node => !this.isNodeInsidePolygon(node))
+            // const newNodes = this.gameArea.nodes.filter(node => !this.isNodeInsidePolygon(node))
+            for (let i=0; i<this.territoryInProgress.nodes.length; i++) {
+                if (this.gameArea.containsNode(this.territoryInProgress.nodes[i])) {
+                    // console.log("Remove " + this.territoryInProgress.nodes[i].x + ":" + this.territoryInProgress.nodes[i].y);
+                    this.territoryInProgress.nodes.splice(i, 1);
+                }
+            }
+
+            const newGameArea = new Territory("white");
+            newGameArea.links = this.gameArea.links;
+            for (const node of this.gameArea.nodes) {
+                if (!this.isNodeInsidePolygon(node)) {
+                    console.log("Not in polygon: " + node.x + ":" + node.y);
+                    newGameArea.addNode(node.x, node.y);
+                } else {
+                    const sameAlignment = this.territoryInProgress.nodes.filter(n => n.y == node.y).sort((a, b) => a.x - b.x)[0];
+                    console.log("In polygon: " + node.x + ":" + node.y);
+                    console.log("Adding instead: " + sameAlignment.x + ":" + sameAlignment.y);
+                    newGameArea.addNode(sameAlignment.x, sameAlignment.y);
+                    const linkToNode = newGameArea.nodes.filter(n => n.y == node.y).sort((a, b) => a.x - b.x)[0];
+                    newGameArea.addLink(linkToNode, sameAlignment);
+                }
+            }
             // this.gameArea.links = this.gameArea.links.filter(link => !this.isLinkInsidePolygon(link));
 
-            this.gameArea.nodes = this.gameArea.nodes
-                .concat(this.territoryInProgress.nodes)
-                .filter((n, index, self) => 
-                    index === self.findIndex((t) => t.x === n.x && t.y === n.y)
-                );
-            // for (const node of this.gameArea.nodes) {
-            //     node.color = "red";
-            // }
+            // this.gameArea.nodes = newGameArea.concat(this.territoryInProgress.nodes)
+                // .filter((n, index, self) => 
+                //     index === self.findIndex((t) => t.x === n.x && t.y === n.y)
+                // );
+
+            this.gameArea = newGameArea;
+            for (const node of this.gameArea.nodes) {
+                node.color = "red";
+            }
+            console.log(this.gameArea);
             // for (const link of this.gameArea.links) {
             //     link.color = "green";
             // }
