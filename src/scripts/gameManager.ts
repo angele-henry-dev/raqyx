@@ -9,30 +9,48 @@ import { randomIntFromInterval } from "./utils";
 export const CONTAINER_WIDTH = 300;
 export const CONTAINER_HEIGHT = 492;
 
+/**
+ * Manages the game logic, including player movements, territory creation, collisions, and victory/defeat conditions.
+ */
 export class GameManager {
     borderWidth = 10;
     wallWidth = 2;
-    fullArea;
-    gameSettings;
+    fullArea: number;
+    gameSettings: {
+        percentage: number;
+        score: number;
+        level: number;
+        numberOfEnemies: number;
+    };
     gameArea: Territory;
     territoryInProgress: Territory | null = null;
-    player;
-    ennemies;
+    player: Player;
+    enemies: Enemy[];
 
-    constructor(numberOfEnnemies = 1, level = 1) {
+    /**
+     * Creates an instance of the GameManager class.
+     * @param numberOfEnemies The number of enemies in the game. Default is 1.
+     * @param level The level of the game. Default is 1.
+     */
+    constructor(numberOfEnemies = 1, level = 1) {
         this.gameArea = this.generateWalls();
         this.player = new Player(this.borderWidth, this.borderWidth);
         this.gameSettings = {
             percentage: 0,
             score: 0,
             level: level,
-            numberOfEnnemies: numberOfEnnemies
+            numberOfEnemies: numberOfEnemies
         };
         this.fullArea = this.getPolygonArea(this.gameArea.nodes);
-        this.ennemies = this.generateEnnemies();
+        this.enemies = this.generateEnemies();
     }
 
-    getPolygonArea(nodes: Node[]) {
+    /**
+     * Calculates the area of a polygon defined by its nodes.
+     * @param nodes The nodes of the polygon.
+     * @returns The absolute area of the polygon.
+     */
+    getPolygonArea(nodes: Node[]): number {
         let total = 0;
     
         for (let i = 0, l = nodes.length; i < l; i++) {
@@ -47,7 +65,14 @@ export class GameManager {
         return Math.abs(total);
     }
 
-    isGestureAuthorized(isHorizontalMove: boolean, directionX: number, directionY: number) {
+    /**
+     * Checks if the given gesture is authorized based on the player's current direction and the proposed move.
+     * @param isHorizontalMove Indicates if the move is horizontal (true) or vertical (false).
+     * @param directionX The proposed horizontal direction.
+     * @param directionY The proposed vertical direction.
+     * @returns True if the gesture is authorized, otherwise false.
+     */
+    isGestureAuthorized(isHorizontalMove: boolean, directionX: number, directionY: number): boolean {
         return (
           (isHorizontalMove
             && (this.player.direction !== DIRECTIONS.LEFT && this.player.direction !== DIRECTIONS.RIGHT)
@@ -59,9 +84,12 @@ export class GameManager {
               || (directionY === DIRECTIONS.DOWN && this.player.y + this.player.speed < (CONTAINER_HEIGHT - this.borderWidth))))
         );
     }
-      
 
-    onManualMove(detail: GestureDetail) {
+    /**
+     * Handles the player's manual move based on the provided gesture detail.
+     * @param detail The gesture detail.
+     */
+    onManualMove(detail: GestureDetail): void {
         const isHorizontalMove = Math.abs(detail.deltaX) > Math.abs(detail.deltaY);
         const directionX = detail.deltaX > 0 ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT;
         const directionY = detail.deltaY > 0 ? DIRECTIONS.DOWN : DIRECTIONS.UP;
@@ -81,12 +109,18 @@ export class GameManager {
         }
     }
 
-    createTerritory() {
+    /**
+     * Initiates the creation of a territory when the player starts drawing.
+     */
+    createTerritory(): void {
         this.territoryInProgress = new Territory(this.player.color);
         this.territoryInProgress.addNode(this.player.x, this.player.y);
     }
 
-    endTerritory() {
+    /**
+     * Ends the current territory, completes it, and updates the game state.
+     */
+    endTerritory(): void {
         if (this.territoryInProgress) {
             this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
             this.territoryInProgress.completeTerritory(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
@@ -99,7 +133,12 @@ export class GameManager {
         }
     }
 
-    isNodeInsidePolygon(node: Node) {
+    /**
+     * Checks if a node is inside the current territory.
+     * @param node The node to check.
+     * @returns True if the node is inside the territory, otherwise false.
+     */
+    isNodeInsidePolygon(node: Node): boolean {
         if (this.territoryInProgress) {
             for (const link of this.territoryInProgress.links) {
                 if (link.includesX(node.x) && link.includesY(node.y)) {
@@ -110,11 +149,19 @@ export class GameManager {
         return false;
     }
 
-    isLinkInsidePolygon(link: Link) {
+    /**
+     * Checks if a link is inside the current territory.
+     * @param link The link to check.
+     * @returns True if the link is inside the territory, otherwise false.
+     */
+    isLinkInsidePolygon(link: Link): boolean {
         return false;
     }
 
-    recreateGameArea() {
+    /**
+     * Recreates the game area based on the current territory and game state.
+     */
+    recreateGameArea(): void {
         if (this.territoryInProgress) {
             const newGameArea = new Territory("white");
 
@@ -144,15 +191,27 @@ export class GameManager {
         }
     }
 
-    victory() {
+    /**
+     * Handles the victory condition.
+     */
+    victory(): void {
         alert("Victory!");
     }
 
-    gameOver() {
+    /**
+     * Handles the game over condition.
+     */
+    gameOver(): void {
         alert("Game Over");
     }
 
-    isWallOnTrajectory(player: Player, wall: Link) {
+    /**
+     * Checks if a wall is on the player's trajectory.
+     * @param player The player.
+     * @param wall The wall to check.
+     * @returns True if the wall is on the player's trajectory, otherwise false.
+     */
+    isWallOnTrajectory(player: Player, wall: Link): boolean {
         const includesX = wall.includesX(player.x);
         const includesY = wall.includesY(player.y);
         if (
@@ -165,8 +224,12 @@ export class GameManager {
         }
         return false;
     }
-    
-    getNextWall() {
+
+    /**
+     * Gets the next wall on the player's trajectory.
+     * @returns The next wall on the player's trajectory.
+     */
+    getNextWall(): Link | null {
         const { player, gameArea } = this;
         let closestWall = null;
         let minDistance = Number.MAX_SAFE_INTEGER;
@@ -183,7 +246,10 @@ export class GameManager {
         return closestWall;
     }
 
-    playerCollidesWall() {
+    /**
+     * Handles player collision with walls.
+     */
+    playerCollidesWall(): void {
         const nextWall = this.getNextWall();
         const didCollide = nextWall ? this.player.detectWallCollision(nextWall) : false;
         if (didCollide && this.territoryInProgress) {
@@ -191,39 +257,51 @@ export class GameManager {
         }
     }
 
-    playerCollidesEnemy(Enemy: Enemy) {
-        const playerCollidesX = this.player.x + this.player.midSize >= Enemy.x &&
-                                this.player.x - this.player.midSize <= Enemy.x;
+    /**
+     * Handles player collision with enemies.
+     * @param enemy The enemy to check for collision.
+     */
+    playerCollidesEnemy(enemy: Enemy): void {
+        const playerCollidesX = this.player.x + this.player.midSize >= enemy.x &&
+                                this.player.x - this.player.midSize <= enemy.x;
     
-        const playerCollidesY = this.player.y + this.player.midSize >= Enemy.y &&
-                                this.player.y - this.player.midSize <= Enemy.y;
+        const playerCollidesY = this.player.y + this.player.midSize >= enemy.y &&
+                                this.player.y - this.player.midSize <= enemy.y;
         if (playerCollidesX && playerCollidesY) {
             this.gameOver();
         }
     }
 
-    EnemyCollidesWalls(Enemy: Enemy) {
+    /**
+     * Handles enemy collisions with walls.
+     * @param enemy The enemy to check for collisions.
+     */
+    EnemyCollidesWalls(enemy: Enemy): void {
         for (const link of this.gameArea.links) {
-            if (link.direction === 'horizontal' && Enemy.collidesWithHorizontalWall(link)) {
-            Enemy.speedY *= -1;
-            } else if (link.direction === 'vertical' && Enemy.collidesWithVerticalWall(link)) {
-            Enemy.speedX *= -1;
+            if (link.direction === 'horizontal' && enemy.collidesWithHorizontalWall(link)) {
+                enemy.speedY *= -1;
+            } else if (link.direction === 'vertical' && enemy.collidesWithVerticalWall(link)) {
+                enemy.speedX *= -1;
             }
         }
     }
 
-    EnemyCollidesTerritoryInProgess(Enemy: Enemy) {
+    /**
+     * Handles enemy collisions with the territory in progress.
+     * @param enemy The enemy to check for collisions.
+     */
+    EnemyCollidesTerritoryInProgess(enemy: Enemy): void {
         if (this.territoryInProgress) {
             const lastNode = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
             const inProgressLink = new Link(lastNode, this.player);
-            if (inProgressLink.includesX(Enemy.x) && inProgressLink.includesY(Enemy.y)) {
+            if (inProgressLink.includesX(enemy.x) && inProgressLink.includesY(enemy.y)) {
                 this.gameOver();
             }
             for (const link of this.territoryInProgress.links) {
                 if (
-                    Enemy.collidesWithHorizontalWall(link)
-                    || Enemy.collidesWithVerticalWall(link)
-                    || (inProgressLink.includesX(Enemy.x) && inProgressLink.includesY(Enemy.y))
+                    enemy.collidesWithHorizontalWall(link)
+                    || enemy.collidesWithVerticalWall(link)
+                    || (inProgressLink.includesX(enemy.x) && inProgressLink.includesY(enemy.y))
                 ) {
                     this.gameOver();
                 }
@@ -231,18 +309,26 @@ export class GameManager {
         }
     }
 
-    generateEnnemies() {
-        const ennemies: Enemy[] = [];
+    /**
+     * Generates an array of enemies with random positions.
+     * @returns The array of generated enemies.
+     */
+    generateEnemies(): Enemy[] {
+        const enemies: Enemy[] = [];
         const min = (this.borderWidth * 2);
         const xMax = (CONTAINER_WIDTH - min);
         const yMax = (CONTAINER_HEIGHT - min);
-        for (let i=0; i<this.gameSettings.numberOfEnnemies; i++) {
-            ennemies.push(new Enemy(randomIntFromInterval(min, xMax), randomIntFromInterval(min, yMax)));
+        for (let i=0; i<this.gameSettings.numberOfEnemies; i++) {
+            enemies.push(new Enemy(randomIntFromInterval(min, xMax), randomIntFromInterval(min, yMax)));
         }
-        return ennemies;
+        return enemies;
     }
 
-    generateWalls() {
+    /**
+     * Generates the initial walls of the game area.
+     * @returns The generated walls.
+     */
+    generateWalls(): Territory {
         const walls = new Territory("white");
         const left = this.borderWidth;
         const top = this.borderWidth;
@@ -256,8 +342,12 @@ export class GameManager {
         return walls;
     }
 
-    drawEnnemies(ctx: CanvasRenderingContext2D) {
-        for (const Enemy of this.ennemies) {
+    /**
+     * Draws the enemies on the canvas, handles their movements, and checks for collisions.
+     * @param ctx The canvas rendering context.
+     */
+    drawEnemies(ctx: CanvasRenderingContext2D): void {
+        for (const Enemy of this.enemies) {
             Enemy.draw(ctx);
             Enemy.onAutomaticMove();
             if (this.territoryInProgress) {
@@ -268,11 +358,19 @@ export class GameManager {
         }
     }
 
-    drawWalls(ctx: CanvasRenderingContext2D) {
+    /**
+     * Draws the walls on the canvas.
+     * @param ctx The canvas rendering context.
+     */
+    drawWalls(ctx: CanvasRenderingContext2D): void {
         this.gameArea.draw(ctx);
     }
 
-    drawPlayer(ctx: CanvasRenderingContext2D) {
+    /**
+     * Draws the player on the canvas, handles their movement, and checks for collisions.
+     * @param ctx The canvas rendering context.
+     */
+    drawPlayer(ctx: CanvasRenderingContext2D): void {
         this.player.draw(ctx);
         this.player.onAutomaticMove();
         this.playerCollidesWall();
@@ -283,12 +381,16 @@ export class GameManager {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D) {
+    /**
+     * Draws all elements (walls, territory in progress, player, enemies) on the canvas.
+     * @param ctx The canvas rendering context.
+     */
+    draw(ctx: CanvasRenderingContext2D): void {
         this.drawWalls(ctx);
         if (this.territoryInProgress) {
             this.territoryInProgress.draw(ctx);
         }
         this.drawPlayer(ctx);
-        this.drawEnnemies(ctx);
+        this.drawEnemies(ctx);
     }
 }
