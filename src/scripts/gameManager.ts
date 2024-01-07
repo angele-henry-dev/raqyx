@@ -3,7 +3,7 @@ import { Node } from '@/scripts/math/node'
 import { Link } from '@/scripts/math/link'
 import { Territory } from "@/scripts/math/territory";
 import { Player, DIRECTIONS } from "@/scripts/player";
-import { Ennemy } from "@/scripts/ennemy";
+import { Enemy } from "@/scripts/enemy";
 import { randomIntFromInterval } from "./utils";
 
 export const CONTAINER_WIDTH = 300;
@@ -191,39 +191,39 @@ export class GameManager {
         }
     }
 
-    playerCollidesEnnemy(ennemy: Ennemy) {
-        const playerCollidesX = this.player.x + this.player.midSize >= ennemy.x &&
-                                this.player.x - this.player.midSize <= ennemy.x;
+    playerCollidesEnemy(Enemy: Enemy) {
+        const playerCollidesX = this.player.x + this.player.midSize >= Enemy.x &&
+                                this.player.x - this.player.midSize <= Enemy.x;
     
-        const playerCollidesY = this.player.y + this.player.midSize >= ennemy.y &&
-                                this.player.y - this.player.midSize <= ennemy.y;
+        const playerCollidesY = this.player.y + this.player.midSize >= Enemy.y &&
+                                this.player.y - this.player.midSize <= Enemy.y;
         if (playerCollidesX && playerCollidesY) {
             this.gameOver();
         }
     }
 
-    ennemyCollidesWalls(ennemy: Ennemy) {
+    EnemyCollidesWalls(Enemy: Enemy) {
         for (const link of this.gameArea.links) {
-            if (link.direction === 'horizontal' && ennemy.collidesWithHorizontalWall(link)) {
-            ennemy.speedY *= -1;
-            } else if (link.direction === 'vertical' && ennemy.collidesWithVerticalWall(link)) {
-            ennemy.speedX *= -1;
+            if (link.direction === 'horizontal' && Enemy.collidesWithHorizontalWall(link)) {
+            Enemy.speedY *= -1;
+            } else if (link.direction === 'vertical' && Enemy.collidesWithVerticalWall(link)) {
+            Enemy.speedX *= -1;
             }
         }
     }
 
-    ennemyCollidesTerritoryInProgess(ennemy: Ennemy) {
+    EnemyCollidesTerritoryInProgess(Enemy: Enemy) {
         if (this.territoryInProgress) {
             const lastNode = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
             const inProgressLink = new Link(lastNode, this.player);
-            if (inProgressLink.includesX(ennemy.x) && inProgressLink.includesY(ennemy.y)) {
+            if (inProgressLink.includesX(Enemy.x) && inProgressLink.includesY(Enemy.y)) {
                 this.gameOver();
             }
             for (const link of this.territoryInProgress.links) {
                 if (
-                    ennemy.collidesWithHorizontalWall(link)
-                    || ennemy.collidesWithVerticalWall(link)
-                    || (inProgressLink.includesX(ennemy.x) && inProgressLink.includesY(ennemy.y))
+                    Enemy.collidesWithHorizontalWall(link)
+                    || Enemy.collidesWithVerticalWall(link)
+                    || (inProgressLink.includesX(Enemy.x) && inProgressLink.includesY(Enemy.y))
                 ) {
                     this.gameOver();
                 }
@@ -232,12 +232,12 @@ export class GameManager {
     }
 
     generateEnnemies() {
-        const ennemies: Ennemy[] = [];
+        const ennemies: Enemy[] = [];
         const min = (this.borderWidth * 2);
         const xMax = (CONTAINER_WIDTH - min);
         const yMax = (CONTAINER_HEIGHT - min);
         for (let i=0; i<this.gameSettings.numberOfEnnemies; i++) {
-            ennemies.push(new Ennemy(randomIntFromInterval(min, xMax), randomIntFromInterval(min, yMax)));
+            ennemies.push(new Enemy(randomIntFromInterval(min, xMax), randomIntFromInterval(min, yMax)));
         }
         return ennemies;
     }
@@ -257,14 +257,14 @@ export class GameManager {
     }
 
     drawEnnemies(ctx: CanvasRenderingContext2D) {
-        for (const ennemy of this.ennemies) {
-            ennemy.draw(ctx);
-            ennemy.onAutomaticMove();
+        for (const Enemy of this.ennemies) {
+            Enemy.draw(ctx);
+            Enemy.onAutomaticMove();
             if (this.territoryInProgress) {
-                this.playerCollidesEnnemy(ennemy);
-                this.ennemyCollidesTerritoryInProgess(ennemy);
+                this.playerCollidesEnemy(Enemy);
+                this.EnemyCollidesTerritoryInProgess(Enemy);
             }
-            this.ennemyCollidesWalls(ennemy);
+            this.EnemyCollidesWalls(Enemy);
         }
     }
 

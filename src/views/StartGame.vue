@@ -21,15 +21,14 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, reactive } from 'vue';
   import { createGesture, GestureDetail } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
-import { reactive } from 'vue';
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
-  const gameManager = reactive(new GameManager(0, 1));
+  const gameManager = reactive(new GameManager(1, 1));
 
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
