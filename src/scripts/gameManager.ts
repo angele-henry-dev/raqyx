@@ -118,6 +118,7 @@ export class GameManager {
         if (this.territoryInProgress) {
             const newGameArea = new Territory("white");
 
+            // Links we want to keep from gameArea
             for (const link of this.gameArea.links) {
                 const linkIncludes = link.includesLink(this.territoryInProgress.links);
                 if (linkIncludes) {
@@ -132,55 +133,14 @@ export class GameManager {
                 }
             }
 
-            // for (const link of this.territoryInProgress.links) {
-            //     const linkIncludes = this.gameArea.includesLink(link);
-            //     if (linkIncludes) {
-            //         const commonNode = link.n1.equals(linkIncludes.n1) || link.n1.equals(linkIncludes.n2) ? link.n1 : link.n2;
-            //         const nonCommonNode1 = link.n1.equals(commonNode) ? link.n2 : link.n1;
-            //         const nonCommonNode2 = linkIncludes.n1.equals(commonNode) ? linkIncludes.n2 : linkIncludes.n1;
-            //         newGameArea.addNode(nonCommonNode1.x, nonCommonNode1.y);
-            //         newGameArea.addNode(nonCommonNode2.x, nonCommonNode2.y);
-            //         newGameArea.addLink(nonCommonNode1, nonCommonNode2);
-            //     }
-            // }
-
-            // Get nodes from territoryInProgress that are not in gameArea
-            // for (const node of this.territoryInProgress.nodes) {
-            //     if (!this.gameArea.containsNode(node)) {
-            //         newGameArea.addNode(node.x, node.y);
-            //     }
-            // }
-
-            // for (const node of this.gameArea.nodes) {
-            //     // Get nodes from gameArea that are not inside territoryInProgress
-            //     if (!this.isNodeInsidePolygon(node)) {
-            //         newGameArea.addNode(node.x, node.y);
-            //     } else {
-            //         const sameAlignment = newGameArea.nodes.filter(n => n.y === node.y && n.x != node.x).sort((a, b) => a.x - b.x);
-            //         const closestNode = sameAlignment.reduce((closest, current) => {
-            //             const closestXDiff = Math.abs(closest.x - node.x);
-            //             const currentXDiff = Math.abs(current.x - node.x);
-            //             return currentXDiff < closestXDiff ? current : closest;
-            //         }, sameAlignment[0]);
-            //         console.log(sameAlignment);
-            //         console.log(closestNode);
-
-            //         newGameArea.addNode(closestNode.x, closestNode.y);
-            //         newGameArea.addLink(sameAlignment[0], closestNode);
-            //     }
-            // }
-
-            // // Add in newGameArea the links from gameArea that are connected in existing nodes in newGameArea
-            // for (const link of this.gameArea.links) {
-            //     if (newGameArea.containsNode(link.n1) && newGameArea.containsNode(link.n2)) {
-            //         newGameArea.addLink(link.n1, link.n2);
-            //     }
-            // }
+            // Links we want to keep from territoryInProgress
+            for (const link of this.territoryInProgress.links) {
+                if (!this.gameArea.includesLink(link)) {
+                    newGameArea.addLink(link.n1, link.n2);
+                }
+            }
 
             this.gameArea = newGameArea;
-            for (const node of this.gameArea.nodes) {
-                node.color = "red";
-            }
         }
     }
 
