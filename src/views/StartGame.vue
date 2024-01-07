@@ -31,17 +31,29 @@
   const gameManager = reactive(new GameManager(1, 1));
 
   onMounted(() => {
-    canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
+    canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
+
+    // Ensure that the canvas element is present
+    if (!canvas) {
+      console.error('Canvas element not found');
+      return;
+    }
+
     canvas.width = CONTAINER_WIDTH * DPR;
     canvas.height = CONTAINER_HEIGHT * DPR;
     canvas.style.width = `${CONTAINER_WIDTH}px`;
     canvas.style.height = `${CONTAINER_HEIGHT}px`;
     
-    ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
-    if (ctx) {
-      ctx.scale(DPR, DPR);
-      ctx.lineWidth = 1;
+    ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: true }) || null;
+
+    // Ensure that the canvas context is available
+    if (!ctx) {
+      console.error('Canvas context not available');
+      return;
     }
+
+    ctx.scale(DPR, DPR);
+    ctx.lineWidth = 1;
     animate();
     setupGesture();
   });
@@ -63,10 +75,11 @@
   };
 
   const animate = () => {
-      if (ctx && gameManager.player) {
-        ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-        gameManager.draw(ctx);
-        requestAnimationFrame(animate);
-      }
+    // Ensure that the canvas context and player are available
+    if (ctx && gameManager.player) {
+      ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+      gameManager.draw(ctx);
+      requestAnimationFrame(animate);
+    }
   }
 </script>
