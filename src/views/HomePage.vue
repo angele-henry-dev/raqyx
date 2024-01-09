@@ -1,6 +1,11 @@
 <template>
   <ion-page>
     <ion-content>
+      <div class="shooting-stars">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
       <ion-grid>
         <ion-row class="row-title">
           <ion-img
