@@ -1,4 +1,59 @@
+
+ion-content {
+  --overflow: hidden;
+  overflow: auto;
+  --background: #000000;
+  color: white;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+ion-footer {
+  background-color: #000000;
+}
+ion-grid {
+  height: 100%;
+}
+.menu ion-button {
+  height: 45px;
+}
+.row-title {
+  height: 55%;
+}
+ion-img.title {
+  width: 250px;
+  margin: auto;
+}
+.menu {
+  border-radius: 2rem;
+  padding: 0.4em;
+  animation: pulsate 1.6s infinite alternate;
+}
+
 #gameCanvas {
   background-color: #000000;
 }
+
+@keyframes pulsate {
+    
+  100% {
+    box-shadow:
+      0 0 .2rem #fff,
+      0 0 .2rem #fff,
+      0 0 1rem var(--ion-color-primary),
+      0 0 0.5rem var(--ion-color-primary),
+      0 0 2rem var(--ion-color-primary),
+      inset 0 0 1.3rem var(--ion-color-primary);
+  }
   
+  0% {
+    box-shadow:
+      0 0 .2rem #fff,
+      0 0 .2rem #fff,
+      0 0 1.5rem var(--ion-color-primary),
+      0 0 0.9rem var(--ion-color-primary),
+      0 0 2.9rem var(--ion-color-primary),
+      inset 0 0 1.4rem var(--ion-color-primary);
+  }
+}
