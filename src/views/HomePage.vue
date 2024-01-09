@@ -5,7 +5,7 @@
         <ion-row class="row-title">
           <ion-img
               class="title"
-              src="/assets/images/raqyx_title.png"
+              src="/assets/images/raqyx_title_green.png"
               alt="Homepage image of the game"
           ></ion-img>
         </ion-row>
