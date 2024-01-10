@@ -51,10 +51,16 @@ ion-img.title {
 }
 .shooting-stars span {
   position: absolute;
+  width: 8px;
+  height: 8px;
   top: 50%;
-  left: 50%;
+  right: -20px;
+  left: initial;
   border-radius: 50%;
   box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
+  animation-name: animateStar;
+  animation-iteration-count: infinite;
+  opacity: 0;
 }
 .shooting-stars span::before {
   content:'';
@@ -66,27 +72,18 @@ ion-img.title {
 }
 /* First star */
 .shooting-stars span:nth-child(1) {
-  width: 6px;
-  height: 6px;
   background: #ff0022;
 }
 .shooting-stars span:nth-child(1)::before {
   background: linear-gradient(90deg, #ff0022, transparent);
 }
 span:nth-child(1) {
-  top: 0;
-  right: 0;
-  left: initial;
-  animation-name: animateStar1;
+  top: 20px;
   animation-delay: 1s;
   animation-duration: 10s;
-  animation-iteration-count: infinite;
-  opacity: 0;
 }
 /* Second star */
 .shooting-stars span:nth-child(2) {
-  width: 8px;
-  height: 8px;
   background: #00f7ff;
 }
 .shooting-stars span:nth-child(2)::before {
@@ -94,18 +91,12 @@ span:nth-child(1) {
 }
 span:nth-child(2) {
   top: 80px;
-  right: initial;
-  left: 0;
-  animation-name: animateStar3;
   animation-delay: 4s;
   animation-duration: 3s;
   animation-iteration-count: 1;
-  opacity: 0;
 }
 /* Third star */
 .shooting-stars span:nth-child(3) {
-  width: 8px;
-  height: 8px;
   background: #ff00d4;
 }
 .shooting-stars span:nth-child(3)::before {
@@ -113,20 +104,15 @@ span:nth-child(2) {
 }
 span:nth-child(3) {
   top: 50%;
-  right: initial;
-  left: 0;
-  animation-name: animateStar2;
   animation-delay: 0s;
   animation-duration: 9s;
-  animation-iteration-count: infinite;
-  opacity: 0;
 }
 
-@keyframes animateStar1
+@keyframes animateStar
 {
     0%
     {
-        transform: rotate(315deg) translateX(0);
+        transform: rotate(360deg) translateX(0);
         opacity: 1;
     }
     70%
@@ -135,41 +121,7 @@ span:nth-child(3) {
     }
     100%
     {
-        transform: rotate(315deg) translateX(-1000px);
-        opacity: 0;
-    }
-}
-@keyframes animateStar2
-{
-    0%
-    {
-        transform: rotate(180deg) translateX(0);
-        opacity: 1;
-    }
-    70%
-    {
-        opacity: 1;
-    }
-    100%
-    {
-        transform: rotate(180deg) translateX(-1000px);
-        opacity: 0;
-    }
-}
-@keyframes animateStar3
-{
-    0%
-    {
-        transform: rotate(555deg) translateX(0);
-        opacity: 1;
-    }
-    70%
-    {
-        opacity: 1;
-    }
-    100%
-    {
-        transform: rotate(555deg) translateX(-1000px);
+        transform: rotate(360deg) translateX(-1000px);
         opacity: 0;
     }
 }
