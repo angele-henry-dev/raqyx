@@ -9,6 +9,33 @@ ion-content {
   }
 }
 
+ion-footer {
+  background-color: #000000;
+}
+ion-grid {
+  height: 100%;
+}
+.row-title {
+  height: 55%;
+}
+ion-img.title {
+  width: 250px;
+  margin: auto;
+}
+.menu {
+  border-radius: 2rem;
+  padding: 0.4em;
+  animation: pulsate 1.6s infinite alternate;
+  background-color: #000000;
+}
+.menu ion-button {
+  height: 45px;
+}
+
+#gameCanvas {
+  background-color: #000000;
+}
+
 .shooting-stars {
   position: absolute;
   top: 0;
@@ -16,25 +43,25 @@ ion-content {
   width: 100%;
   height: 100vh;
 }
-.shooting-stars span{
+.shooting-stars span {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 8px;
   height: 8px;
-  background: var(--ion-color-danger);
+  background: #ff0022;
   border-radius: 50%;
   box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
   animation: animateStars 3s linear infinite;
 }
-.shooting-stars span::before{
+.shooting-stars span::before {
   content:'';
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   width: 300px;
   height: 1px;
-  background: linear-gradient(90deg, var(--ion-color-danger), transparent);
+  background: linear-gradient(90deg, #ff0022, transparent);
 }
 span:nth-child(1){
   top: 0;
@@ -56,32 +83,6 @@ span:nth-child(3){
   left: initial;
   animation-delay: 0.4s;
   animation-duration: 5s;
-}
-
-ion-footer {
-  background-color: #000000;
-}
-ion-grid {
-  height: 100%;
-}
-.menu ion-button {
-  height: 45px;
-}
-.row-title {
-  height: 55%;
-}
-ion-img.title {
-  width: 250px;
-  margin: auto;
-}
-.menu {
-  border-radius: 2rem;
-  padding: 0.4em;
-  animation: pulsate 1.6s infinite alternate;
-}
-
-#gameCanvas {
-  background-color: #000000;
 }
 
 @keyframes animateStars

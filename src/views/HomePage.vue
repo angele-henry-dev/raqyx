@@ -15,7 +15,7 @@
           ></ion-img>
         </ion-row>
         <ion-row class="ion-justify-content-center">
-          <ion-col size="6" class="menu neonBorder">
+          <ion-col size="6" class="menu">
             <div>
               <ion-button expand="block" fill="clear" size="large" router-link="/newgame">New game</ion-button>
               <ion-button expand="block" fill="clear" size="large" router-link="/continuegame">Continue</ion-button>
