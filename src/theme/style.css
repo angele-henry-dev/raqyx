@@ -9,6 +9,8 @@ ion-content {
   }
 }
 
+/* HOMEPAGE */
+
 ion-footer {
   background-color: #000000;
 }
@@ -32,9 +34,13 @@ ion-img.title {
   height: 45px;
 }
 
+/* GAMEPAGE */
+
 #gameCanvas {
   background-color: #000000;
 }
+
+/* SHOOTING STARS */
 
 .shooting-stars {
   position: absolute;
@@ -47,12 +53,7 @@ ion-img.title {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 8px;
-  height: 8px;
-  background: #ff0022;
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
-  animation: animateStars 3s linear infinite;
 }
 .shooting-stars span::before {
   content:'';
@@ -61,31 +62,57 @@ ion-img.title {
   transform: translateY(-50%);
   width: 300px;
   height: 1px;
-  background: linear-gradient(90deg, #ff0022, transparent);
 }
-span:nth-child(1){
+/* First star */
+.shooting-stars span:nth-child(1) {
+  width: 7px;
+  height: 7px;
+  background: #63000d;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.020), 0 0 0 2px rgba(255,255,255,0.020), 0 0 3px rgba(255,255,255,0.020);
+}
+.shooting-stars span:nth-child(1)::before {
+  background: linear-gradient(90deg, #63000d, transparent);
+}
+span:nth-child(1) {
   top: 0;
   right: 0;
   left: initial;
-  animation-delay: 0s;
-  animation-duration: 6s;
+  animation: animateStar1 6s linear infinite;
 }
-span:nth-child(2){
-  top: 0;
-  right: 80px;
-  left: initial;
-  animation-delay: 0.2s;
-  animation-duration: 4s;
+/* Second star */
+.shooting-stars span:nth-child(2) {
+  width: 8px;
+  height: 8px;
+  background: #ff0022;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
 }
-span:nth-child(3){
-  top: 80;
-  right: 0px;
-  left: initial;
-  animation-delay: 0.4s;
-  animation-duration: 5s;
+.shooting-stars span:nth-child(2)::before {
+  background: linear-gradient(90deg, #ff0022, transparent);
+}
+span:nth-child(2) {
+  top: 80px;
+  right: initial;
+  left: 0;
+  animation: animateStar3 9s linear infinite;
+}
+/* Third star */
+.shooting-stars span:nth-child(3) {
+  width: 8px;
+  height: 8px;
+  background: #ff0022;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
+}
+.shooting-stars span:nth-child(3)::before {
+  background: linear-gradient(90deg, #ff0022, transparent);
+}
+span:nth-child(3) {
+  top: 50%;
+  right: initial;
+  left: 0;
+  animation: animateStar2 6s linear infinite;
 }
 
-@keyframes animateStars
+@keyframes animateStar1
 {
     0%
     {
@@ -99,6 +126,40 @@ span:nth-child(3){
     100%
     {
         transform: rotate(315deg) translateX(-1000px);
+        opacity: 0;
+    }
+}
+@keyframes animateStar2
+{
+    0%
+    {
+        transform: rotate(180deg) translateX(0);
+        opacity: 1;
+    }
+    70%
+    {
+        opacity: 1;
+    }
+    100%
+    {
+        transform: rotate(180deg) translateX(-1000px);
+        opacity: 0;
+    }
+}
+@keyframes animateStar3
+{
+    0%
+    {
+        transform: rotate(555deg) translateX(0);
+        opacity: 1;
+    }
+    70%
+    {
+        opacity: 1;
+    }
+    100%
+    {
+        transform: rotate(555deg) translateX(-1000px);
         opacity: 0;
     }
 }
