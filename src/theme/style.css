@@ -54,6 +54,7 @@ ion-img.title {
   top: 50%;
   left: 50%;
   border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
 }
 .shooting-stars span::before {
   content:'';
@@ -65,13 +66,12 @@ ion-img.title {
 }
 /* First star */
 .shooting-stars span:nth-child(1) {
-  width: 7px;
-  height: 7px;
-  background: #63000d;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.020), 0 0 0 2px rgba(255,255,255,0.020), 0 0 3px rgba(255,255,255,0.020);
+  width: 6px;
+  height: 6px;
+  background: #ff0022;
 }
 .shooting-stars span:nth-child(1)::before {
-  background: linear-gradient(90deg, #63000d, transparent);
+  background: linear-gradient(90deg, #ff0022, transparent);
 }
 span:nth-child(1) {
   top: 0;
@@ -83,11 +83,10 @@ span:nth-child(1) {
 .shooting-stars span:nth-child(2) {
   width: 8px;
   height: 8px;
-  background: #ff0022;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
+  background: #00f7ff;
 }
 .shooting-stars span:nth-child(2)::before {
-  background: linear-gradient(90deg, #ff0022, transparent);
+  background: linear-gradient(90deg, #00f7ff, transparent);
 }
 span:nth-child(2) {
   top: 80px;
@@ -99,17 +98,16 @@ span:nth-child(2) {
 .shooting-stars span:nth-child(3) {
   width: 8px;
   height: 8px;
-  background: #ff0022;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
+  background: #ff00d4;
 }
 .shooting-stars span:nth-child(3)::before {
-  background: linear-gradient(90deg, #ff0022, transparent);
+  background: linear-gradient(90deg, #ff00d4, transparent);
 }
 span:nth-child(3) {
   top: 50%;
   right: initial;
   left: 0;
-  animation: animateStar2 6s linear infinite;
+  animation: animateStar2 12s linear infinite;
 }
 
 @keyframes animateStar1
