@@ -77,7 +77,11 @@ span:nth-child(1) {
   top: 0;
   right: 0;
   left: initial;
-  animation: animateStar1 10s linear infinite;
+  animation-name: animateStar1;
+  animation-delay: 1s;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  opacity: 0;
 }
 /* Second star */
 .shooting-stars span:nth-child(2) {
@@ -92,7 +96,11 @@ span:nth-child(2) {
   top: 80px;
   right: initial;
   left: 0;
-  animation: animateStar3 9s linear infinite;
+  animation-name: animateStar3;
+  animation-delay: 4s;
+  animation-duration: 3s;
+  animation-iteration-count: 1;
+  opacity: 0;
 }
 /* Third star */
 .shooting-stars span:nth-child(3) {
@@ -107,7 +115,11 @@ span:nth-child(3) {
   top: 50%;
   right: initial;
   left: 0;
-  animation: animateStar2 12s linear infinite;
+  animation-name: animateStar2;
+  animation-delay: 0s;
+  animation-duration: 9s;
+  animation-iteration-count: infinite;
+  opacity: 0;
 }
 
 @keyframes animateStar1
