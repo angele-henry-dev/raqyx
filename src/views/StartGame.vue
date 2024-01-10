@@ -34,7 +34,6 @@
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
 
-    // Ensure that the canvas element is present
     if (!canvas) {
       console.error('Canvas element not found');
       return;
@@ -47,7 +46,6 @@
     
     ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: true }) || null;
 
-    // Ensure that the canvas context is available
     if (!ctx) {
       console.error('Canvas context not available');
       return;
@@ -76,7 +74,6 @@
   };
 
   const animate = () => {
-    // Ensure that the canvas context and player are available
     if (ctx && gameManager.player) {
       ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
       gameManager.draw(ctx);

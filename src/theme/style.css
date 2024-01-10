@@ -13,6 +13,7 @@ ion-content {
 
 ion-footer {
   background-color: #000000;
+  height: 70px;
 }
 ion-grid {
   height: 100%;
@@ -23,6 +24,7 @@ ion-grid {
 ion-img.title {
   width: 250px;
   margin: auto;
+  z-index: 10;
 }
 .menu {
   border-radius: 2rem;
@@ -42,7 +44,45 @@ ion-img.title {
 
 /* SHOOTING STARS */
 
-.shooting-stars {
+/* #background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+#background span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+}
+#background span::before {
+  content:'';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 1px;
+  background: linear-gradient(90deg, #ff0022, transparent);
+}
+#background span:nth-child(1) {
+  top: 80%;
+  left: 50px;
+  background-color: #ff0022;
+}
+#background span:nth-child(2) {
+  top: 20px;
+  left: 10px;
+  background-color: #00f7ff;
+}
+#background span:nth-child(3) {
+  top: 80px;
+  left: 90%;
+  background-color: #ff00d4;
+} */
+
+/* .shooting-stars {
   position: absolute;
   top: 0;
   left: 0;
@@ -69,46 +109,46 @@ ion-img.title {
   transform: translateY(-50%);
   width: 300px;
   height: 1px;
-}
+} */
 /* First star */
-.shooting-stars span:nth-child(1) {
+/* .shooting-stars span:nth-child(1) {
   background: #ff0022;
 }
 .shooting-stars span:nth-child(1)::before {
   background: linear-gradient(90deg, #ff0022, transparent);
 }
-span:nth-child(1) {
+.shooting-stars span:nth-child(1) {
   top: 20px;
   animation-delay: 1s;
   animation-duration: 10s;
-}
+} */
 /* Second star */
-.shooting-stars span:nth-child(2) {
+/* .shooting-stars span:nth-child(2) {
   background: #00f7ff;
 }
 .shooting-stars span:nth-child(2)::before {
   background: linear-gradient(90deg, #00f7ff, transparent);
 }
-span:nth-child(2) {
+.shooting-stars span:nth-child(2) {
   top: 80px;
   animation-delay: 4s;
   animation-duration: 3s;
   animation-iteration-count: 1;
-}
+} */
 /* Third star */
-.shooting-stars span:nth-child(3) {
+/* .shooting-stars span:nth-child(3) {
   background: #ff00d4;
 }
 .shooting-stars span:nth-child(3)::before {
   background: linear-gradient(90deg, #ff00d4, transparent);
 }
-span:nth-child(3) {
+.shooting-stars span:nth-child(3) {
   top: 50%;
   animation-delay: 0s;
   animation-duration: 9s;
-}
+} */
 
-@keyframes animateStar
+/* @keyframes animateStar
 {
     0%
     {
@@ -124,7 +164,7 @@ span:nth-child(3) {
         transform: rotate(360deg) translateX(-1000px);
         opacity: 0;
     }
-}
+} */
 
 @keyframes pulsate {
   100% {
