@@ -5,6 +5,8 @@
         <span></span>
         <span></span>
         <span></span>
+        <span></span>
+        <span></span>
       </div>
       <ion-grid>
         <ion-row class="row-title">

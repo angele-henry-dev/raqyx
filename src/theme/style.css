@@ -55,12 +55,11 @@ ion-img.title {
   position: absolute;
   width: 8px;
   height: 8px;
-  top: 50%;
   right: 0px;
   left: initial;
   border-radius: 50%;
   box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
-  animation-name: animateStar;
+  animation-name: animateStarToLeft;
   animation-iteration-count: infinite;
   opacity: 0;
 }
@@ -68,9 +67,9 @@ ion-img.title {
   content:'';
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
   width: 300px;
   height: 1px;
+  transform: translateY(-50%);
 }
 /* First star */
 .shooting-stars span:nth-child(1) {
@@ -108,22 +107,48 @@ ion-img.title {
   animation-delay: 2s;
   animation-duration: 9s;
 }
-@keyframes animateStar
+/* Fourth star */
+.shooting-stars span:nth-child(4) {
+  background: #000dff;
+  right: initial;
+  left: 0px;
+  animation-name: animateStarToRight;
+}
+.shooting-stars span:nth-child(4)::before {
+  background: linear-gradient(90deg, #000dff, transparent);
+}
+.shooting-stars span:nth-child(4) {
+  top: calc(100% - 80px);
+  animation-delay: 5s;
+  animation-duration: 5s;
+}
+/* Fifth star */
+.shooting-stars span:nth-child(5) {
+  background: #b3ff00;
+  right: initial;
+  left: 0px;
+  animation-name: animateStarToRight;
+}
+.shooting-stars span:nth-child(5)::before {
+  background: linear-gradient(90deg, #b3ff00, transparent);
+}
+.shooting-stars span:nth-child(5) {
+  top: 25%;
+  animation-delay: 3s;
+  animation-duration: 8s;
+}
+
+@keyframes animateStarToLeft
 {
-    0%
-    {
-        transform: rotate(360deg) translateX(0);
-        opacity: 1;
-    }
-    70%
-    {
-        opacity: 1;
-    }
-    100%
-    {
-        transform: rotate(360deg) translateX(-1000px);
-        opacity: 0;
-    }
+    0% { transform: rotate(360deg) translateX(0); opacity: 1; }
+    70% { opacity: 1; }
+    100% { transform: rotate(360deg) translateX(-1000px); opacity: 0; }
+}
+@keyframes animateStarToRight
+{
+    0% { transform: rotate(180deg) translateX(0); opacity: 1; }
+    70% { opacity: 1; }
+    100% { transform: rotate(180deg) translateX(-1000px); opacity: 0; }
 }
 
 @keyframes pulsate {
