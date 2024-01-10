@@ -46,8 +46,6 @@ ion-img.title {
 
 .shooting-stars {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100vh;
 }
@@ -55,11 +53,8 @@ ion-img.title {
   position: absolute;
   width: 8px;
   height: 8px;
-  right: 0px;
-  left: initial;
   border-radius: 50%;
   box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 3px rgba(255,255,255,0.1), 0 0 6px rgba(255,255,255,0.1);
-  animation-name: animateStarToLeft;
   animation-iteration-count: infinite;
   opacity: 0;
 }
@@ -72,43 +67,47 @@ ion-img.title {
   transform: translateY(-50%);
 }
 /* First star */
-.shooting-stars span:nth-child(1) {
-  background: #ff0022;
-}
 .shooting-stars span:nth-child(1)::before {
   background: linear-gradient(90deg, #ff0022, transparent);
 }
 .shooting-stars span:nth-child(1) {
+  background: #ff0022;
+  animation-name: animateStarToLeft;
   top: 20px;
+  right: 0px;
+  left: initial;
   animation-delay: 0s;
   animation-duration: 10s;
 }
 /* Second star */
-.shooting-stars span:nth-child(2) {
-  background: #00f7ff;
-}
 .shooting-stars span:nth-child(2)::before {
   background: linear-gradient(90deg, #00f7ff, transparent);
 }
 .shooting-stars span:nth-child(2) {
+  background: #00f7ff;
+  animation-name: animateStarToLeft;
   top: 80px;
+  right: 0px;
+  left: initial;
   animation-delay: 5s;
   animation-duration: 9s;
 }
 /* Third star */
-.shooting-stars span:nth-child(3) {
-  background: #ff00d4;
-}
 .shooting-stars span:nth-child(3)::before {
   background: linear-gradient(90deg, #ff00d4, transparent);
 }
 .shooting-stars span:nth-child(3) {
+  background: #ff00d4;
+  animation-name: animateStarToLeft;
   top: 50%;
+  right: 0px;
+  left: initial;
   animation-delay: 2s;
   animation-duration: 9s;
 }
 /* Fourth star */
-.shooting-stars span:nth-child(4) {
+.shooting-stars span:nth-child(4),
+.shooting-stars span:nth-child(5) {
   background: #000dff;
   right: initial;
   left: 0px;
@@ -123,16 +122,11 @@ ion-img.title {
   animation-duration: 5s;
 }
 /* Fifth star */
-.shooting-stars span:nth-child(5) {
-  background: #b3ff00;
-  right: initial;
-  left: 0px;
-  animation-name: animateStarToRight;
-}
 .shooting-stars span:nth-child(5)::before {
   background: linear-gradient(90deg, #b3ff00, transparent);
 }
 .shooting-stars span:nth-child(5) {
+  background: #b3ff00;
   top: 25%;
   animation-delay: 3s;
   animation-duration: 8s;
@@ -140,15 +134,13 @@ ion-img.title {
 
 @keyframes animateStarToLeft
 {
-    0% { transform: rotate(360deg) translateX(0); opacity: 1; }
-    70% { opacity: 1; }
-    100% { transform: rotate(360deg) translateX(-1000px); opacity: 0; }
+    from { transform: rotate(360deg) translateX(0); opacity: 1; }
+    To { transform: rotate(360deg) translateX(-1000px); opacity: 0; }
 }
 @keyframes animateStarToRight
 {
-    0% { transform: rotate(180deg) translateX(0); opacity: 1; }
-    70% { opacity: 1; }
-    100% { transform: rotate(180deg) translateX(-1000px); opacity: 0; }
+    From { transform: rotate(180deg) translateX(0); opacity: 1; }
+    To { transform: rotate(180deg) translateX(-1000px); opacity: 0; }
 }
 
 @keyframes pulsate {
