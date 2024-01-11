@@ -132,7 +132,6 @@ ion-modal.stats {
 }
 .stats ion-item-group {
   height: 50%;
-  /* margin-bottom: 30px; */
 }
 .stats ion-item-group ion-row {
   width: 100%;
