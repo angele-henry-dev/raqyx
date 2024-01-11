@@ -11,8 +11,13 @@ ion-content {
 
 /* HOMEPAGE */
 
+ion-toolbar {
+  --background: #000000;
+  color: white;
+}
 ion-footer {
   background-color: #000000;
+  color: white;
   height: 70px;
 }
 ion-grid {

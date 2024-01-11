@@ -3,27 +3,33 @@
     <ion-header>
       <ion-toolbar>
         <ion-row class="ion-justify-content-between">
-          <ion-col size="4" class="ion-text-start">
-            <ion-text>Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
-          </ion-col>
-          <ion-col size="4" class="ion-text-end">
+          <ion-col class="ion-text-start">
             <ion-text>Level {{ gameManager?.gameSettings.level || 0 }}</ion-text>
           </ion-col>
-          <ion-col size="4" class="ion-text-end">
+          <ion-col class="ion-text-end">
             <ion-text>{{ gameManager?.gameSettings.percentage || 0 }}% / 75%</ion-text>
           </ion-col>
         </ion-row>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
+      <ion-row class="ion-justify-content-center">
+        <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
+      </ion-row>
     </ion-content>
+    <ion-footer>
+      <ion-row class="ion-justify-content-center">
+        <ion-text>Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
+      </ion-row>
+    </ion-footer>
   </ion-page>
 </template>
 
 <script setup lang="ts">
   import { onMounted, reactive } from 'vue';
-  import { IonPage, IonHeader, IonToolbar, IonContent, IonRow, IonCol, IonText, createGesture, GestureDetail } from '@ionic/vue';
+  import {
+    IonPage, IonHeader, IonFooter, IonToolbar, IonContent, IonRow, IonCol, IonText, createGesture, GestureDetail
+  } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
 
   const DPR = window.devicePixelRatio || 1;
