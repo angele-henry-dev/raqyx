@@ -79,6 +79,7 @@ export class Link {
      * @param ctx The canvas context.
      */
     draw(ctx: CanvasRenderingContext2D): void {
+        ctx.shadowColor = this.color;
         ctx.beginPath();
         ctx.lineWidth = this.width;
         ctx.strokeStyle = this.color;

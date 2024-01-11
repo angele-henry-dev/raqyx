@@ -212,7 +212,6 @@ export class Territory {
      * @param ctx The CanvasRenderingContext2D to draw on.
      */
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.shadowColor = this.color;
         this.links.forEach((link) => link.draw(ctx));
         this.nodes.forEach((node) => node.draw(ctx));
     }

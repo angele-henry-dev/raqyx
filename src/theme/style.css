@@ -11,10 +11,6 @@ ion-content {
 
 /* HOMEPAGE */
 
-ion-toolbar {
-  --background: #000000;
-  color: white;
-}
 ion-footer {
   background-color: #000000;
   color: white;
@@ -42,6 +38,15 @@ ion-img.title {
 }
 
 /* GAMEPAGE */
+
+ion-toolbar {
+  --background: #000000;
+  color: white;
+}
+
+.gamepage ion-header ion-row {
+  padding: 0 15px;
+}
 
 #gameCanvas {
   background-color: #000000;

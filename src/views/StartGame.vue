@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page class="gamepage">
     <ion-header>
       <ion-toolbar>
         <ion-row class="ion-justify-content-between">
