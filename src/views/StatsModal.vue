@@ -8,31 +8,31 @@
           </ion-buttons>
         </ion-toolbar>
         <ion-content class="ion-padding">
-          <ion-item-group>
+            <ion-item-group>
             <ion-item-divider>
-              <ion-label>Friends</ion-label>
+                <ion-label>Friends</ion-label>
             </ion-item-divider>
             <ion-item v-for="(friend, index) in friends" :key="index" lines="none">
-              <ion-row class="ion-justify-content-between">
+                <ion-row class="ion-justify-content-between">
                 <ion-col class="ion-text-start">{{ friend.placement }}</ion-col>
                 <ion-col class="ion-text-start">{{ friend.username }}</ion-col>
                 <ion-col class="ion-text-end">{{ friend.score }}</ion-col>
-              </ion-row>
+                </ion-row>
             </ion-item>
-          </ion-item-group>
+            </ion-item-group>
 
-          <ion-item-group>
+            <ion-item-group>
             <ion-item-divider>
-              <ion-label>World</ion-label>
+                <ion-label>World</ion-label>
             </ion-item-divider>
             <ion-item v-for="(people, index) in world" :key="index" lines="none">
-              <ion-row class="ion-justify-content-between">
+                <ion-row class="ion-justify-content-between">
                 <ion-col class="ion-text-start">{{ people.placement }}</ion-col>
                 <ion-col class="ion-text-start">{{ people.username }}</ion-col>
                 <ion-col class="ion-text-end">{{ people.score }}</ion-col>
-              </ion-row>
+                </ion-row>
             </ion-item>
-          </ion-item-group>
+            </ion-item-group>
         </ion-content>
       </div>
     </ion-modal>
@@ -56,6 +56,8 @@
   import { ref } from 'vue';
 
   const modalStats = ref();
+  const dismiss = () => modalStats.value.$el.dismiss();
+
   const friends = [
     {
       username: "Aziza",
@@ -100,6 +102,4 @@
       placement: 10,
     },
   ];
-
-  const dismiss = () => modalStats.value.$el.dismiss();
 </script>
