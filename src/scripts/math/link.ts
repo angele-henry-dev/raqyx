@@ -79,10 +79,18 @@ export class Link {
      * @param ctx The canvas context.
      */
     draw(ctx: CanvasRenderingContext2D): void {
-        ctx.shadowColor = this.color;
-        ctx.beginPath();
+        ctx.lineTo(this.n2.x, this.n2.y);
+    }
+
+    /**
+     * Draws the link on the canvas context.
+     * @param ctx The canvas context.
+     */
+    drawRect(ctx: CanvasRenderingContext2D): void {
         ctx.lineWidth = this.width;
         ctx.strokeStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.beginPath();
         ctx.moveTo(this.n1.x, this.n1.y);
         ctx.lineTo(this.n2.x, this.n2.y);
         ctx.stroke();

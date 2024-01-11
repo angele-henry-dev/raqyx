@@ -13,7 +13,7 @@
           <ion-img
               class="title"
               src="/assets/images/raqyx_title_green.png"
-              alt="Homepage image of the game"
+              alt="Game title"
           ></ion-img>
         </ion-row>
         <ion-row class="ion-justify-content-center">

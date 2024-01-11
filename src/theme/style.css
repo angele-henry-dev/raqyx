@@ -50,13 +50,18 @@ ion-toolbar {
   --background: #000000;
   color: white;
 }
-
 .gamepage ion-header ion-row {
   padding: 0 15px;
 }
-
 #gameCanvas {
-  background-color: #000000;
+  /* background-color: #000000; */
+  z-index: 20;
+}
+.random-img {
+  width: 250px;
+  top: 100px;
+  position: absolute;
+  z-index: 1;
 }
 
 /* MODALS */

@@ -14,6 +14,11 @@
     </ion-header>
     <ion-content class="ion-padding background">
       <ion-row class="ion-justify-content-center">
+        <ion-img
+          class="random-img"
+          src="/assets/images/test1.png"
+          alt="Random image neon pixel art"
+        ></ion-img>
         <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
       </ion-row>
     </ion-content>
@@ -28,14 +33,14 @@
 <script setup lang="ts">
   import { onMounted, reactive } from 'vue';
   import {
-    IonPage, IonHeader, IonFooter, IonToolbar, IonContent, IonRow, IonCol, IonText, createGesture, GestureDetail
+    IonPage, IonHeader, IonFooter, IonToolbar, IonContent, IonRow, IonCol, IonText, IonImg, createGesture, GestureDetail
   } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
-  const gameManager = reactive(new GameManager(1, 1));
+  const gameManager = reactive(new GameManager(0, 1));
 
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
@@ -59,6 +64,7 @@
 
     ctx.scale(DPR, DPR);
     ctx.lineWidth = 1;
+    ctx.fillStyle = "yellow";
     ctx.shadowBlur = 10;
     animate();
     setupGesture();

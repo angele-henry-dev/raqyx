@@ -207,13 +207,25 @@ export class Territory {
         );
     }
 
+    drawLines(ctx: CanvasRenderingContext2D) {
+        this.links.forEach((link) => link.drawRect(ctx));
+    }
+
     /**
      * Draws the territory by rendering its nodes and links on the canvas.
      * @param ctx The CanvasRenderingContext2D to draw on.
      */
     draw(ctx: CanvasRenderingContext2D): void {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(this.links[0].n1.x, this.links[0].n1.y);
         this.links.forEach((link) => link.draw(ctx));
-        this.nodes.forEach((node) => node.draw(ctx));
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
     }
 }
 

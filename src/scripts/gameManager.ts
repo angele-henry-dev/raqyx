@@ -187,6 +187,9 @@ export class GameManager {
                 }
             }
 
+            // Sort the links to have them on the right order
+            // TODO
+
             this.gameArea = newGameArea;
         }
     }
@@ -363,7 +366,7 @@ export class GameManager {
      * @param ctx The canvas rendering context.
      */
     drawWalls(ctx: CanvasRenderingContext2D): void {
-        this.gameArea.draw(ctx);
+        this.gameArea.drawLines(ctx);
     }
 
     /**
@@ -377,7 +380,7 @@ export class GameManager {
         if (this.territoryInProgress) {
             const lastNode = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
             const inProgressLink = new Link(lastNode, this.player, {color: this.territoryInProgress.color});
-            inProgressLink.draw(ctx);
+            inProgressLink.drawRect(ctx);
         }
     }
 
@@ -388,7 +391,7 @@ export class GameManager {
     draw(ctx: CanvasRenderingContext2D): void {
         this.drawWalls(ctx);
         if (this.territoryInProgress) {
-            this.territoryInProgress.draw(ctx);
+            this.territoryInProgress.drawLines(ctx);
         }
         this.drawPlayer(ctx);
         this.drawEnemies(ctx);
