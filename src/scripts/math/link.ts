@@ -13,7 +13,7 @@ export class Link {
      * @param n2 The second node of the link.
      * @param options Optional parameters like width and color.
      */
-    constructor(n1: Node, n2: Node, { width = 2, color = "white" }: { width?: number; color?: string } = {}) {
+    constructor(n1: Node, n2: Node, { width = 2, color = "hsl(32, 99%, 54%)" }: { width?: number; color?: string } = {}) {
         this.n1 = n1;
         this.n2 = n2;
         this.width = width;
