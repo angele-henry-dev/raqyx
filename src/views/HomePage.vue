@@ -19,7 +19,7 @@
         <ion-row class="ion-justify-content-center">
           <ion-col size="6" class="menu">
             <div>
-              <ion-button class="broken" expand="block" fill="clear" size="large" router-link="/newgame">New game</ion-button>
+              <ion-button class="broken" expand="block" fill="clear" size="large" @click="newGame()">New game</ion-button>
               <ion-button class="deactivated" expand="block" fill="clear" size="large" @click="loadGame()">Continue</ion-button>
               <ion-button expand="block" fill="clear" id="open-modal-rules">Rules</ion-button>
             </div>
@@ -44,11 +44,16 @@
 </template>
 
 <script setup lang="ts">
-  import { IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonImg } from '@ionic/vue';
+  import { useIonRouter, IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonImg } from '@ionic/vue';
   import RulesModal from './RulesModal.vue';
   import SettingsModal from './SettingsModal.vue';
   import StatsModal from './StatsModal.vue';
 
+  const ionRouter = useIonRouter();
+
+  const newGame = () => {
+    ionRouter.push('/newgame');
+  };
   const loadGame = () => {
     return false;
   };

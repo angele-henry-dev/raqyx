@@ -15,10 +15,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/newgame',
     component: GamePage
-  },
-  {
-    path: '/continuegame',
-    component: GamePage
   }
 ]
 
