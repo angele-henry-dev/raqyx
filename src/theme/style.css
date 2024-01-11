@@ -48,13 +48,14 @@ ion-button.deactivated {
 
 ion-toolbar {
   --background: #000000;
-  color: white;
+}
+.gamepage ion-row {
+  color: var(--ion-color-primary);
 }
 .gamepage ion-header ion-row {
   padding: 0 15px;
 }
 #gameCanvas {
-  /* background-color: #000000; */
   z-index: 20;
 }
 .random-img {
@@ -77,13 +78,6 @@ ion-modal::part(backdrop) {
 ion-modal div {
   height: 100%;
   border: 1px solid var(--ion-color-primary);
-  /* box-shadow:
-    0 0 .2rem #fff,
-    0 0 .2rem #fff,
-    0 0 1rem var(--ion-color-primary),
-    0 0 0.5rem var(--ion-color-primary),
-    0 0 2rem var(--ion-color-primary),
-    inset 0 0 1.3rem var(--ion-color-primary); */
 }
 ion-modal ion-content, ion-modal ion-toolbar {
   --background: #000000;
