@@ -1,14 +1,12 @@
 
-ion-content {
+ion-content.background {
+  --background: #000000;
   --overflow: hidden;
   overflow: auto;
   color: white;
   &::-webkit-scrollbar {
     display: none;
   }
-}
-ion-content.background {
-  --background: #000000;
 }
 
 /* HOMEPAGE */
@@ -59,21 +57,43 @@ ion-toolbar {
 ion-modal {
   --height: 70%;
   --width: 96%;
-  --border-radius: 10px;
-  /* border: 1px solid var(--ion-color-primary); */
 }
 ion-modal::part(backdrop) {
   background: #000000;
   opacity: 1;
 }
-ion-modal ion-toolbar {
-  --background: var(--ion-color-primary);
-  color: #000000;
-}
-ion-modal ion-content {
-  /* --background: #000000;
+ion-modal div {
+  height: 100%;
   border: 1px solid var(--ion-color-primary);
-  --color: white; */
+  /* box-shadow:
+    0 0 .2rem #fff,
+    0 0 .2rem #fff,
+    0 0 1rem var(--ion-color-primary),
+    0 0 0.5rem var(--ion-color-primary),
+    0 0 2rem var(--ion-color-primary),
+    inset 0 0 1.3rem var(--ion-color-primary); */
+}
+ion-modal ion-content, ion-modal ion-toolbar {
+  --background: #000000;
+  --color: white;
+}
+ion-modal ion-toolbar {
+  border-bottom: 1px solid var(--ion-color-primary);
+}
+
+/* Lists */
+
+ion-list {
+  background-color: #000000 !important;
+  margin-bottom: 50px;
+}
+ion-item {
+  --background: #000000;
+  --color: white;
+}
+ion-item p::first-line {
+  font-weight: bold;
+  color: var(--ion-color-primary);
 }
 
 /* SHOOTING STARS */
