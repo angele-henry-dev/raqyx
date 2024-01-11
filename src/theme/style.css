@@ -48,14 +48,24 @@ ion-img.title {
 
 /* GAMEPAGE */
 
-ion-toolbar {
+ion-toolbar,
+.gamepage ion-header {
   --background: #000000;
+  background-color: #000000;
 }
 .gamepage ion-row {
   color: var(--ion-color-primary);
 }
 .gamepage ion-header ion-row {
-  padding: 0 15px;
+  padding: 15px;
+}
+.gamepage ion-header,
+.gamepage ion-footer {
+  height: 60px;
+}
+.gamepage ion-header ion-toolbar,
+.gamepage ion-footer ion-row {
+  height: 100%;
 }
 #gameCanvas {
   z-index: 20;
@@ -65,6 +75,15 @@ ion-toolbar {
   top: 100px;
   position: absolute;
   z-index: 1;
+}
+ion-progress-bar::part(track) {
+  background: hsl(32, 99%, 15%);
+}
+ion-progress-bar::part(progress) {
+  background: var(--ion-color-primary);
+}
+ion-progress-bar::part(stream) {
+  background-image: radial-gradient(ellipse at center, hsl(32, 99%, 15%) 0%, hsl(32, 99%, 15%) 30%, transparent 30%);
 }
 
 /* MODALS */

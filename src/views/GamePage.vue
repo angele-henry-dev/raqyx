@@ -2,12 +2,12 @@
   <ion-page class="gamepage">
     <ion-header>
       <ion-toolbar>
-        <ion-row class="ion-justify-content-between">
-          <ion-col class="ion-text-start">
+        <ion-row class="ion-align-items-center">
+          <ion-col size="3">
             <ion-text>Level {{ gameManager?.gameSettings.level || 0 }}</ion-text>
           </ion-col>
-          <ion-col class="ion-text-end">
-            <ion-text>{{ gameManager?.gameSettings.percentage || 0 }}% / 75%</ion-text>
+          <ion-col>
+            <ion-progress-bar ref="progressBar" :buffer=".75" :value="(gameManager?.gameSettings.percentage / 100)" color="primary"></ion-progress-bar>
           </ion-col>
         </ion-row>
       </ion-toolbar>
@@ -23,7 +23,7 @@
       </ion-row>
     </ion-content>
     <ion-footer>
-      <ion-row class="ion-justify-content-center">
+      <ion-row class="ion-justify-content-center ion-align-items-center">
         <ion-text>Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
       </ion-row>
     </ion-footer>
@@ -31,9 +31,20 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive } from 'vue';
+  import { onMounted, reactive, ref } from 'vue';
   import {
-    IonPage, IonHeader, IonFooter, IonToolbar, IonContent, IonRow, IonCol, IonText, IonImg, createGesture, GestureDetail
+    IonPage,
+    IonHeader,
+    IonFooter,
+    IonToolbar,
+    IonContent,
+    IonRow,
+    IonCol,
+    IonText,
+    IonImg,
+    IonProgressBar,
+    createGesture,
+    GestureDetail
   } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
 
@@ -44,12 +55,10 @@
 
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
-
     if (!canvas) {
       console.error('Canvas element not found');
       return;
     }
-
     canvas.width = CONTAINER_WIDTH * DPR;
     canvas.height = CONTAINER_HEIGHT * DPR;
     canvas.style.width = `${CONTAINER_WIDTH}px`;
