@@ -1,9 +1,5 @@
 import { Node } from '@/scripts/math/node';
 import { Link } from '@/scripts/math/link';
-// import { randomIntFromInterval } from "./utils";
-
-// const TERRITORIES_COLORS = ["blue", "green", "orange", "pink", "purple"];
-// const SELECTED_COLOR = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length - 1)];
 
 export const DIRECTIONS = {
   RIGHT: 0,

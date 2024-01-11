@@ -1,5 +1,13 @@
 import { Node } from '@/scripts/math/node';
 import { Link } from '@/scripts/math/link';
+import { randomIntFromInterval } from "@/scripts/utils";
+
+const TERRITORIES_COLORS = [
+    "hsl(32, 99%, 54%)",
+    "hsl(310, 96%, 59%)",
+    "hsl(180, 97%, 44%)",
+    "hsl(90, 100%, 50%)"
+];
 
 /**
  * Represents a territory in the game, which consists of nodes and links.
@@ -8,14 +16,12 @@ import { Link } from '@/scripts/math/link';
 export class Territory {
     nodes: Node[];
     links: Link[];
-    color: string;
 
     /**
      * Creates an instance of the Territory class.
      * @param color The color of the territory. Default is "orange".
      */
-    constructor(color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary')) {
-        this.color = color;
+    constructor() {
         this.nodes = [];
         this.links = [];
     }
@@ -69,7 +75,8 @@ export class Territory {
      * @returns True if the link was added successfully, otherwise false.
      */
     addLink(n1: Node, n2: Node): boolean {
-        const link = new Link(n1, n2, { color: this.color });
+        const SELECTED_COLOR = TERRITORIES_COLORS[randomIntFromInterval(0, 3)];
+        const link = new Link(n1, n2, { color: SELECTED_COLOR });
         if (!this.containsLink(link) && !link.n1.equals(link.n2)) {
             this.links.push(link);
             this.addNode(n1.x, n1.y);
@@ -86,7 +93,7 @@ export class Territory {
      * @returns True if the node was added successfully, otherwise false.
      */
     addNode(x: number, y: number): boolean {
-        const node = new Node(x, y, { size: 2, color: this.color });
+        const node = new Node(x, y, { size: 2, color: "white" });
         if (!this.containsNode(node)) {
             this.nodes.push(node);
             return true;
@@ -217,8 +224,8 @@ export class Territory {
      */
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.lineWidth = 2;
-        ctx.strokeStyle = this.color;
-        ctx.shadowColor = this.color;
+        ctx.strokeStyle = this.links[0].color;
+        ctx.shadowColor = this.links[0].color;
         ctx.fillStyle = "black";
         ctx.beginPath();
         ctx.moveTo(this.links[0].n1.x, this.links[0].n1.y);

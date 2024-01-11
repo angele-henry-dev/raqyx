@@ -113,7 +113,7 @@ export class GameManager {
      * Initiates the creation of a territory when the player starts drawing.
      */
     createTerritory(): void {
-        this.territoryInProgress = new Territory(this.player.color);
+        this.territoryInProgress = new Territory();
         this.territoryInProgress.addNode(this.player.x, this.player.y);
     }
 
@@ -380,7 +380,7 @@ export class GameManager {
         this.playerCollidesWall();
         if (this.territoryInProgress) {
             const lastNode = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
-            const inProgressLink = new Link(lastNode, this.player, {color: this.territoryInProgress.color});
+            const inProgressLink = new Link(lastNode, this.player);
             inProgressLink.drawRect(ctx);
         }
     }

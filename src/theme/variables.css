@@ -8,8 +8,8 @@
 	--ion-color-secondary-contrast: hsl(310, 96%, 29%);
 
   /** tertiary **/
-  --ion-color-tertiary: hsl(57, 97%, 62%);
-  --ion-color-tertiary-contrast: hsl(57, 97%, 32%);
+  --ion-color-tertiary: hsl(180, 97%, 44%);
+  --ion-color-tertiary-contrast: hsl(180, 97%, 14%);
 
   /** four **/
   --ion-color-four: hsl(90, 100%, 50%);
