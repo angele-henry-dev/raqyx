@@ -1,6 +1,6 @@
 <template>
-  <ion-page>
-    <ion-content class="background">
+  <ion-page class="home">
+    <ion-content>
       <div class="shooting-stars">
         <span></span>
         <span></span>

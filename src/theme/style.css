@@ -3,7 +3,9 @@ html {
   --ion-font-family: 'Arial';
 }
 
-ion-content.background {
+.home ion-content,
+.gamepage ion-content,
+.stats ion-content {
   --background: #000000;
   --overflow: hidden;
   overflow: auto;
@@ -11,6 +13,9 @@ ion-content.background {
   &::-webkit-scrollbar {
     display: none;
   }
+}
+ion-button.deactivated {
+  color: hsl(32, 99%, 15%);
 }
 
 /* HOMEPAGE */
@@ -39,9 +44,6 @@ ion-img.title {
 }
 .menu ion-button {
   height: 45px;
-}
-ion-button.deactivated {
-  color: hsl(32, 99%, 15%);
 }
 
 /* GAMEPAGE */
@@ -111,9 +113,37 @@ ion-item {
   --background: #000000;
   --color: white;
 }
-ion-item p::first-line {
+
+/* RULES */
+
+.rules ion-item p::first-line {
   font-weight: bold;
   color: var(--ion-color-primary);
+}
+
+/* STATS */
+
+ion-modal.stats {
+  --height: 90%;
+}
+.stats ion-item-divider {
+  background-color: #000000;
+  color: var(--ion-color-primary);
+}
+.stats ion-item-group {
+  height: 50%;
+  /* margin-bottom: 30px; */
+}
+.stats ion-item-group ion-row {
+  width: 100%;
+}
+.stats ion-item:last-child {
+  --background: hsl(32, 99%, 15%);
+}
+
+/* SETTINGS */
+.settings .btn-apply {
+  margin-top: 25px;
 }
 
 /* SHOOTING STARS */

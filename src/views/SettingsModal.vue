@@ -1,10 +1,10 @@
 <template>
-    <ion-modal ref="modalSettings" trigger="open-modal-settings">
+    <ion-modal class="settings" ref="modalSettings" trigger="open-modal-settings">
       <div class="modal-content">
         <ion-toolbar>
           <ion-title>Settings</ion-title>
           <ion-buttons slot="end">
-            <ion-button color="light" @click="dismiss()">Close</ion-button>
+            <ion-button color="light" @click="dismiss()">X</ion-button>
           </ion-buttons>
         </ion-toolbar>
         <ion-content class="ion-padding">
@@ -26,7 +26,12 @@
               </ion-col>
             </ion-row>
             <ion-row>
-              <ion-input label="Username:" placeholder="Enter text" counter="true" maxlength="20"></ion-input>
+              <ion-input label="Username:" placeholder="Enter text" :counter="true" :maxlength="20"></ion-input>
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-end">
+                <ion-button class="btn-apply" fill="outline">Save</ion-button>
+              </ion-col>
             </ion-row>
           </ion-col>
         </ion-content>
@@ -46,6 +51,7 @@
     IonRow,
     IonRange,
     IonLabel,
+    IonInput,
   } from '@ionic/vue';
   import { ref } from 'vue';
 

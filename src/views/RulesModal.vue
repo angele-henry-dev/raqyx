@@ -1,10 +1,10 @@
 <template>
-    <ion-modal ref="modalRules" trigger="open-modal-rules">
+    <ion-modal class="rules" ref="modalRules" trigger="open-modal-rules">
       <div class="modal-content">
         <ion-toolbar>
           <ion-title>Rules</ion-title>
           <ion-buttons slot="end">
-            <ion-button color="light" @click="dismiss()">Close</ion-button>
+            <ion-button color="light" @click="dismiss()">X</ion-button>
           </ion-buttons>
         </ion-toolbar>
         <ion-content>
