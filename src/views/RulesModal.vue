@@ -7,7 +7,7 @@
             <ion-button color="light" @click="dismiss()">Close</ion-button>
           </ion-buttons>
         </ion-toolbar>
-        <ion-content class="ion-padding">
+        <ion-content>
           <ion-list lines="none">
             <ion-item>
               <p>Objective of the Game:
