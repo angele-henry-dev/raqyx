@@ -1,7 +1,7 @@
 {
   "name": "raqyx",
   "version": "0.0.1",
-  "description": "An Ionic project",
+  "description": "Puzzle game",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

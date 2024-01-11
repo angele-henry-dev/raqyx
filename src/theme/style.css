@@ -75,7 +75,7 @@ ion-modal::part(backdrop) {
   background: #000000;
   opacity: 1;
 }
-ion-modal div {
+ion-modal div.modal-content {
   height: 100%;
   border: 1px solid var(--ion-color-primary);
 }
@@ -87,7 +87,18 @@ ion-modal ion-content {
   height: calc(100% - 45px);
 }
 ion-modal ion-toolbar {
+  height: 45px;
   border-bottom: 1px solid var(--ion-color-primary);
+}
+ion-range {
+  padding: 0;
+}
+ion-range, ion-range::part(pin) {
+  color: #fff;
+  --color: #fff;
+}
+ion-range::part(bar-active) {
+  background: var(--ion-color-primary);
 }
 
 /* LISTS */
