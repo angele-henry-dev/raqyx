@@ -193,7 +193,7 @@ ion-modal.stats {
   top: 80px;
   right: 0px;
   left: initial;
-  animation-delay: 5s;
+  animation-delay: 1s;
   animation-duration: 9s;
 }
 /* Third star */
@@ -222,7 +222,7 @@ ion-modal.stats {
 }
 .shooting-stars span:nth-child(4) {
   top: calc(100% - 80px);
-  animation-delay: 5s;
+  animation-delay: 0s;
   animation-duration: 5s;
 }
 /* Fifth star */
@@ -232,7 +232,7 @@ ion-modal.stats {
 .shooting-stars span:nth-child(5) {
   background: #b3ff00;
   top: 25%;
-  animation-delay: 3s;
+  animation-delay: 2s;
   animation-duration: 8s;
 }
 
