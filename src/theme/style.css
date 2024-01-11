@@ -36,6 +36,9 @@ ion-img.title {
 .menu ion-button {
   height: 45px;
 }
+ion-button.deactivated {
+  color: hsl(32, 99%, 15%);
+}
 
 /* GAMEPAGE */
 
@@ -84,7 +87,7 @@ ion-modal ion-toolbar {
   border-bottom: 1px solid var(--ion-color-primary);
 }
 
-/* Lists */
+/* LISTS */
 
 ion-list {
   background-color: #000000 !important;

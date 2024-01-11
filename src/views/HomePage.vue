@@ -20,7 +20,7 @@
           <ion-col size="6" class="menu">
             <div>
               <ion-button class="broken" expand="block" fill="clear" size="large" router-link="/newgame">New game</ion-button>
-              <ion-button expand="block" fill="clear" size="large" router-link="/continuegame">Continue</ion-button>
+              <ion-button class="deactivated" expand="block" fill="clear" size="large" @click="loadGame()">Continue</ion-button>
               <ion-button expand="block" fill="clear" id="open-modal-rules">Rules</ion-button>
             </div>
           </ion-col>
@@ -48,4 +48,8 @@
   import RulesModal from './RulesModal.vue';
   import SettingsModal from './SettingsModal.vue';
   import StatsModal from './StatsModal.vue';
+
+  const loadGame = () => {
+    return false;
+  };
 </script>
