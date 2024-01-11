@@ -1,5 +1,6 @@
 <template>
     <ion-modal ref="modalStats" trigger="open-modal-stats">
+      <div>
         <ion-toolbar>
           <ion-title>Stats</ion-title>
           <ion-buttons slot="end">
@@ -9,6 +10,7 @@
         <ion-content class="ion-padding">
           Plop
         </ion-content>
+      </div>
     </ion-modal>
 </template>
 

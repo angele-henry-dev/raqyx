@@ -1,5 +1,6 @@
 <template>
     <ion-modal ref="modalSettings" trigger="open-modal-settings">
+      <div>
         <ion-toolbar>
           <ion-title>Settings</ion-title>
           <ion-buttons slot="end">
@@ -9,6 +10,7 @@
         <ion-content class="ion-padding">
           Plop
         </ion-content>
+      </div>
     </ion-modal>
 </template>
 
