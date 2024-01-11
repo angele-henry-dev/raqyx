@@ -1,4 +1,8 @@
 
+html {
+  --ion-font-family: 'Arial';
+}
+
 ion-content.background {
   --background: #000000;
   --overflow: hidden;
