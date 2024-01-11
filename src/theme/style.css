@@ -76,28 +76,28 @@ ion-toolbar,
   position: absolute;
   z-index: 1;
 }
-.progress-bar {
-  width: 100%;
-  border: 1px solid hsl(32, 99%, 15%);
+.progress-bar-track,
+.progress-bar-progress {
+  border-radius: 15px;
 }
 .progress-bar-track {
-  width: 75%;
+  width: 100%;
   background-color: hsl(32, 99%, 15%);
+  box-shadow:
+    0 0 .1rem #787878,
+    0 0 .1rem #787878,
+    0 0 0.2rem var(--ion-color-primary),
+    0 0 0.1rem var(--ion-color-primary),
+    0 0 0.2rem var(--ion-color-primary),
+    inset 0 0 0.3rem var(--ion-color-primary);
 }
 .progress-bar-progress {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   height: 20px;
   background-color: var(--ion-color-primary);
-  transition: width 0.5s ease;
+  animation: progressBarPulsate 1s infinite alternate;
 }
-/* ion-progress-bar::part(track) {
-  background: hsl(32, 99%, 15%);
-}
-ion-progress-bar::part(progress) {
-  background: var(--ion-color-primary);
-}
-ion-progress-bar::part(stream) {
-  background-image: radial-gradient(ellipse at center, hsl(32, 99%, 15%) 0%, hsl(32, 99%, 15%) 30%, transparent 30%);
-} */
 
 /* MODALS */
 
@@ -315,5 +315,26 @@ ion-modal.stats {
       0 0 0.9rem var(--ion-color-primary),
       0 0 2.9rem var(--ion-color-primary),
       inset 0 0 1.4rem var(--ion-color-primary);
+  }
+}
+
+@keyframes progressBarPulsate {
+  100% {
+    box-shadow:
+      0 0 .2rem #fff,
+      0 0 .2rem #fff,
+      0 0 0.5rem var(--ion-color-primary),
+      0 0 0.25rem var(--ion-color-primary),
+      0 0 0.5rem var(--ion-color-primary),
+      inset 0 0 0.6rem var(--ion-color-primary);
+  }
+  0% {
+    box-shadow:
+      0 0 .2rem #fff,
+      0 0 .2rem #fff,
+      0 0 0.75rem var(--ion-color-primary),
+      0 0 0.45rem var(--ion-color-primary),
+      0 0 0.7rem var(--ion-color-primary),
+      inset 0 0 0.7rem var(--ion-color-primary);
   }
 }

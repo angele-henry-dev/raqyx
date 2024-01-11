@@ -7,10 +7,8 @@
             <ion-text>Level {{ gameManager?.gameSettings.level || 0 }}</ion-text>
           </ion-col>
           <ion-col>
-            <div class="progress-bar">
-              <div class="progress-bar-track">
-                  <div class="progress-bar-progress" :style="'width: ' + gameManager?.gameSettings.percentage + '%;'"></div>
-              </div>
+            <div class="progress-bar-track">
+                <div class="progress-bar-progress" :style="'width: ' + gameManager?.gameSettings.percentage + '%;'"></div>
             </div>
           </ion-col>
         </ion-row>
