@@ -14,7 +14,7 @@ export class Territory {
      * Creates an instance of the Territory class.
      * @param color The color of the territory. Default is "orange".
      */
-    constructor(color = "orange") {
+    constructor(color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary')) {
         this.color = color;
         this.nodes = [];
         this.links = [];

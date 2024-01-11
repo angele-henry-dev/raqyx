@@ -28,7 +28,7 @@ export class Player extends Node {
       y: number,
       {
         direction = DIRECTIONS.RIGHT, size = 8, speed = 1.5,
-        color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-success')
+        color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary')
       }: { direction?: number; size?: number; speed?: number; color?: string} = {}
     ) {
     super(x, y, { size, color });

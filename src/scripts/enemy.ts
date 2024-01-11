@@ -12,7 +12,7 @@ export class Enemy extends Node {
      * @param y The y-coordinate of the enemy.
      * @param options Optional parameters like size, speed, and color.
      */
-    constructor(x: number, y: number, { size = 8, speed = 1, color = "red" }: { size?: number; speed?: number; color?: string } = {}) {
+    constructor(x: number, y: number, { size = 8, speed = 1, color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-tertiary') }: { size?: number; speed?: number; color?: string } = {}) {
         super(x, y, { size, color });
         const plusOrMinusX = Math.random() < 0.5 ? -1 : 1;
         const plusOrMinusY = Math.random() < 0.5 ? -1 : 1;

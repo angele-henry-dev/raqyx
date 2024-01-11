@@ -10,7 +10,7 @@ export class Node {
      * @param y The y-coordinate of the node.
      * @param options Optional parameters like size and color.
      */
-    constructor(x: number, y: number, { size = 2, color = "red" }: { size?: number; color?: string } = {}) {
+    constructor(x: number, y: number, { size = 2, color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-tertiary') }: { size?: number; color?: string } = {}) {
         this.x = x;
         this.y = y;
         this.size = size;

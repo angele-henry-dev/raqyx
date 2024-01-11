@@ -1,6 +1,7 @@
 
 html {
   --ion-font-family: 'Arial';
+  font-family: 'Arial';
 }
 
 .home ion-content,
@@ -15,7 +16,7 @@ html {
   }
 }
 ion-button.deactivated {
-  color: hsl(32, 99%, 15%);
+  color: var(--ion-color-primary-contrast);
 }
 
 /* HOMEPAGE */
@@ -82,7 +83,7 @@ ion-toolbar,
 }
 .progress-bar-track {
   width: 100%;
-  background-color: hsl(32, 99%, 15%);
+  background-color: var(--ion-color-primary-contrast);
   box-shadow:
     0 0 .1rem #787878,
     0 0 .1rem #787878,
@@ -169,7 +170,7 @@ ion-modal.stats {
   width: 100%;
 }
 .stats ion-item:last-child {
-  --background: hsl(32, 99%, 15%);
+  --background: var(--ion-color-primary-contrast);
 }
 
 /* SETTINGS */
@@ -203,10 +204,10 @@ ion-modal.stats {
 }
 /* First star */
 .shooting-stars span:nth-child(1)::before {
-  background: linear-gradient(90deg, #ff0022, transparent);
+  background: linear-gradient(90deg, var(--ion-color-primary), transparent);
 }
 .shooting-stars span:nth-child(1) {
-  background: #ff0022;
+  background: var(--ion-color-primary);
   animation-name: animateStarToLeft;
   top: 20px;
   right: 0px;
@@ -216,10 +217,10 @@ ion-modal.stats {
 }
 /* Second star */
 .shooting-stars span:nth-child(2)::before {
-  background: linear-gradient(90deg, #00f7ff, transparent);
+  background: linear-gradient(90deg, var(--ion-color-secondary), transparent);
 }
 .shooting-stars span:nth-child(2) {
-  background: #00f7ff;
+  background: var(--ion-color-secondary);
   animation-name: animateStarToLeft;
   top: 80px;
   right: 0px;
@@ -229,10 +230,10 @@ ion-modal.stats {
 }
 /* Third star */
 .shooting-stars span:nth-child(3)::before {
-  background: linear-gradient(90deg, #ff00d4, transparent);
+  background: linear-gradient(90deg, var(--ion-color-tertiary), transparent);
 }
 .shooting-stars span:nth-child(3) {
-  background: #ff00d4;
+  background: var(--ion-color-tertiary);
   animation-name: animateStarToLeft;
   top: 50%;
   right: 0px;
@@ -243,25 +244,25 @@ ion-modal.stats {
 /* Fourth star */
 .shooting-stars span:nth-child(4),
 .shooting-stars span:nth-child(5) {
-  background: #000dff;
   right: initial;
   left: 0px;
   animation-name: animateStarToRight;
 }
 .shooting-stars span:nth-child(4)::before {
-  background: linear-gradient(90deg, #000dff, transparent);
+  background: linear-gradient(90deg, var(--ion-color-secondary), transparent);
 }
 .shooting-stars span:nth-child(4) {
+  background: var(--ion-color-secondary);
   top: calc(100% - 80px);
   animation-delay: 0s;
   animation-duration: 5s;
 }
 /* Fifth star */
 .shooting-stars span:nth-child(5)::before {
-  background: linear-gradient(90deg, #b3ff00, transparent);
+  background: linear-gradient(90deg, var(--ion-color-four), transparent);
 }
 .shooting-stars span:nth-child(5) {
-  background: #b3ff00;
+  background: var(--ion-color-four);
   top: 25%;
   animation-delay: 2s;
   animation-duration: 8s;
