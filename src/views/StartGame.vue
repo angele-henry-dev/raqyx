@@ -59,6 +59,7 @@
 
     ctx.scale(DPR, DPR);
     ctx.lineWidth = 1;
+    ctx.shadowBlur = 10;
     animate();
     setupGesture();
   });

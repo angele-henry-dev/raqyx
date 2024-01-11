@@ -12,9 +12,9 @@ export class Territory {
 
     /**
      * Creates an instance of the Territory class.
-     * @param color The color of the territory. Default is "green".
+     * @param color The color of the territory. Default is "orange".
      */
-    constructor(color = "green") {
+    constructor(color = "orange") {
         this.color = color;
         this.nodes = [];
         this.links = [];
@@ -212,6 +212,7 @@ export class Territory {
      * @param ctx The CanvasRenderingContext2D to draw on.
      */
     draw(ctx: CanvasRenderingContext2D): void {
+        ctx.shadowColor = this.color;
         this.links.forEach((link) => link.draw(ctx));
         this.nodes.forEach((node) => node.draw(ctx));
     }

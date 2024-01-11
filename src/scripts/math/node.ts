@@ -10,7 +10,7 @@ export class Node {
      * @param y The y-coordinate of the node.
      * @param options Optional parameters like size and color.
      */
-    constructor(x: number, y: number, { size = 2, color = "white" }: { size?: number; color?: string } = {}) {
+    constructor(x: number, y: number, { size = 2, color = "red" }: { size?: number; color?: string } = {}) {
         this.x = x;
         this.y = y;
         this.size = size;
@@ -31,6 +31,7 @@ export class Node {
      * @param ctx The canvas context.
      */
     draw(ctx: CanvasRenderingContext2D): void {
+        ctx.shadowColor = "transparent";
         const radius: number = this.size / 2;
         ctx.beginPath();
         ctx.fillStyle = this.color;

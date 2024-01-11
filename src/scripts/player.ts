@@ -1,9 +1,9 @@
 import { Node } from '@/scripts/math/node';
 import { Link } from '@/scripts/math/link';
-import { randomIntFromInterval } from "./utils";
+// import { randomIntFromInterval } from "./utils";
 
-const TERRITORIES_COLORS = ["blue", "green", "orange", "pink", "purple"];
-const SELECTED_COLOR = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length - 1)];
+// const TERRITORIES_COLORS = ["blue", "green", "orange", "pink", "purple"];
+// const SELECTED_COLOR = TERRITORIES_COLORS[randomIntFromInterval(0, TERRITORIES_COLORS.length - 1)];
 
 export const DIRECTIONS = {
   RIGHT: 0,
@@ -23,11 +23,18 @@ export class Player extends Node {
    * @param y The y-coordinate of the player.
    * @param options Optional parameters like direction, size, speed, and color.
    */
-  constructor(x: number, y: number, { direction = DIRECTIONS.RIGHT, size = 8, speed = 1.5, color = SELECTED_COLOR }: { direction?: number; size?: number; speed?: number; color?: string } = {}) {
-      super(x, y, { size, color });
-      this.midSize = Math.ceil(this.size / 2) + 1;
-      this.speed = speed;
-      this.direction = direction;
+  constructor(
+      x: number,
+      y: number,
+      {
+        direction = DIRECTIONS.RIGHT, size = 8, speed = 1.5,
+        color = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-success')
+      }: { direction?: number; size?: number; speed?: number; color?: string} = {}
+    ) {
+    super(x, y, { size, color });
+    this.midSize = Math.ceil(this.size / 2) + 1;
+    this.speed = speed;
+    this.direction = direction;
   }
 
   /**

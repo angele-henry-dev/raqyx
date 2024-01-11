@@ -163,7 +163,7 @@ export class GameManager {
      */
     recreateGameArea(): void {
         if (this.territoryInProgress) {
-            const newGameArea = new Territory("white");
+            const newGameArea = new Territory();
 
             // Links we want to keep from gameArea
             for (const link of this.gameArea.links) {
@@ -329,7 +329,7 @@ export class GameManager {
      * @returns The generated walls.
      */
     generateWalls(): Territory {
-        const walls = new Territory("white");
+        const walls = new Territory();
         const left = this.borderWidth;
         const top = this.borderWidth;
         const right = CONTAINER_WIDTH - this.borderWidth;
