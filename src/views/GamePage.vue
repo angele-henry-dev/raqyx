@@ -7,7 +7,11 @@
             <ion-text>Level {{ gameManager?.gameSettings.level || 0 }}</ion-text>
           </ion-col>
           <ion-col>
-            <ion-progress-bar ref="progressBar" :buffer=".75" :value="(gameManager?.gameSettings.percentage / 100)" color="primary"></ion-progress-bar>
+            <div class="progress-bar">
+              <div class="progress-bar-track">
+                  <div class="progress-bar-progress" :style="'width: ' + gameManager?.gameSettings.percentage + '%;'"></div>
+              </div>
+            </div>
           </ion-col>
         </ion-row>
       </ion-toolbar>
@@ -42,11 +46,10 @@
     IonCol,
     IonText,
     IonImg,
-    IonProgressBar,
     createGesture,
-    GestureDetail
+    GestureDetail,
   } from '@ionic/vue';
-  import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager'
+  import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
@@ -75,6 +78,7 @@
     ctx.lineWidth = 1;
     ctx.fillStyle = "yellow";
     ctx.shadowBlur = 10;
+
     animate();
     setupGesture();
   });

@@ -76,7 +76,20 @@ ion-toolbar,
   position: absolute;
   z-index: 1;
 }
-ion-progress-bar::part(track) {
+.progress-bar {
+  width: 100%;
+  border: 1px solid hsl(32, 99%, 15%);
+}
+.progress-bar-track {
+  width: 75%;
+  background-color: hsl(32, 99%, 15%);
+}
+.progress-bar-progress {
+  height: 20px;
+  background-color: var(--ion-color-primary);
+  transition: width 0.5s ease;
+}
+/* ion-progress-bar::part(track) {
   background: hsl(32, 99%, 15%);
 }
 ion-progress-bar::part(progress) {
@@ -84,7 +97,7 @@ ion-progress-bar::part(progress) {
 }
 ion-progress-bar::part(stream) {
   background-image: radial-gradient(ellipse at center, hsl(32, 99%, 15%) 0%, hsl(32, 99%, 15%) 30%, transparent 30%);
-}
+} */
 
 /* MODALS */
 
