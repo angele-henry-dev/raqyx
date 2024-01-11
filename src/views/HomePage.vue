@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content class="background">
       <div class="shooting-stars">
         <span></span>
         <span></span>
@@ -21,7 +21,7 @@
             <div>
               <ion-button expand="block" fill="clear" size="large" router-link="/newgame">New game</ion-button>
               <ion-button expand="block" fill="clear" size="large" router-link="/continuegame">Continue</ion-button>
-              <ion-button expand="block" fill="clear" @click="displayRules()">Rules</ion-button>
+              <ion-button expand="block" fill="clear" id="open-modal-rules">Rules</ion-button>
             </div>
           </ion-col>
         </ion-row>
@@ -30,26 +30,22 @@
     <ion-footer>
       <ion-row class="ion-justify-content-between">
         <ion-col size="3">
-          <ion-button fill="clear" @click="displaySettings()">Settings</ion-button>
+          <ion-button fill="clear" id="open-modal-settings">Settings</ion-button>
         </ion-col>
         <ion-col size="3" class="ion-text-end">
-          <ion-button fill="clear" @click="displayStats()">Stats</ion-button>
+          <ion-button fill="clear" id="open-modal-stats">Stats</ion-button>
         </ion-col>
       </ion-row>
     </ion-footer>
+    <RulesModal />
+    <SettingsModal />
+    <StatsModal />
   </ion-page>
 </template>
 
 <script setup lang="ts">
-  import { IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonText, IonImg } from '@ionic/vue';
-
-  const displayRules = () => {
-    alert("Rules");
-  };
-  const displaySettings = () => {
-    alert("Settings");
-  };
-  const displayStats = () => {
-    alert("Stats");
-  };
+  import { IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonImg } from '@ionic/vue';
+  import RulesModal from './RulesModal.vue';
+  import SettingsModal from './SettingsModal.vue';
+  import StatsModal from './StatsModal.vue';
 </script>

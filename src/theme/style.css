@@ -2,11 +2,13 @@
 ion-content {
   --overflow: hidden;
   overflow: auto;
-  --background: #000000;
   color: white;
   &::-webkit-scrollbar {
     display: none;
   }
+}
+ion-content.background {
+  --background: #000000;
 }
 
 /* HOMEPAGE */
@@ -50,6 +52,28 @@ ion-toolbar {
 
 #gameCanvas {
   background-color: #000000;
+}
+
+/* MODALS */
+
+ion-modal {
+  --height: 70%;
+  --width: 96%;
+  --border-radius: 10px;
+  /* border: 1px solid var(--ion-color-primary); */
+}
+ion-modal::part(backdrop) {
+  background: #000000;
+  opacity: 1;
+}
+ion-modal ion-toolbar {
+  --background: var(--ion-color-primary);
+  color: #000000;
+}
+ion-modal ion-content {
+  /* --background: #000000;
+  border: 1px solid var(--ion-color-primary);
+  --color: white; */
 }
 
 /* SHOOTING STARS */
