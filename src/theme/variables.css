@@ -1,17 +1,17 @@
 :root {
   /** primary **/
-	--ion-color-primary: hsl(21, 97%, 56%);
-	--ion-color-primary-contrast: hsl(21, 97%, 26%);
+	--ion-color-primary: hsl(32, 99%, 54%);
+	--ion-color-primary-contrast: hsl(21, 97%, 24%);
 
   /** secondary **/
-	--ion-color-secondary: hsl(328, 100%, 54%);
-	--ion-color-secondary-contrast: hsl(328, 100%, 24%);
+	--ion-color-secondary: hsl(310, 96%, 59%);
+	--ion-color-secondary-contrast: hsl(310, 96%, 29%);
 
   /** tertiary **/
-  --ion-color-tertiary: hsl(60, 100%, 70%);
-  --ion-color-tertiary-contrast: hsl(60, 100%, 40%);
+  --ion-color-tertiary: hsl(57, 97%, 62%);
+  --ion-color-tertiary-contrast: hsl(57, 97%, 32%);
 
   /** four **/
-  --ion-color-four: hsl(282, 90%, 63%);
-  --ion-color-four-contrast: hsl(282, 90%, 23%);
+  --ion-color-four: hsl(90, 100%, 50%);
+  --ion-color-four-contrast: hsl(90, 100%, 20%);
 }
