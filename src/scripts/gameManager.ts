@@ -188,7 +188,8 @@ export class GameManager {
             }
 
             // Sort the links to have them on the right order
-            // TODO
+            // TODO Get the y le plus proche de 0 avec le x le plus proche de 0 (priorité au y)
+            // Puis second plus proche, troisième, etc.
 
             this.gameArea = newGameArea;
         }
