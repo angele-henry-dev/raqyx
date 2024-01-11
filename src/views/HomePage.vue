@@ -19,7 +19,7 @@
         <ion-row class="ion-justify-content-center">
           <ion-col size="6" class="menu">
             <div>
-              <ion-button expand="block" fill="clear" size="large" router-link="/newgame">New game</ion-button>
+              <ion-button class="broken" expand="block" fill="clear" size="large" router-link="/newgame">New game</ion-button>
               <ion-button expand="block" fill="clear" size="large" router-link="/continuegame">Continue</ion-button>
               <ion-button expand="block" fill="clear" id="open-modal-rules">Rules</ion-button>
             </div>
