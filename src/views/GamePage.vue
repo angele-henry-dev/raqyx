@@ -12,7 +12,7 @@
         </ion-row>
       </ion-toolbar>
     </ion-header>
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding background">
       <ion-row class="ion-justify-content-center">
         <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
       </ion-row>
