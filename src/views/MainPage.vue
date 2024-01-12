@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
     import { ref } from 'vue';
-    import { IonPage, IonButton, IonFooter, IonRow, IonCol } from '@ionic/vue';
+    import { IonPage, IonButton, IonFooter, IonRow } from '@ionic/vue';
     import BricksWall from '@/views/BricksWall.vue';
     import HomePage from '@/views/HomePage.vue';
     import GamePage from '@/views/GamePage.vue';
