@@ -4,16 +4,10 @@
         <component :is="tabs[currentTab as keyof typeof tabs]" :value="currentTab"></component>
         <ion-footer>
             <div class="menu">
-                <ion-row>
-                    <ion-col class="title-text ion-text-center" size="4">
-                        <ion-button class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">New</ion-button>
-                    </ion-col>
-                    <ion-col class="title-text ion-text-center" size="4">
-                        <ion-button class="deactivated" fill="clear" @click="currentTab = 'GamePage'">Continue</ion-button>
-                    </ion-col>
-                    <ion-col class="title-text ion-text-center" size="4">
-                        <ion-button fill="clear" id="open-modal-stats">Stats</ion-button>
-                    </ion-col>
+                <ion-row class="title-text ion-justify-content-between">
+                    <ion-button class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">New</ion-button>
+                    <ion-button class="deactivated" fill="clear" @click="currentTab = 'GamePage'">Continue</ion-button>
+                    <ion-button fill="clear" id="open-modal-stats">Stats</ion-button>
                 </ion-row>
             </div>
         </ion-footer>
