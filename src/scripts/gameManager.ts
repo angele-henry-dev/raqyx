@@ -192,7 +192,7 @@ export class GameManager {
             // Puis second plus proche, troisième, etc.
 
             this.gameArea = newGameArea;
-            this.gameSettings.score = this.gameArea.nodes.length * this.gameSettings.level
+            this.gameSettings.score += this.gameArea.nodes.length * this.gameSettings.level
         }
     }
 
