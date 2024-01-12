@@ -14,4 +14,8 @@
   /** four **/
 	--ion-color-four: hsl(310, 96%, 59%);
 	--ion-color-four-contrast: hsl(310, 96%, 29%);
+
+  /** grey **/
+	--ion-color-grey: hsl(0, 0%, 20%);
+	--ion-color-grey-contrast: hsl(0, 0%, 0%);
 }

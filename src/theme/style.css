@@ -53,16 +53,12 @@ ion-img.title {
 
 /* GAMEPAGE */
 
-.gamepage ion-content {
-  --background: transparent;
-  --background: rgba(0, 0, 0, 0.5);
-}
+.gamepage ion-content,
 .gamepage ion-toolbar {
-  --background: rgba(0, 0, 0, 0.5);
+  --background: rgba(0, 0, 0, 0.6);
 }
-#gameCanvas,
 .gamepage ion-footer {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 .gamepage ion-row {
   color: var(--ion-color-primary);
@@ -122,9 +118,6 @@ ion-img.title {
   animation: progressBarPulsate 1s infinite alternate;
 }
 
-.bricks-wall {
-  opacity: 0.5;
-}
 .wall-halo {
   position: absolute;
   width: 100%;
@@ -146,27 +139,23 @@ ion-img.title {
 .bricks-wall .row:nth-child(even) .brick:first-child {
   display: none;
 }
+.bricks-wall .brick,
 .bricks-wall .row:nth-child(even)::before,
 .bricks-wall .row:nth-child(even)::after {
-  position: relative;
-  content: "";
-  background: hsl(310, 96%, 59%);
-  width: calc(15%/2);
-  height: 10px;
-  border-radius: 2px;
-  margin: 1px;
-  box-shadow: 0 0 19px 1px hsl(310, 96%, 29%) inset;
-}
-.bricks-wall .brick {
-  background: hsl(310, 96%, 59%);
+  background: var(--ion-color-grey);
   width: 15%;
   height: 10px;
   border-radius: 2px;
   margin: 1px;
-  box-shadow: 0 0 19px 1px hsl(310, 96%, 29%) inset;
+}
+.bricks-wall .row:nth-child(even)::before,
+.bricks-wall .row:nth-child(even)::after {
+  position: relative;
+  content: "";
+  width: calc(15%/2);
 }
 .bricks-wall .light {
-  background: hsl(310, 96%, 89%);
+  background: hsl(180, 97%, 84%);
 }
 
 /* MODALS */

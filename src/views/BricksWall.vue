@@ -21,6 +21,7 @@
             for (let j=0; j<9; j++) {
                 const brick = document.createElement("div");
                 brick.classList.add('brick');
+                // brick.classList.add('light');
                 row.appendChild(brick);
             }
             container.appendChild(row);
