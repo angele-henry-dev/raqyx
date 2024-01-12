@@ -4,14 +4,14 @@
 	--ion-color-primary-contrast: hsl(21, 97%, 24%);
 
   /** secondary **/
-	--ion-color-secondary: hsl(310, 96%, 59%);
-	--ion-color-secondary-contrast: hsl(310, 96%, 29%);
+  --ion-color-secondary: hsl(90, 100%, 50%);
+  --ion-color-secondary-contrast: hsl(90, 100%, 20%);
 
   /** tertiary **/
   --ion-color-tertiary: hsl(180, 97%, 44%);
   --ion-color-tertiary-contrast: hsl(180, 97%, 14%);
 
   /** four **/
-  --ion-color-four: hsl(90, 100%, 50%);
-  --ion-color-four-contrast: hsl(90, 100%, 20%);
+	--ion-color-four: hsl(310, 96%, 59%);
+	--ion-color-four-contrast: hsl(310, 96%, 29%);
 }

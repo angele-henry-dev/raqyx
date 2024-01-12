@@ -53,10 +53,12 @@ ion-img.title {
 
 /* GAMEPAGE */
 
-ion-toolbar,
-.gamepage ion-header {
-  --background: #000000;
-  background-color: #000000;
+.gamepage ion-toolbar,
+.gamepage ion-header,
+.gamepage ion-content,
+.gamepage ion-footer {
+  --background: transparent;
+  background-color: transparent;
 }
 .gamepage ion-row {
   color: var(--ion-color-primary);
@@ -68,8 +70,23 @@ ion-toolbar,
 .gamepage ion-footer {
   height: 60px;
 }
-.gamepage ion-header ion-toolbar,
+
 .gamepage ion-footer ion-row {
+    width: 250px;
+    height: 40px;
+    margin: auto;
+    box-shadow:
+      0 0 .1rem #fff,
+      0 0 .1rem #fff,
+      0 0 0.5rem var(--ion-color-secondary),
+      0 0 0.2rem var(--ion-color-secondary),
+      0 0 0.5rem var(--ion-color-secondary),
+      inset 0 0 0.4rem var(--ion-color-secondary);
+}
+.gamepage ion-footer ion-row ion-text {
+  z-index: 6;
+}
+.gamepage ion-header ion-toolbar {
   height: 100%;
 }
 #gameCanvas {
@@ -285,7 +302,7 @@ ion-modal.stats {
 
 /* Broken neon effect */
 
-.broken {
+.broken-letter {
   animation: letter-flicker 4s linear infinite 1s;
 }
 @keyframes letter-flicker {

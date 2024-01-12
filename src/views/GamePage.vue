@@ -1,4 +1,5 @@
 <template>
+  <BricksWall />
   <ion-page class="gamepage">
     <ion-header>
       <ion-toolbar>
@@ -25,15 +26,15 @@
       </ion-row>
     </ion-content>
     <ion-footer>
-      <ion-row class="ion-justify-content-center ion-align-items-center">
-        <ion-text>Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
+      <ion-row class="ion-justify-content-center ion-align-items-center broken-border">
+        <ion-text class="hex">Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
       </ion-row>
     </ion-footer>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive, ref } from 'vue';
+  import { onMounted, reactive } from 'vue';
   import {
     IonPage,
     IonHeader,
@@ -48,6 +49,7 @@
     GestureDetail,
   } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
+  import BricksWall from '@/views/BricksWall.vue';
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
@@ -65,7 +67,7 @@
     canvas.style.width = `${CONTAINER_WIDTH}px`;
     canvas.style.height = `${CONTAINER_HEIGHT}px`;
     
-    ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: true }) || null;
+    ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: true }) || null;
 
     if (!ctx) {
       console.error('Canvas context not available');
