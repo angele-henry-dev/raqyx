@@ -21,7 +21,7 @@
             <div>
               <ion-button class="broken-letter" expand="block" fill="clear" size="large" @click="newGame()">New game</ion-button>
               <ion-button class="deactivated" expand="block" fill="clear" size="large" @click="loadGame()">Continue</ion-button>
-              <ion-button expand="block" fill="clear" id="open-modal-rules">Rules</ion-button>
+              <ion-button expand="block"  fill="clear" id="open-modal-stats">Stats</ion-button>
             </div>
           </ion-col>
         </ion-row>
@@ -33,7 +33,7 @@
           <ion-button fill="clear" id="open-modal-settings">Settings</ion-button>
         </ion-col>
         <ion-col size="3" class="ion-text-end">
-          <ion-button fill="clear" id="open-modal-stats">Stats</ion-button>
+          <ion-button expand="block" fill="clear" id="open-modal-rules">Rules</ion-button>
         </ion-col>
       </ion-row>
     </ion-footer>
