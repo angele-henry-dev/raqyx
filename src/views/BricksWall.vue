@@ -8,15 +8,6 @@
 
 <script setup lang="ts">
     import { onMounted } from 'vue';
-    import { onIonViewWillEnter, onIonViewDidEnter } from '@ionic/vue';
-
-    onIonViewWillEnter(() => {
-        console.log('Home page will enter');
-    });
-
-    onIonViewDidEnter(() => {
-      console.log('Home page did enter');
-    });
 
     onMounted(() => {
         const lines = Math.ceil(screen.height / 12);

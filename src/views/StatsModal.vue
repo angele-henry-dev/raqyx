@@ -10,7 +10,7 @@
         <ion-content class="ion-padding">
             <ion-item-group>
             <ion-item-divider>
-                <ion-label>Friends</ion-label>
+                <ion-label class="title-text">Friends</ion-label>
             </ion-item-divider>
             <ion-item v-for="(friend, index) in friends" :key="index" lines="none">
                 <ion-row class="ion-justify-content-between">
@@ -23,7 +23,7 @@
 
             <ion-item-group>
             <ion-item-divider>
-                <ion-label>World</ion-label>
+                <ion-label class="title-text">World</ion-label>
             </ion-item-divider>
             <ion-item v-for="(people, index) in world" :key="index" lines="none">
                 <ion-row class="ion-justify-content-between">

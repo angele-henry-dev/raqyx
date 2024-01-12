@@ -1,39 +1,32 @@
 <template>
-  <ion-page class="gamepage">
-    <BricksWall />
-    <ion-header>
-      <ion-toolbar>
-        <ion-row class="ion-align-items-center">
-          <ion-col size="3">
-            <ion-text>Level {{ gameManager?.gameSettings.level || 0 }}</ion-text>
-          </ion-col>
-          <ion-col>
-            <div class="progress-bar-track">
-                <div class="progress-bar-progress" :style="'width: ' + gameManager?.gameSettings.percentage + '%;'"></div>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-toolbar>
+    <ion-header class="game-header">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="3">
+          <ion-text class="title-text">Level {{ gameManager?.gameSettings.level || 0 }}</ion-text>
+        </ion-col>
+        <ion-col>
+          <div class="progress-bar-track">
+              <div class="progress-bar-progress" :style="'width: ' + (gameManager?.gameSettings.percentage * 100 / 75) + '%;'"></div>
+          </div>
+        </ion-col>
+      </ion-row>
     </ion-header>
     <ion-content class="ion-padding background">
       <ion-row class="ion-justify-content-center">
         <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
       </ion-row>
     </ion-content>
-    <ion-footer>
+    <!-- <ion-footer class=game-footer>
       <ion-row class="ion-justify-content-center ion-align-items-center broken-border">
-        <ion-text class="hex">Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
+        <ion-text class="title-text hex">Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
       </ion-row>
-    </ion-footer>
-  </ion-page>
+    </ion-footer> -->
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive } from 'vue';
+  import { onMounted, reactive, ref } from 'vue';
   import {
-    IonPage,
     IonHeader,
-    IonFooter,
     IonToolbar,
     IonContent,
     IonRow,
@@ -43,7 +36,6 @@
     GestureDetail,
   } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
-  import BricksWall from '@/views/BricksWall.vue';
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;

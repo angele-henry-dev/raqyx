@@ -8,9 +8,8 @@ body {
   max-width: 700px;
 }
 
-.home ion-content,
-.gamepage ion-content,
-.stats ion-content {
+ion-content {
+  --background: rgba(0, 0, 0, 0.6);
   --overflow: hidden;
   overflow: auto;
   color: white;
@@ -18,70 +17,72 @@ body {
     display: none;
   }
 }
-.home ion-content {
-  --background: rgba(0, 0, 0, 0.8);
-}
-.home ion-footer {
-  background-color: rgba(0, 0, 0, 0.8);
-}
-.gamepage ion-toolbar,
-.gamepage ion-content {
-  --background: rgba(0, 0, 0, 0.6);
-}
-.gamepage ion-footer {
+ion-footer,
+ion-header {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
 ion-button.deactivated {
   color: var(--ion-color-primary-contrast);
 }
-
-/* HOMEPAGE */
-
-ion-grid {
-  height: 100%;
+.title-text {
+  color: var(--ion-color-primary);
 }
-.row-title {
-  height: 55%;
-}
+
+/* MAINPAGE */
+
 .menu {
+  width: 300px;
   border-radius: 2rem;
   padding: 0.4em;
   animation: pulsate 1.6s infinite alternate;
   background-color: #000000;
-}
-.menu ion-button.menu-btn {
-  height: 45px;
-}
-.menu ion-img.title {
-  width: 250px;
   margin: auto;
-  z-index: 10;
+  margin-bottom: 20px;
 }
-.settings_icon {
-  height: 70px;
+.menu ion-row {
+  width: 100%;
 }
-.settings_icon ion-button {
-  height: 60px;
+.menu ion-col {
+  padding: 0;
+}
+.menu ion-button {
+  height: 30px;
   margin: 0;
 }
-.settings_icon ion-img {
+
+/* HOMEPAGE */
+
+.homepage ion-row {
+  height: 100%;
+}
+.homepage ion-img {
+  width: 300px;
+  margin: auto;
+  margin-top: calc(50% - 25px);
+  z-index: 10;
+}
+.settings-icon,
+.settings-icon ion-row,
+.settings-icon ion-col {
+  height: 90px;
+}
+.settings-icon ion-button {
+  height: 60px;
+}
+.settings-icon ion-img {
   height: 50px;
 }
 
 /* GAMEPAGE */
 
-.gamepage ion-row {
-  color: var(--ion-color-primary);
-}
-.gamepage ion-header ion-row {
+.game-header ion-row {
   padding: 15px;
 }
-.gamepage ion-header,
-.gamepage ion-footer {
+.game-header {
   height: 60px;
 }
-.gamepage ion-footer ion-row {
+/* .game-footer ion-row {
     width: 250px;
     height: 40px;
     margin: auto;
@@ -94,12 +95,9 @@ ion-grid {
       0 0 0.5rem var(--ion-color-secondary),
       inset 0 0 0.7rem var(--ion-color-secondary);
 }
-.gamepage ion-footer ion-row ion-text {
+.game-footer ion-row ion-text {
   z-index: 6;
-}
-.gamepage ion-header ion-toolbar {
-  height: 100%;
-}
+} */
 .progress-bar-track,
 .progress-bar-progress {
   border-radius: 15px;
@@ -221,17 +219,15 @@ ion-item {
 
 .rules ion-item p::first-line {
   font-weight: bold;
-  color: var(--ion-color-primary);
 }
 
 /* STATS */
 
-ion-modal.stats {
+.stats {
   --height: 90%;
 }
 .stats ion-item-divider {
   background-color: #000000;
-  color: var(--ion-color-primary);
 }
 .stats ion-item-group {
   height: 50%;
@@ -240,7 +236,7 @@ ion-modal.stats {
   width: 100%;
 }
 .stats ion-item:last-child {
-  --background: var(--ion-color-primary-contrast);
+  --background: var(--ion-color-grey);
 }
 
 /* SETTINGS */
