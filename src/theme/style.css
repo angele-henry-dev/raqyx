@@ -3,6 +3,10 @@ html {
   --ion-font-family: 'Arial';
   font-family: 'Arial';
 }
+body {
+  background-color: #000000;
+  max-width: 700px;
+}
 
 .home ion-content,
 .gamepage ion-content,
