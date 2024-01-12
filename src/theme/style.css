@@ -11,7 +11,6 @@ body {
 .home ion-content,
 .gamepage ion-content,
 .stats ion-content {
-  --background: rgba(0, 0, 0, 0.6);
   --overflow: hidden;
   overflow: auto;
   color: white;
@@ -19,6 +18,20 @@ body {
     display: none;
   }
 }
+.home ion-content {
+  --background: rgba(0, 0, 0, 0.8);
+}
+.home ion-footer {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.gamepage ion-toolbar,
+.gamepage ion-content {
+  --background: rgba(0, 0, 0, 0.6);
+}
+.gamepage ion-footer {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
 ion-button.deactivated {
   color: var(--ion-color-primary-contrast);
 }
@@ -26,7 +39,6 @@ ion-button.deactivated {
 /* HOMEPAGE */
 
 ion-footer {
-  background-color: rgba(0, 0, 0, 0.6);
   color: white;
   height: 70px;
 }
@@ -53,12 +65,6 @@ ion-img.title {
 
 /* GAMEPAGE */
 
-.gamepage ion-toolbar {
-  --background: rgba(0, 0, 0, 0.6);
-}
-.gamepage ion-footer {
-  background-color: rgba(0, 0, 0, 0.6);
-}
 .gamepage ion-row {
   color: var(--ion-color-primary);
 }
