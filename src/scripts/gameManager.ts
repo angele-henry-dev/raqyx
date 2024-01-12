@@ -32,12 +32,12 @@ export class GameManager {
      * @param numberOfEnemies The number of enemies in the game. Default is 1.
      * @param level The level of the game. Default is 1.
      */
-    constructor(numberOfEnemies = 1, level = 1) {
+    constructor(numberOfEnemies = 1, level = 1, score = 0) {
         this.gameArea = this.generateWalls();
         this.player = new Player(this.borderWidth, this.borderWidth);
         this.gameSettings = {
             percentage: 0,
-            score: 0,
+            score: score,
             level: level,
             numberOfEnemies: numberOfEnemies
         };
