@@ -64,7 +64,7 @@
   const router = useIonRouter();
 
   const newGame = () => {
-    router.push('/newgame');
+    router.replace('/newgame');
   };
   const loadGame = () => {
     return false;
