@@ -8,14 +8,16 @@ body {
   max-width: 700px;
 }
 
-ion-content {
-  --background: rgba(0, 0, 0, 0.6);
+ion-content:not(.rules-content) {
   --overflow: hidden;
   overflow: auto;
   color: white;
   &::-webkit-scrollbar {
     display: none;
   }
+}
+ion-content {
+  --background: rgba(0, 0, 0, 0.6);
 }
 ion-footer,
 ion-header {
@@ -367,21 +369,19 @@ ion-item {
 @keyframes pulsate {
   100% {
     box-shadow:
-      0 0 .2rem #fff,
-      0 0 .2rem #fff,
+      0 0 .1rem #fff,
+      0 0 .1rem #fff,
       0 0 1rem var(--ion-color-primary),
       0 0 0.5rem var(--ion-color-primary),
-      0 0 2rem var(--ion-color-primary),
-      inset 0 0 1.3rem var(--ion-color-primary);
+      inset 0 0 1.2rem var(--ion-color-primary);
   }
   0% {
     box-shadow:
-      0 0 .2rem #fff,
-      0 0 .2rem #fff,
+      0 0 .1rem #fff,
+      0 0 .1rem #fff,
       0 0 1.5rem var(--ion-color-primary),
       0 0 0.9rem var(--ion-color-primary),
-      0 0 2.9rem var(--ion-color-primary),
-      inset 0 0 1.4rem var(--ion-color-primary);
+      inset 0 0 1.3rem var(--ion-color-primary);
   }
 }
 

@@ -5,13 +5,13 @@
         <ion-footer>
             <div class="menu">
                 <ion-row>
-                    <ion-col class="title-text" size="4">
-                        <ion-button class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">New game</ion-button>
+                    <ion-col class="title-text ion-text-center" size="4">
+                        <ion-button class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">New</ion-button>
                     </ion-col>
-                    <ion-col class="title-text" size="4">
+                    <ion-col class="title-text ion-text-center" size="4">
                         <ion-button class="deactivated" fill="clear" @click="currentTab = 'GamePage'">Continue</ion-button>
                     </ion-col>
-                    <ion-col class="title-text" size="4">
+                    <ion-col class="title-text ion-text-center" size="4">
                         <ion-button fill="clear" id="open-modal-stats">Stats</ion-button>
                     </ion-col>
                 </ion-row>
