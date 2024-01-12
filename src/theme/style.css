@@ -155,7 +155,7 @@ ion-img.title {
   width: calc(15%/2);
 }
 .bricks-wall .light {
-  background: hsl(180, 97%, 84%);
+  background: hsl(0, 0%, 30%);
 }
 
 /* MODALS */

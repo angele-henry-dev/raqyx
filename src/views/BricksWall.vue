@@ -7,8 +7,7 @@
 <script setup lang="ts">
     import { onMounted } from 'vue';
     onMounted(() => {
-        const height = screen.height;
-        const lines = Math.ceil(height / 12);
+        const lines = Math.ceil(screen.height / 12);
         const container = document.getElementById("bricksWall");
         if (!container) {
             console.error('Container element not found');
@@ -21,7 +20,9 @@
             for (let j=0; j<9; j++) {
                 const brick = document.createElement("div");
                 brick.classList.add('brick');
-                // brick.classList.add('light');
+                if (i%3 == 0 && j%3 == 0) {
+                    brick.classList.add('light');
+                }
                 row.appendChild(brick);
             }
             container.appendChild(row);
