@@ -55,13 +55,14 @@
 </template>
 
 <script setup lang="ts">
-  import { IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonImg, useIonRouter } from '@ionic/vue';
+  import { IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonImg } from '@ionic/vue';
+  import { useRouter } from "vue-router";
   import RulesModal from '@/views/RulesModal.vue';
   import SettingsModal from '@/views/SettingsModal.vue';
   import StatsModal from '@/views/StatsModal.vue';
   import BricksWall from '@/views/BricksWall.vue';
 
-  const router = useIonRouter();
+  const router = useRouter();
 
   const newGame = () => {
     router.replace('/newgame');
