@@ -17,11 +17,6 @@
     </ion-header>
     <ion-content class="ion-padding background">
       <ion-row class="ion-justify-content-center">
-        <!-- <ion-img
-          class="random-img"
-          src="/assets/images/test1.png"
-          alt="Random image neon pixel art"
-        ></ion-img> -->
         <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
       </ion-row>
     </ion-content>
