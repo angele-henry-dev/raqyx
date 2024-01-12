@@ -134,7 +134,7 @@ ion-img.title {
 }
 .bricks-wall .row {
   display: flex;
-  background: hsl(278, 100%, 1%);
+  background: hsl(0, 0%, 0%);
 }
 .bricks-wall .row:nth-child(even) .brick:first-child {
   display: none;
