@@ -38,20 +38,11 @@ ion-button.deactivated {
 
 /* HOMEPAGE */
 
-ion-footer {
-  color: white;
-  height: 70px;
-}
 ion-grid {
   height: 100%;
 }
 .row-title {
   height: 55%;
-}
-ion-img.title {
-  width: 250px;
-  margin: auto;
-  z-index: 10;
 }
 .menu {
   border-radius: 2rem;
@@ -59,8 +50,23 @@ ion-img.title {
   animation: pulsate 1.6s infinite alternate;
   background-color: #000000;
 }
-.menu ion-button {
+.menu ion-button.menu-btn {
   height: 45px;
+}
+.menu ion-img.title {
+  width: 250px;
+  margin: auto;
+  z-index: 10;
+}
+.settings_icon {
+  height: 70px;
+}
+.settings_icon ion-button {
+  height: 60px;
+  margin: 0;
+}
+.settings_icon ion-img {
+  height: 50px;
 }
 
 /* GAMEPAGE */
@@ -93,12 +99,6 @@ ion-img.title {
 }
 .gamepage ion-header ion-toolbar {
   height: 100%;
-}
-.random-img {
-  width: 250px;
-  top: 100px;
-  position: absolute;
-  z-index: 1;
 }
 .progress-bar-track,
 .progress-bar-progress {
