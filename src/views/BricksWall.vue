@@ -1,7 +1,9 @@
 <template>
-    <div class="wall-halo"></div>
-    <div class="wall-black-halo"></div>
-    <div id="bricksWall" class="bricks-wall"></div>
+    <div class="bricks-wall">
+        <div class="wall-halo"></div>
+        <div class="wall-black-halo"></div>
+        <div id="bricksWall"></div>
+    </div>
 </template>
 
 <script setup lang="ts">

@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
 import GamePage from '@/views/GamePage.vue';
 import HomePage from '@/views/HomePage.vue';
 
-const routes: Array<RouteRecordRaw> = [
+const routes = [
   {
     path: '/',
     redirect: '/homepage'
@@ -16,11 +15,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/newgame',
     component: GamePage
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
-export default router
+export default router;

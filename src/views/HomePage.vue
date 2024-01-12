@@ -1,6 +1,6 @@
 <template>
-  <BricksWall />
   <ion-page class="home">
+    <BricksWall />
     <ion-content>
       <div class="shooting-stars">
         <span></span>
@@ -55,16 +55,16 @@
 </template>
 
 <script setup lang="ts">
-  import { useIonRouter, IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonImg } from '@ionic/vue';
+  import { IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonImg, useIonRouter } from '@ionic/vue';
   import RulesModal from './RulesModal.vue';
   import SettingsModal from './SettingsModal.vue';
   import StatsModal from './StatsModal.vue';
   import BricksWall from '@/views/BricksWall.vue';
 
-  const ionRouter = useIonRouter();
+  const router = useIonRouter();
 
   const newGame = () => {
-    ionRouter.push('/newgame');
+    router.push('/newgame');
   };
   const loadGame = () => {
     return false;

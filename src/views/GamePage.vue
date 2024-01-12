@@ -1,6 +1,6 @@
 <template>
-  <BricksWall />
   <ion-page class="gamepage">
+    <BricksWall />
     <ion-header>
       <ion-toolbar>
         <ion-row class="ion-align-items-center">

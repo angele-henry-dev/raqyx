@@ -125,6 +125,11 @@ ion-grid {
 
 /* BRICKS WALL */
 
+.bricks-wall {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
 .wall-halo {
   position: absolute;
   width: 100%;
