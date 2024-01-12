@@ -56,9 +56,9 @@
 
 <script setup lang="ts">
   import { IonPage, IonContent, IonButton, IonFooter, IonGrid, IonRow, IonCol, IonImg, useIonRouter } from '@ionic/vue';
-  import RulesModal from './RulesModal.vue';
-  import SettingsModal from './SettingsModal.vue';
-  import StatsModal from './StatsModal.vue';
+  import RulesModal from '@/views/RulesModal.vue';
+  import SettingsModal from '@/views/SettingsModal.vue';
+  import StatsModal from '@/views/StatsModal.vue';
   import BricksWall from '@/views/BricksWall.vue';
 
   const router = useIonRouter();
