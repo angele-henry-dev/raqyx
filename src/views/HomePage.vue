@@ -1,4 +1,5 @@
 <template>
+  <BricksWall />
   <ion-page class="home">
     <ion-content>
       <div class="shooting-stars">
@@ -48,6 +49,7 @@
   import RulesModal from './RulesModal.vue';
   import SettingsModal from './SettingsModal.vue';
   import StatsModal from './StatsModal.vue';
+  import BricksWall from '@/views/BricksWall.vue';
 
   const ionRouter = useIonRouter();
 
