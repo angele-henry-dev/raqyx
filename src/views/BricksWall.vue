@@ -608,13 +608,13 @@
         width: 100%;
         height: 100%;
         background: radial-gradient(circle, hsl(0, 0%, 100%) 10%, hsl(0, 0%, 0%) 50%);
-        opacity: 0.2;
+        opacity: 0.3;
     }
     .wall-black-halo {
         position: absolute;
         width: 100%;
         height: 100%;
-        background: radial-gradient(circle, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 0%) 80%);
+        background: radial-gradient(circle, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 0%) 10%);
         opacity: 0.2;
     }
     .bricks-wall .row {
@@ -628,22 +628,22 @@
     .bricks-wall .row:nth-child(even)::after {
         position: relative;
         content: "";
-        background: hsl(278, 100%, 21%);
+        background: hsl(310, 96%, 59%);
         width: calc(15%/2);
         height: 3vw;
         border-radius: 2px;
         margin: 1px;
-        box-shadow: 0 0 19px 1px hsl(278, 100%, 11%) inset;
+        box-shadow: 0 0 19px 1px hsl(310, 96%, 29%) inset;
     }
     .bricks-wall .brick {
-        background: hsl(278, 100%, 21%);
+        background: hsl(310, 96%, 59%);
         width: 15%;
         height: 3vw;
         border-radius: 2px;
         margin: 1px;
-        box-shadow: 0 0 19px 1px hsl(278, 100%, 11%) inset;
+        box-shadow: 0 0 19px 1px hsl(310, 96%, 29%) inset;
     }
     .bricks-wall .light {
-        background: hsl(278, 100%, 31%);
+        background: hsl(310, 96%, 89%);
     }
 </style>

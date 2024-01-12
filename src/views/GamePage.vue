@@ -44,7 +44,6 @@
     IonRow,
     IonCol,
     IonText,
-    IonImg,
     createGesture,
     GestureDetail,
   } from '@ionic/vue';
