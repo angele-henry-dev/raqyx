@@ -21,10 +21,17 @@
         <ion-text class="title-text hex">Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
       </ion-row>
     </ion-footer> -->
+    <ion-modal class="gameover" :is-open="gameManager?.isGameOver">
+        <div class="modal-content">
+            <ion-content class="ion-padding">
+                Game Over
+            </ion-content>
+        </div>
+    </ion-modal>
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive } from 'vue';
+  import { onMounted, reactive, ref } from 'vue';
   import {
     IonHeader,
     IonContent,
@@ -85,7 +92,7 @@
   };
 
   const animate = () => {
-    if (ctx && gameManager.player) {
+    if (ctx && gameManager.player && !gameManager?.isGameOver) {
       ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
       gameManager.draw(ctx);
       requestAnimationFrame(animate);
