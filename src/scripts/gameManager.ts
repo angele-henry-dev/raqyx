@@ -150,15 +150,6 @@ export class GameManager {
     }
 
     /**
-     * Checks if a link is inside the current territory.
-     * @param link The link to check.
-     * @returns True if the link is inside the territory, otherwise false.
-     */
-    isLinkInsidePolygon(link: Link): boolean {
-        return false;
-    }
-
-    /**
      * Recreates the game area based on the current territory and game state.
      */
     recreateGameArea(): void {

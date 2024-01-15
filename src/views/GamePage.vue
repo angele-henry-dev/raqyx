@@ -27,7 +27,6 @@
   import { onMounted, reactive } from 'vue';
   import {
     IonHeader,
-    IonToolbar,
     IonContent,
     IonRow,
     IonCol,
