@@ -5,9 +5,13 @@
         <ion-footer>
             <div class="menu">
                 <ion-row class="title-text ion-justify-content-between">
+                    <audio id="music">
+                        <source src="/assets/music/theme 1.10.wav" autoplay :loop="true" />
+                    </audio>
                     <ion-button class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">New</ion-button>
                     <ion-button class="deactivated" fill="clear" @click="currentTab = 'GamePage'">Continue</ion-button>
                     <ion-button fill="clear" id="open-modal-stats">Stats</ion-button>
+                    <!-- <ion-button fill="clear" @click="play()">Plop</ion-button> -->
                 </ion-row>
             </div>
         </ion-footer>
@@ -26,4 +30,9 @@
         HomePage,
         GamePage,
     }
+
+    // const play = () => {
+    //     const player = document.getElementById("music");
+    //     player?.play();
+    // };
 </script>
