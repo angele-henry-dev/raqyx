@@ -26,7 +26,7 @@ export class GameManager {
     territoryInProgress: Territory | null = null;
     player: Player;
     enemies: Enemy[];
-    isGameOver: boolean;
+    isGameOver = false;
 
     /**
      * Creates an instance of the GameManager class.
@@ -34,15 +34,14 @@ export class GameManager {
      * @param level The level of the game. Default is 1.
      */
     constructor(numberOfEnemies = 1, level = 1, score = 0) {
-        this.isGameOver = false;
-        this.gameArea = this.generateWalls();
-        this.player = new Player(this.borderWidth, this.borderWidth);
         this.gameSettings = {
             percentage: 0,
             score: score,
             level: level,
             numberOfEnemies: numberOfEnemies
         };
+        this.gameArea = this.generateWalls();
+        this.player = new Player(this.borderWidth, this.borderWidth);
         this.fullArea = this.getPolygonArea(this.gameArea.nodes);
         this.enemies = this.generateEnemies();
     }

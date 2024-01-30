@@ -1,6 +1,6 @@
 <template>
     <ion-modal class="settings" ref="modalSettings" trigger="open-modal-settings">
-      <div class="modal-content">
+      <div>
         <ion-toolbar>
           <ion-title>Settings</ion-title>
           <ion-buttons slot="end">
@@ -24,9 +24,6 @@
               <ion-col>
                 <ion-range aria-label="SFX range volume" :pin="true" :pin-formatter="pinFormatter"></ion-range>
               </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-input label="Username:" placeholder="Enter text" :counter="true" :maxlength="20"></ion-input>
             </ion-row>
             <ion-row>
               <ion-col class="ion-text-end">

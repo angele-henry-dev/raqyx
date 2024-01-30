@@ -1,6 +1,6 @@
 <template>
     <ion-modal class="rules" ref="modalRules" trigger="open-modal-rules">
-      <div class="modal-content">
+      <div>
         <ion-toolbar>
           <ion-title>Rules</ion-title>
           <ion-buttons slot="end">

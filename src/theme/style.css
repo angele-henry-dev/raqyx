@@ -173,11 +173,12 @@ ion-modal::part(backdrop) {
   background: #000000;
   opacity: 1;
 }
-ion-modal div.modal-content {
+ion-modal div {
   height: 100%;
   border: 1px solid var(--ion-color-primary);
 }
-ion-modal ion-content, ion-modal ion-toolbar {
+ion-modal ion-content,
+ion-modal ion-toolbar {
   --background: #000000;
   --color: white;
 }
@@ -188,6 +189,17 @@ ion-modal ion-toolbar {
   height: 45px;
   border-bottom: 1px solid var(--ion-color-primary);
 }
+ion-modal ion-toolbar ion-title {
+  padding: 0;
+}
+ion-modal#gameover {
+  --height: 150px;
+  --width: 300px;
+  margin: auto;
+}
+
+/* Ion range */
+
 ion-range {
   padding: 0;
 }

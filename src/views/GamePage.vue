@@ -21,23 +21,37 @@
         <ion-text class="title-text hex">Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
       </ion-row>
     </ion-footer> -->
-    <ion-modal class="gameover" :is-open="gameManager?.isGameOver">
-        <div class="modal-content">
+    <ion-modal id="gameover" :canDismiss="false" :is-open="gameManager?.isGameOver">
+        <div>
+            <ion-toolbar>
+              <ion-title>Game Over</ion-title>
+            </ion-toolbar>
             <ion-content class="ion-padding">
-                Game Over
+              <ion-row class="ion-align-items-center">
+                <ion-col class="ion-text-center">
+                  <ion-button color="light" fill="outline">Go home</ion-button>
+                </ion-col>
+                <ion-col class="ion-text-center">
+                  <ion-button color="light" fill="outline" @click="relaunch()">Try again</ion-button>
+                </ion-col>
+              </ion-row>
             </ion-content>
         </div>
     </ion-modal>
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive, ref } from 'vue';
+  import { onMounted, reactive } from 'vue';
   import {
+    IonModal,
+    IonToolbar,
+    IonTitle,
     IonHeader,
     IonContent,
     IonRow,
     IonCol,
     IonText,
+    IonButton,
     createGesture,
     GestureDetail,
   } from '@ionic/vue';
@@ -46,7 +60,8 @@
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
-  const gameManager = reactive(new GameManager(1, 1));
+  let gameManager = reactive(new GameManager(1, 1, 0));
+  let animationId: number;
 
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
@@ -75,6 +90,12 @@
     setupGesture();
   });
 
+  const relaunch = () => {
+    cancelAnimationFrame(animationId);
+    gameManager = reactive(new GameManager(1, 1, 0));
+    animate();
+  };
+
   const setupGesture = () => {
     if (canvas) {
       createGesture({
@@ -95,7 +116,7 @@
     if (ctx && gameManager.player && !gameManager?.isGameOver) {
       ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
       gameManager.draw(ctx);
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
     }
   }
 </script>
