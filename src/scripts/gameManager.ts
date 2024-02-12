@@ -378,6 +378,15 @@ export class GameManager {
         }
     }
 
+    reset(): void {
+        this.isGameOver = false;
+        this.territoryInProgress = null;
+        this.gameArea = this.generateWalls();
+        this.player = new Player(this.borderWidth, this.borderWidth);
+        this.fullArea = this.getPolygonArea(this.gameArea.nodes);
+        this.enemies = this.generateEnemies();
+    }
+
     /**
      * Draws all elements (walls, territory in progress, player, enemies) on the canvas.
      * @param ctx The canvas rendering context.

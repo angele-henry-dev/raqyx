@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
   import {
-    IonModal,
     IonToolbar,
     IonTitle,
     IonContent,

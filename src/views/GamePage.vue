@@ -41,7 +41,7 @@
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
-  let gameManager = reactive(new GameManager(1, 1, 0));
+  const gameManager = reactive(new GameManager(1, 1, 0));
   let animationId: number;
 
   const emit = defineEmits(['goHome']);
@@ -99,7 +99,7 @@
 
   const relaunch = async () => {
     cancelAnimationFrame(animationId);
-    gameManager = reactive(new GameManager(1, 1, 0));
+    gameManager.reset();
     animate();
   };
 
