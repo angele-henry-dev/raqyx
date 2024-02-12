@@ -1,7 +1,7 @@
 <template>
     <ion-page >
         <BricksWall />
-        <component :is="tabs[currentTab as keyof typeof tabs]" :value="currentTab"></component>
+        <component :is="tabs[currentTab as keyof typeof tabs]" :value="currentTab" @goHome="currentTab = 'HomePage'"></component>
         <ion-footer>
             <div class="menu">
                 <ion-row class="title-text ion-justify-content-between">
@@ -29,7 +29,7 @@
     const tabs = {
         HomePage,
         GamePage,
-    }
+    };
 
     // const play = () => {
     //     const player = document.getElementById("music");

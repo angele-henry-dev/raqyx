@@ -21,47 +21,50 @@
         <ion-text class="title-text hex">Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
       </ion-row>
     </ion-footer> -->
-    <ion-modal id="gameover" :canDismiss="false" :is-open="gameManager?.isGameOver">
-        <div>
-            <ion-toolbar>
-              <ion-title>Game Over</ion-title>
-            </ion-toolbar>
-            <ion-content class="ion-padding">
-              <ion-row class="ion-align-items-center">
-                <ion-col class="ion-text-center">
-                  <ion-button color="light" fill="outline">Go home</ion-button>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-button color="light" fill="outline" @click="relaunch()">Try again</ion-button>
-                </ion-col>
-              </ion-row>
-            </ion-content>
-        </div>
-    </ion-modal>
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive } from 'vue';
+  import { onMounted, reactive, defineEmits, ref, watch } from 'vue';
   import {
-    IonModal,
-    IonToolbar,
-    IonTitle,
     IonHeader,
     IonContent,
     IonRow,
     IonCol,
     IonText,
-    IonButton,
     createGesture,
     GestureDetail,
+    modalController,
   } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
+  import GameOverModal from '@/views/GameOverModal.vue';
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
   let canvas: HTMLCanvasElement | null = null;
   let gameManager = reactive(new GameManager(1, 1, 0));
   let animationId: number;
+
+  const emit = defineEmits(['goHome']);
+
+  watch(
+    () => gameManager?.isGameOver,
+    async (isOver) => {
+      if (isOver) {
+        const modal = await modalController.create({
+          component: GameOverModal,
+        });
+        modal.present();
+
+        const { data, role } = await modal.onWillDismiss();
+
+        if (role === 'goHome') {
+          goHome();
+        } else if (role === 'relaunch') {
+          relaunch();
+        }
+      }
+    }
+  );
 
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
@@ -90,7 +93,11 @@
     setupGesture();
   });
 
-  const relaunch = () => {
+  const goHome = async () => {
+    emit("goHome");
+  };
+
+  const relaunch = async () => {
     cancelAnimationFrame(animationId);
     gameManager = reactive(new GameManager(1, 1, 0));
     animate();

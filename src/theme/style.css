@@ -166,6 +166,7 @@ ion-button.deactivated {
 /* MODALS */
 
 ion-modal {
+  --background: transparent;
   --height: 70%;
   --width: 96%;
 }
@@ -192,9 +193,13 @@ ion-modal ion-toolbar {
 ion-modal ion-toolbar ion-title {
   padding: 0;
 }
-ion-modal#gameover {
-  --height: 150px;
-  --width: 300px;
+ion-modal .ion-page {
+  background-color: transparent;
+  border: none;
+}
+#gameover {
+  height: 150px;
+  width: 300px;
   margin: auto;
 }
 
