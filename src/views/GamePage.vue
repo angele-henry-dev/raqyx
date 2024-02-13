@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive, defineEmits, ref, watch } from 'vue';
+  import { onMounted, reactive, defineEmits, watch } from 'vue';
   import {
     IonHeader,
     IonContent,
@@ -37,6 +37,7 @@
   } from '@ionic/vue';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
   import GameOverModal from '@/views/GameOverModal.vue';
+  import NextLevelModal from '@/views/NextLevelModal.vue';
 
   const DPR = window.devicePixelRatio || 1;
   let ctx: CanvasRenderingContext2D | null = null;
@@ -66,6 +67,13 @@
     }
   );
 
+  watch(
+    () => gameManager?.gameSettings?.level,
+    async (newLevel) => {
+      displayLevel(newLevel);
+    }
+  );
+
   onMounted(() => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
     if (!canvas) {
@@ -89,9 +97,21 @@
     ctx.fillStyle = "yellow";
     ctx.shadowBlur = 10;
 
+    displayLevel(gameManager?.gameSettings?.level);
     animate();
     setupGesture();
   });
+
+  const displayLevel = async (level: number) => {
+    const modal = await modalController.create({
+      component: NextLevelModal,
+      componentProps:{
+        level: level
+      },
+    });
+    modal.present();
+    setTimeout(() => { modal.dismiss(); }, 1500);
+  };
 
   const goHome = async () => {
     emit("goHome");

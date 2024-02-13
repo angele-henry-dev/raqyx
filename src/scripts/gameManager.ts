@@ -192,7 +192,10 @@ export class GameManager {
      * Handles the victory condition.
      */
     victory(): void {
-        alert("Victory!");
+        this.gameSettings.level++;
+        this.gameSettings.numberOfEnemies++;
+        this.gameSettings.percentage = 0;
+        this.reset();
     }
 
     /**
