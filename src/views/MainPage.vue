@@ -11,19 +11,28 @@
                         <source src="/assets/music/theme 1.10.wav" autoplay :loop="true" />
                     </audio>
                     <ion-button v-if="currentTab == 'HomePage'" class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">
-                        G
+                        <ion-img
+                            src="/assets/images/icon-game.png"
+                            alt="Play"
+                        ></ion-img>
                     </ion-button>
                     <ion-button v-if="currentTab == 'GamePage'" fill="clear" @click="currentTab = 'HomePage'">
-                        H
+                        <ion-img
+                            src="/assets/images/icon-home.png"
+                            alt="Home"
+                        ></ion-img>
                     </ion-button>
                     <ion-button fill="clear" id="open-modal-settings">
                         <ion-img
                             src="/assets/images/icon-settings.png"
-                            alt="Stats"
+                            alt="Settings"
                         ></ion-img>
                     </ion-button>
                     <ion-button fill="clear" id="open-modal-stats">
-                        S
+                        <ion-img
+                        src="/assets/images/icon-stats.png"
+                        alt="Stats"
+                        ></ion-img>
                     </ion-button>
                     <ion-button fill="clear" id="open-modal-rules">
                         <ion-img
