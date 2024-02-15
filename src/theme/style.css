@@ -27,7 +27,8 @@ ion-header {
 ion-button.deactivated {
   color: var(--ion-color-primary-contrast);
 }
-.title-text {
+.title-text,
+.title-icon {
   color: var(--ion-color-primary);
 }
 
@@ -85,22 +86,6 @@ ion-button.deactivated {
 .game-header ion-row {
   padding: 5px 10px;
 }
-/* .game-footer ion-row {
-    width: 250px;
-    height: 40px;
-    margin: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    box-shadow:
-      0 0 .03rem #fff,
-      0 0 .03rem #fff,
-      0 0 0.5rem var(--ion-color-secondary),
-      0 0 0.2rem var(--ion-color-secondary),
-      0 0 0.5rem var(--ion-color-secondary),
-      inset 0 0 0.7rem var(--ion-color-secondary);
-}
-.game-footer ion-row ion-text {
-  z-index: 6;
-} */
 .progress-bar-track,
 .progress-bar-progress {
   border-radius: 15px;

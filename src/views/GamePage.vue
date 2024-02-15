@@ -2,7 +2,7 @@
     <ion-header class="game-header">
       <ion-row class="ion-align-items-center">
         <ion-col size="3">
-          <ion-text class="title-text">{{ gameManager?.gameSettings.level || 0 }}</ion-text>
+          <ion-text class="title-icon">{{ gameManager?.gameSettings.level || 0 }}</ion-text>
         </ion-col>
         <ion-col>
           <div class="progress-bar-track">
@@ -11,7 +11,7 @@
         </ion-col>
       </ion-row>
       <ion-row class="ion-justify-content-center">
-        <ion-text class="title-text hex">Score {{ gameManager?.gameSettings.score || 0 }}</ion-text>
+        <ion-text class="title-text">Score {{ gameManager?.gameSettings.score || 0 }}</ion-text>
       </ion-row>
     </ion-header>
     <ion-content class="ion-padding background">
