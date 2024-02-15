@@ -2,7 +2,7 @@
     <ion-header class="game-header">
       <ion-row class="ion-align-items-center">
         <ion-col size="3">
-          <ion-text class="title-text">Level {{ gameManager?.gameSettings.level || 0 }}</ion-text>
+          <ion-text class="title-text">{{ gameManager?.gameSettings.level || 0 }}</ion-text>
         </ion-col>
         <ion-col>
           <div class="progress-bar-track">
@@ -10,17 +10,15 @@
           </div>
         </ion-col>
       </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-text class="title-text hex">Score {{ gameManager?.gameSettings.score || 0 }}</ion-text>
+      </ion-row>
     </ion-header>
     <ion-content class="ion-padding background">
       <ion-row class="ion-justify-content-center">
         <canvas id="gameCanvas" :width="CONTAINER_WIDTH" :height="CONTAINER_HEIGHT"></canvas>
       </ion-row>
     </ion-content>
-    <!-- <ion-footer class=game-footer>
-      <ion-row class="ion-justify-content-center ion-align-items-center broken-border">
-        <ion-text class="title-text hex">Score: {{ gameManager?.gameSettings.score || 0 }}</ion-text>
-      </ion-row>
-    </ion-footer> -->
 </template>
 
 <script setup lang="ts">

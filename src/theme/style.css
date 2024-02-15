@@ -78,11 +78,12 @@ ion-button.deactivated {
 
 /* GAMEPAGE */
 
-.game-header ion-row {
-  padding: 15px;
-}
 .game-header {
   height: 60px;
+  padding-top: 5px;
+}
+.game-header ion-row {
+  padding: 5px 10px;
 }
 /* .game-footer ion-row {
     width: 250px;
