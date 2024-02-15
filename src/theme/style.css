@@ -60,23 +60,29 @@ ion-button.deactivated {
   transform: translate(0px, 0px);
 }
 .menu li:nth-child(1) {
-    transform: rotate(-110deg) translateY(-120px) rotate(110deg);
+  transform: rotate(-45deg) translateY(-105px) rotate(45deg);
 }
 .menu li:nth-child(2) {
-    transform: rotate(-80deg) translateY(-50px) rotate(80deg);
+  transform: rotate(-100deg) translateY(-150px) rotate(100deg);
 }
 .menu li:nth-child(3) {
-    transform: rotate(80deg) translateY(-50px) rotate(-80deg);
+  transform: rotate(45deg) translateY(-105px) rotate(-45deg);
 }
 .menu li:nth-child(4) {
-    transform: rotate(110deg) translateY(-120px) rotate(-110deg);
+  transform: rotate(100deg) translateY(-150px) rotate(-100deg);
 }
 
-.menu li.ingame:nth-child(2) {
+.menu li.ingame:nth-child(1) {
   transform: rotate(-110deg) translateY(-50px) rotate(110deg);
+}
+.menu li.ingame:nth-child(2) {
+  transform: rotate(-110deg) translateY(-120px) rotate(110deg);
 }
 .menu li.ingame:nth-child(3) {
   transform: rotate(110deg) translateY(-50px) rotate(-110deg);
+}
+.menu li.ingame:nth-child(4) {
+    transform: rotate(110deg) translateY(-120px) rotate(-110deg);
 }
 
 /* HOMEPAGE */

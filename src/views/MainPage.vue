@@ -10,7 +10,7 @@
                     <source src="/assets/music/theme 1.10.wav" autoplay :loop="true" />
                 </audio>
                 <ul>
-                    <li><ion-button v-if="currentTab == 'HomePage'" class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">
+                    <li :class="currentTab == 'GamePage' ? 'ingame' : ''"><ion-button v-if="currentTab == 'HomePage'" class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">
                         <ion-img
                             src="/assets/images/icon-game.png"
                             alt="Play"
@@ -34,7 +34,7 @@
                         alt="Stats"
                         ></ion-img>
                     </ion-button></li>
-                    <li><ion-button fill="clear" id="open-modal-rules">
+                    <li :class="currentTab == 'GamePage' ? 'ingame' : ''"><ion-button fill="clear" id="open-modal-rules">
                         <ion-img
                         src="/assets/images/icon-rules.png"
                         alt="Rules"
