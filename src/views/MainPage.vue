@@ -4,13 +4,13 @@
         <SettingsModal />
         <StatsModal />
         <component :is="tabs[currentTab as keyof typeof tabs]" :value="currentTab" @goHome="currentTab = 'HomePage'"></component>
-        <ion-footer>
-            <div class="menu">
-                <ion-row class="title-text ion-justify-content-between">
-                    <audio id="music">
-                        <source src="/assets/music/theme 1.10.wav" autoplay :loop="true" />
-                    </audio>
-                    <ion-button v-if="currentTab == 'HomePage'" class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">
+        <ion-footer class="menu">
+            <ion-row class="title-text ion-justify-content-between">
+                <audio id="music">
+                    <source src="/assets/music/theme 1.10.wav" autoplay :loop="true" />
+                </audio>
+                <ul>
+                    <li><ion-button v-if="currentTab == 'HomePage'" class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">
                         <ion-img
                             src="/assets/images/icon-game.png"
                             alt="Play"
@@ -21,28 +21,28 @@
                             src="/assets/images/icon-home.png"
                             alt="Home"
                         ></ion-img>
-                    </ion-button>
-                    <ion-button fill="clear" id="open-modal-settings">
+                    </ion-button></li>
+                    <li :class="currentTab == 'GamePage' ? 'ingame' : ''"><ion-button fill="clear" id="open-modal-settings">
                         <ion-img
                             src="/assets/images/icon-settings.png"
                             alt="Settings"
                         ></ion-img>
-                    </ion-button>
-                    <ion-button fill="clear" id="open-modal-stats">
+                    </ion-button></li>
+                    <li :class="currentTab == 'GamePage' ? 'ingame' : ''"><ion-button fill="clear" id="open-modal-stats">
                         <ion-img
                         src="/assets/images/icon-stats.png"
                         alt="Stats"
                         ></ion-img>
-                    </ion-button>
-                    <ion-button fill="clear" id="open-modal-rules">
+                    </ion-button></li>
+                    <li><ion-button fill="clear" id="open-modal-rules">
                         <ion-img
                         src="/assets/images/icon-rules.png"
                         alt="Rules"
                         ></ion-img>
-                    </ion-button>
-                    <!-- <ion-button fill="clear" @click="play()">Plop</ion-button> -->
-                </ion-row>
-            </div>
+                    </ion-button></li>
+                </ul>
+                <!-- <ion-button fill="clear" @click="play()">Plop</ion-button> -->
+            </ion-row>
         </ion-footer>
     </ion-page>
 </template>

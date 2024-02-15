@@ -34,27 +34,49 @@ ion-button.deactivated {
 
 /* MAINPAGE */
 
-.menu {
-  width: 300px;
-  border-radius: 2rem;
-  padding: 0.4em;
-  animation: pulsate 1.6s infinite alternate;
-  background-color: #000000;
-  margin: auto;
-  margin-bottom: 20px;
-}
-.menu ion-row {
-  width: 100%;
-}
-.menu ion-col {
-  padding: 0;
-}
 .menu ion-button {
-  height: 30px;
   margin: 0;
 }
 .menu ion-img {
   height: 25px;
+}
+.menu ul {
+  list-style: none;
+  width: 150px;
+  height: 100px;
+  position: absolute;
+  left: calc(50% - 75px);
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+}
+.menu ul li {
+  width: 60px;
+  height: 45px;
+  text-align: center;
+  position: absolute;
+  left: calc(50% - 30px);
+  transition: .5s;
+  transform: translate(0px, 0px);
+}
+.menu li:nth-child(1) {
+    transform: rotate(-110deg) translateY(-120px) rotate(110deg);
+}
+.menu li:nth-child(2) {
+    transform: rotate(-80deg) translateY(-50px) rotate(80deg);
+}
+.menu li:nth-child(3) {
+    transform: rotate(80deg) translateY(-50px) rotate(-80deg);
+}
+.menu li:nth-child(4) {
+    transform: rotate(110deg) translateY(-120px) rotate(-110deg);
+}
+
+.menu li.ingame:nth-child(2) {
+  transform: rotate(-110deg) translateY(-50px) rotate(110deg);
+}
+.menu li.ingame:nth-child(3) {
+  transform: rotate(110deg) translateY(-50px) rotate(-110deg);
 }
 
 /* HOMEPAGE */
