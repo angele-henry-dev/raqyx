@@ -53,6 +53,9 @@ ion-button.deactivated {
   height: 30px;
   margin: 0;
 }
+.menu ion-img {
+  height: 25px;
+}
 
 /* HOMEPAGE */
 
@@ -65,15 +68,15 @@ ion-button.deactivated {
   margin-top: calc(50% - 25px);
   z-index: 10;
 }
-.settings-icon,
-.settings-icon ion-row,
-.settings-icon ion-col {
+.events,
+.events ion-row,
+.events ion-col {
   height: 90px;
 }
-.settings-icon ion-button {
+.events ion-button {
   height: 60px;
 }
-.settings-icon ion-img {
+.events ion-img {
   height: 50px;
 }
 
