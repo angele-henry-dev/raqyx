@@ -14,7 +14,7 @@
                 <ion-label>Music:</ion-label>
               </ion-col>
               <ion-col>
-                <ion-range aria-label="Music range volume" :pin="true" :pin-formatter="pinFormatter"></ion-range>
+                <ion-range v-model="musicVolume" aria-label="Music range volume" :pin="true" :pin-formatter="pinFormatter"></ion-range>
               </ion-col>
             </ion-row>
             <ion-row class="ion-align-items-center">
@@ -22,12 +22,12 @@
                 <ion-label>SFX:</ion-label>
               </ion-col>
               <ion-col>
-                <ion-range aria-label="SFX range volume" :pin="true" :pin-formatter="pinFormatter"></ion-range>
+                <ion-range v-model="sfxVolume" aria-label="SFX range volume" :pin="true" :pin-formatter="pinFormatter"></ion-range>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col class="ion-text-end">
-                <ion-button class="btn-apply" fill="outline">Save</ion-button>
+                <ion-button class="btn-apply" fill="outline" @click="save()">Save</ion-button>
               </ion-col>
             </ion-row>
           </ion-col>
@@ -48,12 +48,18 @@
     IonRow,
     IonRange,
     IonLabel,
-    IonInput,
   } from '@ionic/vue';
   import { ref } from 'vue';
 
   const modalSettings = ref();
+  const musicVolume = ref(Number(localStorage.getItem("music")) || 100);
+  const sfxVolume = ref(Number(localStorage.getItem("sfx")) || 100);
   const pinFormatter = (value: number) => `${value}%`;
 
   const dismiss = () => modalSettings.value.$el.dismiss();
+  const save = () => {
+    localStorage.setItem("music", musicVolume.value.toString());
+    localStorage.setItem("sfx", sfxVolume.value.toString());
+    dismiss();
+  };
 </script>
