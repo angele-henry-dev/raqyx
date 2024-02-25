@@ -19,6 +19,7 @@ export class GameManager {
     gameSettings: {
         percentage: number;
         score: number;
+        totalScore: number;
         level: number;
         numberOfEnemies: number;
     };
@@ -36,7 +37,8 @@ export class GameManager {
     constructor(numberOfEnemies = 1, level = 1, score = 0) {
         this.gameSettings = {
             percentage: 0,
-            score: score,
+            score: 0,
+            totalScore: score,
             level: level,
             numberOfEnemies: numberOfEnemies
         };
@@ -263,14 +265,20 @@ export class GameManager {
         if (this.territoryInProgress) {
             const lastNode = this.territoryInProgress.nodes[this.territoryInProgress.nodes.length - 1];
             const inProgressLink = new Link(lastNode, this.player);
-            if (inProgressLink.includesX(enemy.x) && inProgressLink.includesY(enemy.y)) {
+            if (
+                ((enemy.x >= inProgressLink.n1.x && enemy.x <= (inProgressLink.n2.x + this.player.midSize))
+                || (enemy.x >= (inProgressLink.n2.x + this.player.midSize) && enemy.x <= inProgressLink.n1.x))
+                && (
+                    (enemy.y >= inProgressLink.n1.y && enemy.y <= (inProgressLink.n2.y + this.player.midSize))
+                    || (enemy.y >= (inProgressLink.n2.y + this.player.midSize) && enemy.y <= inProgressLink.n1.y)
+                )
+            ) {
                 this.gameOver();
             }
             for (const link of this.territoryInProgress.links) {
                 if (
                     enemy.collidesWithHorizontalWall(link)
                     || enemy.collidesWithVerticalWall(link)
-                    || (inProgressLink.includesX(enemy.x) && inProgressLink.includesY(enemy.y))
                 ) {
                     this.gameOver();
                 }
@@ -320,8 +328,8 @@ export class GameManager {
             Enemy.draw(ctx);
             Enemy.onAutomaticMove();
             if (this.territoryInProgress) {
-                this.playerCollidesEnemy(Enemy);
                 this.EnemyCollidesTerritoryInProgess(Enemy);
+                this.playerCollidesEnemy(Enemy);
             }
             this.EnemyCollidesWalls(Enemy);
         }
@@ -353,6 +361,8 @@ export class GameManager {
     reset(): void {
         this.isGameOver = false;
         this.territoryInProgress = null;
+        this.gameSettings.percentage = 0;
+        this.gameSettings.score = 0;
         this.gameArea = this.generateWalls();
         this.player = new Player(this.borderWidth, this.borderWidth);
         this.fullArea = this.getPolygonArea(this.gameArea.nodes);
