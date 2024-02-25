@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, reactive, defineEmits, watch } from 'vue';
+  import { ref, onMounted, reactive, defineEmits, watch } from 'vue';
   import {
     IonHeader,
     IonContent,
@@ -35,6 +35,7 @@
     GestureDetail,
     modalController,
   } from '@ionic/vue';
+  import { Preferences } from '@capacitor/preferences';
   import { GameManager, CONTAINER_HEIGHT, CONTAINER_WIDTH } from '@/scripts/gameManager';
   import GameOverModal from '@/views/GameOverModal.vue';
   import NextLevelModal from '@/views/NextLevelModal.vue';
@@ -44,6 +45,8 @@
   let canvas: HTMLCanvasElement | null = null;
   const gameManager = reactive(new GameManager(1, 1, 0));
   let animationId: number;
+  let musicPlayer: HTMLMediaElement | null = null;
+  const musicVolume = ref(100);
 
   const emit = defineEmits(['goHome']);
 
@@ -74,7 +77,7 @@
     }
   );
 
-  onMounted(() => {
+  onMounted(async () => {
     canvas = document.getElementById("gameCanvas") as HTMLCanvasElement | null;
     if (!canvas) {
       console.error('Canvas element not found');
@@ -100,6 +103,9 @@
     displayLevel(gameManager?.gameSettings?.level);
     animate();
     setupGesture();
+
+    musicVolume.value = Number((await Preferences.get({ key: 'music' })).value);
+    musicPlayer = document.getElementById("music1") as HTMLMediaElement;
     play();
   });
 
@@ -149,7 +155,9 @@
   }
 
   const play = () => {
-      const musicPlayer = document.getElementById("music1");
-      musicPlayer?.play();
+      if (musicPlayer) {
+        musicPlayer.volume = musicVolume.value / 100;
+        musicPlayer.play();
+      }
   };
 </script>

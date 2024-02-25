@@ -49,17 +49,29 @@
     IonRange,
     IonLabel,
   } from '@ionic/vue';
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
+  import { Preferences } from '@capacitor/preferences';
 
   const modalSettings = ref();
-  const musicVolume = ref(Number(localStorage.getItem("music")) || 100);
-  const sfxVolume = ref(Number(localStorage.getItem("sfx")) || 100);
+  const musicVolume = ref(100);
+  const sfxVolume = ref(100);
   const pinFormatter = (value: number) => `${value}%`;
 
+  onMounted(async () => {
+    musicVolume.value = Number((await Preferences.get({ key: 'music' })).value);
+    sfxVolume.value = Number((await Preferences.get({ key: 'sfx' })).value);
+  });
+
   const dismiss = () => modalSettings.value.$el.dismiss();
-  const save = () => {
-    localStorage.setItem("music", musicVolume.value.toString());
-    localStorage.setItem("sfx", sfxVolume.value.toString());
+  const save = async () => {
+    await Preferences.set({
+      key: 'music',
+      value: musicVolume.value.toString(),
+    });
+    await Preferences.set({
+      key: 'sfx',
+      value: sfxVolume.value.toString(),
+    });
     dismiss();
   };
 </script>
