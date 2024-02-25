@@ -3,12 +3,10 @@
         <BricksWall />
         <SettingsModal />
         <StatsModal />
+        <RulesModal />
         <component :is="tabs[currentTab as keyof typeof tabs]" :value="currentTab" @goHome="currentTab = 'HomePage'"></component>
         <ion-footer class="menu">
             <ion-row class="title-text ion-justify-content-between">
-                <!-- <audio id="music">
-                    <source src="/assets/music/theme 1.10.wav" autoplay :loop="true" />
-                </audio> -->
                 <ul>
                     <li :class="currentTab == 'GamePage' ? 'ingame' : ''">
                         <ion-button v-if="currentTab == 'HomePage'" class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">
@@ -53,7 +51,6 @@
                         </ion-button>
                     </li>
                 </ul>
-                <!-- <ion-button fill="clear" @click="play()">Plop</ion-button> -->
             </ion-row>
         </ion-footer>
     </ion-page>
@@ -67,15 +64,11 @@
     import GamePage from '@/views/GamePage.vue';
     import SettingsModal from '@/views/SettingsModal.vue';
     import StatsModal from '@/views/StatsModal.vue';
+    import RulesModal from '@/views/RulesModal.vue';
 
     const currentTab = ref('HomePage');
     const tabs = {
         HomePage,
         GamePage,
     };
-
-    // const play = () => {
-    //     const musicPlayer = document.getElementById("music");
-    //     musicPlayer?.play();
-    // };
 </script>

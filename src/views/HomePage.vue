@@ -19,10 +19,8 @@
         </ion-col>
       </ion-row>
     </ion-content>
-    <RulesModal />
 </template>
 
 <script setup lang="ts">
   import { IonContent, IonRow, IonCol, IonImg } from '@ionic/vue';
-  import RulesModal from '@/views/RulesModal.vue';
 </script>
