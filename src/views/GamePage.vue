@@ -1,5 +1,7 @@
 <template>
     <ion-header class="game-header">
+      <audio id="music1" src="/assets/music/theme 1.wav" :loop="true">
+      </audio>
       <ion-row class="ion-align-items-center">
         <ion-col size="3">
           <ion-text class="title-icon">{{ gameManager?.gameSettings.level || 0 }}</ion-text>
@@ -98,6 +100,7 @@
     displayLevel(gameManager?.gameSettings?.level);
     animate();
     setupGesture();
+    play();
   });
 
   const displayLevel = async (level: number) => {
@@ -144,4 +147,9 @@
       animationId = requestAnimationFrame(animate);
     }
   }
+
+  const play = () => {
+      const musicPlayer = document.getElementById("music1");
+      musicPlayer?.play();
+  };
 </script>

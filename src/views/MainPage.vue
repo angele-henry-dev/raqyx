@@ -6,9 +6,9 @@
         <component :is="tabs[currentTab as keyof typeof tabs]" :value="currentTab" @goHome="currentTab = 'HomePage'"></component>
         <ion-footer class="menu">
             <ion-row class="title-text ion-justify-content-between">
-                <audio id="music">
+                <!-- <audio id="music">
                     <source src="/assets/music/theme 1.10.wav" autoplay :loop="true" />
-                </audio>
+                </audio> -->
                 <ul>
                     <li :class="currentTab == 'GamePage' ? 'ingame' : ''">
                         <ion-button v-if="currentTab == 'HomePage'" class="broken-letter" fill="clear" @click="currentTab = 'GamePage'">
@@ -75,7 +75,7 @@
     };
 
     // const play = () => {
-    //     const player = document.getElementById("music");
-    //     player?.play();
+    //     const musicPlayer = document.getElementById("music");
+    //     musicPlayer?.play();
     // };
 </script>
