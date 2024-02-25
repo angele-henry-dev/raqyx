@@ -42,7 +42,7 @@ ion-button.deactivated {
   list-style: none;
   position: absolute;
   left: calc(50% - 75px);
-  bottom: 150px;
+  bottom: 50px;
   padding: 0;
 }
 .menu ul li {
@@ -86,24 +86,17 @@ ion-button.deactivated {
 /* HOMEPAGE */
 
 .homepage ion-row {
-  height: 100%;
+  margin-top: 30px;
 }
 .homepage ion-img {
   width: 300px;
   margin: auto;
-  margin-top: 20px;
   z-index: 10;
 }
-.events,
-.events ion-row,
-.events ion-col {
-  height: 90px;
-}
-.events ion-button {
-  height: 60px;
-}
-.events ion-img {
-  height: 50px;
+
+.events {
+  height: 150px;
+  color: var(--ion-color-primary);
 }
 
 /* GAMEPAGE */
