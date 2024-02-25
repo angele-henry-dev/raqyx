@@ -37,8 +37,8 @@ export class Enemy extends Node {
     collidesWithHorizontalWall(wall: Link): boolean {
         return (
             Math.abs(this.y - wall.n1.y) <= this.midSize &&
-            this.x < Math.max(wall.n1.x, wall.n2.x) &&
-            this.x > Math.min(wall.n1.x, wall.n2.x)
+            this.x <= Math.max(wall.n1.x, wall.n2.x) &&
+            this.x >= Math.min(wall.n1.x, wall.n2.x)
         );
     }
 
@@ -50,8 +50,8 @@ export class Enemy extends Node {
     collidesWithVerticalWall(wall: Link): boolean {
         return (
             Math.abs(this.x - wall.n1.x) <= this.midSize &&
-            this.y < Math.max(wall.n1.y, wall.n2.y) &&
-            this.y > Math.min(wall.n1.y, wall.n2.y)
+            this.y <= Math.max(wall.n1.y, wall.n2.y) &&
+            this.y >= Math.min(wall.n1.y, wall.n2.y)
         );
     }
 }

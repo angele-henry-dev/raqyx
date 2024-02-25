@@ -125,7 +125,15 @@ export class GameManager {
         if (this.territoryInProgress) {
             this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
             this.territoryInProgress.completeTerritory(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
-            this.recreateGameArea();
+            // this.recreateGameArea();
+
+            for (const node of this.territoryInProgress.nodes) {
+                this.gameArea.addNode(node.x, node.y);
+            }
+            for (const link of this.territoryInProgress.links) {
+                this.gameArea.addLink(link.n1, link.n2);
+            }
+
             this.gameSettings.percentage += Math.ceil(100 * this.getPolygonArea(this.territoryInProgress.nodes) / this.fullArea);
             if (this.gameSettings.percentage >= 75) {
                 this.victory();
