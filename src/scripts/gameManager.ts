@@ -125,7 +125,6 @@ export class GameManager {
         if (this.territoryInProgress) {
             this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
             this.territoryInProgress.completeTerritory(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
-            // this.recreateGameArea();
 
             for (const node of this.territoryInProgress.nodes) {
                 this.gameArea.addNode(node.x, node.y);
@@ -156,44 +155,6 @@ export class GameManager {
             }
         }
         return false;
-    }
-
-    /**
-     * Recreates the game area based on the current territory and game state.
-     */
-    recreateGameArea(): void {
-        if (this.territoryInProgress) {
-            const newGameArea = new Territory();
-
-            // Links we want to keep from gameArea
-            for (const link of this.gameArea.links) {
-                const linkIncludes = link.includesLink(this.territoryInProgress.links);
-                if (linkIncludes) {
-                    const commonNode = link.n1.equals(linkIncludes.n1) || link.n1.equals(linkIncludes.n2) ? link.n1 : link.n2;
-                    const nonCommonNode1 = link.n1.equals(commonNode) ? link.n2 : link.n1;
-                    const nonCommonNode2 = linkIncludes.n1.equals(commonNode) ? linkIncludes.n2 : linkIncludes.n1;
-                    newGameArea.addNode(nonCommonNode1.x, nonCommonNode1.y);
-                    newGameArea.addNode(nonCommonNode2.x, nonCommonNode2.y);
-                    newGameArea.addLink(nonCommonNode1, nonCommonNode2);
-                } else {
-                    newGameArea.addLink(link.n1, link.n2);
-                }
-            }
-
-            // Links we want to keep from territoryInProgress
-            for (const link of this.territoryInProgress.links) {
-                if (!this.gameArea.includesLink(link)) {
-                    newGameArea.addLink(link.n1, link.n2);
-                }
-            }
-
-            // Sort the links to have them on the right order
-            // TODO Get the y le plus proche de 0 avec le x le plus proche de 0 (priorité au y)
-            // Puis second plus proche, troisième, etc.
-
-            this.gameArea = newGameArea;
-            this.gameSettings.score += this.gameArea.nodes.length * this.gameSettings.level
-        }
     }
 
     /**
