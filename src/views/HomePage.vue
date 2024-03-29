@@ -9,7 +9,7 @@
     <ion-content class="homepage">
       <ion-row>
         <ion-img
-            src="/assets/images/raqyx_title_green.png"
+            src="/assets/images/raqyx_title.webp"
             alt="Game title"
         ></ion-img>
       </ion-row>
