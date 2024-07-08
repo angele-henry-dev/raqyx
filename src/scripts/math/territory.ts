@@ -133,12 +133,13 @@ export class Territory {
      * @param x The x-coordinate of the new node.
      * @param y The y-coordinate of the new node.
      */
-    drawTerritory(x: number, y: number): void {
+    drawTerritory(x: number, y: number): Link {
         this.addNode(x, y);
         this.addLink(
             this.nodes[this.nodes.length - 2],
             this.nodes[this.nodes.length - 1]
         );
+        return this.links[this.links.length - 1];
     }
 
     /**

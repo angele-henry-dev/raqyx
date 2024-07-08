@@ -123,9 +123,9 @@ export class GameManager {
     /**
      * Ends the current territory, completes it, and updates the game state.
      */
-    endTerritory(): void {
+    endTerritory(): Link | undefined {
         if (this.territoryInProgress) {
-            this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
+            const lastWall = this.territoryInProgress.drawTerritory(this.player.x, this.player.y);
             this.territoryInProgress.completeTerritory(CONTAINER_HEIGHT, CONTAINER_WIDTH, this.borderWidth);
 
             for (const node of this.territoryInProgress.nodes) {
@@ -140,7 +140,9 @@ export class GameManager {
                 this.victory();
             }
             this.territoryInProgress = null;
+            return lastWall;
         }
+        return undefined;
     }
 
     /**
@@ -224,7 +226,14 @@ export class GameManager {
         const nextWall = this.getNextWall();
         const didCollide = nextWall ? this.player.detectWallCollision(nextWall) : false;
         if (didCollide && this.territoryInProgress) {
-            this.endTerritory();
+            // For the case the user may go on the last wall he created
+            const lastWall = this.endTerritory();
+            if (lastWall) {
+                const { x, y, speed, direction } = this.player;
+                const futureX = (direction === DIRECTIONS.RIGHT || direction === DIRECTIONS.UP) ? x + speed : x - speed;
+                const futureY = (direction === DIRECTIONS.DOWN || direction === DIRECTIONS.RIGHT) ? y + speed : y - speed;
+                this.player.handleCollision(lastWall, futureX, futureY);
+            }
         }
     }
 
